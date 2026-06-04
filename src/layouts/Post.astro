@@ -19,7 +19,7 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
 ---
 
 <Base title={title} description={post.data.summary || title} image={cover}>
-  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
     <header class="mb-8 sm:mb-12">
       <time class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]" datetime={date.toISOString()}>
         {formattedDate}

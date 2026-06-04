@@ -22,7 +22,7 @@
   --color-border-dark: #2a2a27;
 
   /* 字体 */
-  --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
@@ -36,9 +36,25 @@ body {
 }
 
 /* prose 样式覆盖（文章详情用） */
-.prose {
-  max-width: 65ch;
+.prose :where(h1, h2, h3, h4, p, ul, ol, blockquote, pre) {
+  margin: revert;
+  padding: revert;
 }
+
+.prose p {
+  margin-bottom: 1rem;
+}
+.prose ul, .article ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.prose h2 { @apply text-2xl font-bold mt-6 mb-3; }
+.prose h3 { @apply text-xl font-semibold mt-5 mb-2; }
+.prose p { @apply mb-4 leading-relaxed; }
 
 .prose img {
   border-radius: 0.75rem;

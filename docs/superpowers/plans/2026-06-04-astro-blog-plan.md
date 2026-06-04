@@ -83,10 +83,6 @@ git commit -m "feat: scaffold Astro blog project from official template"
   --color-accent-hover-dark: #e87b35;
   --color-code-bg-dark: #0d0d0c;
   --color-border-dark: #2a2a27;
-
-  /* 字体 */
-  --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* 全局过渡 */
@@ -99,9 +95,6 @@ body {
 }
 
 /* prose 样式覆盖（文章详情用） */
-.prose {
-  max-width: 65ch;
-}
 
 .prose img {
   border-radius: 0.75rem;
