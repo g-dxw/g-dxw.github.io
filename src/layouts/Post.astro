@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import TagBadge from '../components/TagBadge.astro';
+import ImageViewer from '../components/ImageViewer.astro';
+
+export interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, date, cover, tags = [] } = post.data;
+
+const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Base title={title} description={post.data.summary || title} image={cover}>
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+    <header class="mb-8 sm:mb-12">
+      <time class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]" datetime={date.toISOString()}>
+        {formattedDate}
+      </time>
+      <h1 class="mt-4 text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] tracking-tight">
+        {title}
+      </h1>
+      {tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {tags.map((tag) => <TagBadge tag={tag} />)}
+        </div>
+      )}
+    </header>
+
+    {cover && (
+      <img
+        src={cover}
+        alt={title}
+        class="w-full rounded-2xl mb-8 sm:mb-12 object-cover cursor-pointer"
+      />
+    )}
+
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <slot />
+    </div>
+
+    <ImageViewer />
+  </article>
+</Base>

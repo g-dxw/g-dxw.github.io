@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://myblog.vercel.app',
   integrations: [mdx(), sitemap()],
 
   fonts: [
@@ -38,5 +38,12 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+  },
+
+  markdown: {
+    shikiConfig: {
+      theme: 'github-dark-dimmed',
+      wrap: true,
+    },
   },
 });

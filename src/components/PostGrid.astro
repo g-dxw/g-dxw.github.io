@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+export interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 ? (
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+) : (
+  <div class="text-center py-16">
+    <p class="text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">暂无文章</p>
+  </div>
+)}

@@ -1,0 +1,38 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostGrid from '../../../components/PostGrid.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
+
+  return allTags.map((tag) => ({
+    params: { tag },
+    props: {
+      posts: posts.filter((p) => (p.data.tags || []).includes(tag)),
+      tag,
+    },
+  }));
+}
+
+const { posts, tag } = Astro.props;
+---
+
+<Base
+  title={`标签: #${tag}`}
+  description={`包含标签"${tag}"的文章列表`}
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+    <a href="/" class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline inline-flex items-center gap-1 mb-6">
+      &larr; 返回首页
+    </a>
+    <h1 class="text-3xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-2">
+      #{tag}
+    </h1>
+    <p class="text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-8">
+      {posts.length} 篇文章
+    </p>
+    <PostGrid posts={posts} />
+  </div>
+</Base>

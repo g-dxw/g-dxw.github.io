@@ -1,0 +1,55 @@
+<div
+  id="image-viewer"
+  class="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+  role="dialog"
+  aria-modal="true"
+  aria-label="图片查看器"
+>
+  <button
+    id="image-viewer-close"
+    class="absolute top-4 right-4 p-3 text-white/80 hover:text-white transition-colors cursor-pointer z-10"
+    aria-label="关闭"
+  >
+    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  <img id="image-viewer-img" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl transition-transform duration-200" src="" alt="" />
+</div>
+
+<script>
+  const viewer = document.getElementById('image-viewer')!;
+  const img = document.getElementById('image-viewer-img') as HTMLImageElement;
+  const closeBtn = document.getElementById('image-viewer-close')!;
+
+  function openViewer(src: string, alt: string) {
+    img.src = src;
+    img.alt = alt;
+    viewer.classList.remove('opacity-0', 'pointer-events-none');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeViewer() {
+    viewer.classList.add('opacity-0', 'pointer-events-none');
+    document.body.style.overflow = '';
+  }
+
+  // 点击文章中的图片触发
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLImageElement;
+    if (target.tagName === 'IMG' && target.closest('.prose')) {
+      openViewer(target.getAttribute('src')!, target.alt);
+    }
+  });
+
+  // 关闭
+  closeBtn.addEventListener('click', closeViewer);
+  viewer.addEventListener('click', (e) => {
+    if (e.target === viewer) closeViewer();
+  });
+
+  // 键盘控制
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeViewer();
+  });
+</script>

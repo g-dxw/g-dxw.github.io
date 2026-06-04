@@ -1,0 +1,57 @@
+<div class="relative w-full max-w-md mx-auto mb-8">
+  <input
+    id="search-input"
+    type="search"
+    placeholder="搜索文章..."
+    autocomplete="off"
+    class="w-full px-4 py-3 pl-10 rounded-xl border border-[var(--color-border)] dark:border-[var(--color-border-dark)] bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] text-[var(--color-text)] dark:text-[var(--color-text-dark)] placeholder:text-[var(--color-text-muted)] dark:placeholder:text-[var(--color-text-muted-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] dark:focus:ring-[var(--color-accent-dark)] transition-shadow"
+  />
+  <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+  <div id="search-results" class="hidden absolute top-full mt-2 w-full bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] rounded-xl border border-[var(--color-border)] dark:border-[var(--color-border-dark)] shadow-lg max-h-80 overflow-y-auto z-40">
+    <!-- 搜索结果由 Pagefind 动态填充 -->
+  </div>
+</div>
+
+<script>
+  import { search } from '../utils/search';
+
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const results = document.getElementById('search-results')!;
+  let debounceTimer: ReturnType<typeof setTimeout>;
+
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const query = input.value.trim();
+
+    if (query.length < 2) {
+      results.classList.add('hidden');
+      results.innerHTML = '';
+      return;
+    }
+
+    debounceTimer = setTimeout(async () => {
+      const hits = await search(query);
+      if (hits.length === 0) {
+        results.innerHTML = '<p class="p-4 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">未找到相关文章</p>';
+        results.classList.remove('hidden');
+        return;
+      }
+      results.innerHTML = hits.map((h: any) => `
+        <a href="${h.url}" class="block p-4 hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)] transition-colors no-underline border-b border-[var(--color-border)] dark:border-[var(--color-border-dark)] last:border-0">
+          <p class="text-sm font-medium text-[var(--color-text)] dark:text-[var(--color-text-dark)]">${h.meta?.title || h.url}</p>
+          ${h.excerpt ? `<p class="text-xs text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mt-1">${h.excerpt}</p>` : ''}
+        </a>
+      `).join('');
+      results.classList.remove('hidden');
+    }, 300);
+  });
+
+  // 点击外部关闭
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('#search-input') && !(e.target as HTMLElement).closest('#search-results')) {
+      results.classList.add('hidden');
+    }
+  });
+</script>
