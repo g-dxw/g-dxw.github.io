@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>邻里生活圈 - UI 原型</title>
+<style>
+:root {
+  --c-primary: #E67E22;
+  --c-primary-light: #FDE8D0;
+  --c-primary-dark: #B8601A;
+  --c-secondary: #10B981;
+  --c-secondary-light: #D1FAE5;
+  --c-bg: #FFFBEB;
+  --c-surface: #FFFFFF;
+  --c-text: #1E293B;
+  --c-subtext: #64748B;
+  --c-border: #E8E4D9;
+  --c-danger: #EF4444;
+  --c-danger-light: #FEE2E2;
+  --c-warning: #F59E0B;
+  --c-info: #0EA5E9;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --tab-h: 56px;
+  --safe-bottom: env(safe-area-inset-bottom, 16px);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--font-sans); background:var(--c-bg); color:var(--c-text); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+button { font-family:inherit; cursor:pointer; border:none; outline:none; }
+input,textarea,select { font-family:inherit; font-size:15px; }
+
+/* Layout */
+.app { max-width:430px; margin:0 auto; min-height:100vh; background:var(--c-bg); position:relative; box-shadow:var(--shadow-md); }
+.header { position:sticky; top:0; z-index:100; background:var(--c-surface); padding:12px 16px; border-bottom:1px solid var(--c-border); display:flex; align-items:center; gap:12px; }
+.header .back { width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--c-text); background:none; cursor:pointer; }
+.header .title { font-size:17px; font-weight:600; flex:1; }
+.page { display:none; padding-bottom:80px; }
+.page.active { display:block; }
+.page-content { padding:16px; }
+
+/* Bottom Tab Bar */
+.tab-bar { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; background:var(--c-surface); border-top:1px solid var(--c-border); display:flex; z-index:200; padding-bottom:var(--safe-bottom); }
+.tab-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 0; color:var(--c-subtext); font-size:11px; gap:2px; cursor:pointer; transition:color .2s; }
+.tab-item.active { color:var(--c-primary); }
+.tab-item .icon { font-size:22px; line-height:1; }
+
+/* Cards */
+.card { background:var(--c-surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; box-shadow:var(--shadow); }
+.card-title { font-size:16px; font-weight:600; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.card-row { display:flex; align-items:center; justify-content:space-between; }
+.card-tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:500; }
+.tag-red { background:var(--c-danger-light); color:var(--c-danger); }
+.tag-green { background:var(--c-secondary-light); color:var(--c-secondary); }
+.tag-orange { background:var(--c-primary-light); color:var(--c-primary-dark); }
+.tag-blue { background:#DBEAFE; color:#2563EB; }
+.tag-gray { background:#F1F5F9; color:#64748B; }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 24px; border-radius:var(--radius-sm); font-size:15px; font-weight:500; transition:all .2s; gap:6px; }
+.btn-primary { background:var(--c-primary); color:#fff; }
+.btn-primary:hover { background:var(--c-primary-dark); }
+.btn-outline { background:transparent; border:1.5px solid var(--c-primary); color:var(--c-primary); }
+.btn-outline:hover { background:var(--c-primary-light); }
+.btn-danger { background:var(--c-danger); color:#fff; }
+.btn-sm { padding:6px 14px; font-size:13px; }
+.btn-lg { padding:14px 32px; font-size:16px; border-radius:var(--radius); }
+.btn-block { width:100%; }
+
+/* Form */
+.form-group { margin-bottom:16px; }
+.form-label { display:block; font-size:14px; font-weight:500; margin-bottom:6px; color:var(--c-text); }
+.form-input { width:100%; padding:10px 14px; border:1.5px solid var(--c-border); border-radius:var(--radius-sm); background:var(--c-surface); transition:border-color .2s; }
+.form-input:focus { border-color:var(--c-primary); outline:none; }
+.form-hint { font-size:12px; color:var(--c-subtext); margin-top:4px; }
+.form-textarea { min-height:100px; resize:vertical; }
+
+/* Badge */
+.badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:500; background:var(--c-primary-light); color:var(--c-primary-dark); }
+
+/* List */
+.list-item { display:flex; align-items:center; padding:14px 0; border-bottom:1px solid var(--c-border); gap:12px; }
+.list-item:last-child { border-bottom:none; }
+.list-item .avatar { width:44px; height:44px; border-radius:50%; background:var(--c-primary-light); display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--c-primary); flex-shrink:0; }
+.list-item .info { flex:1; min-width:0; }
+.list-item .name { font-size:15px; font-weight:500; }
+.list-item .meta { font-size:12px; color:var(--c-subtext); margin-top:2px; }
+.list-item .extra { flex-shrink:0; text-align:right; }
+
+/* Tabs */
+.filter-tabs { display:flex; gap:8px; overflow-x:auto; padding:12px 16px; scrollbar-width:none; }
+.filter-tabs::-webkit-scrollbar { display:none; }
+.filter-tab { white-space:nowrap; padding:6px 16px; border-radius:20px; font-size:13px; background:var(--c-surface); border:1px solid var(--c-border); color:var(--c-subtext); cursor:pointer; transition:all .2s; }
+.filter-tab.active { background:var(--c-primary); color:#fff; border-color:var(--c-primary); }
+
+/* Progress */
+.progress-bar { height:6px; background:var(--c-border); border-radius:3px; overflow:hidden; margin:8px 0; }
+.progress-fill { height:100%; border-radius:3px; background:var(--c-primary); transition:width .5s; }
+
+/* Modal-like */
+.guest-wall { text-align:center; padding:40px 24px; }
+.guest-wall .lock-icon { font-size:56px; margin-bottom:16px; color:var(--c-primary); }
+.guest-wall h3 { font-size:18px; margin-bottom:8px; }
+.guest-wall p { color:var(--c-subtext); font-size:14px; margin-bottom:20px; }
+
+/* Section Header */
+.section-header { display:flex; align-items:center; justify-content:space-between; padding:16px 16px 8px; }
+.section-header h2 { font-size:17px; font-weight:600; }
+.section-header .more { color:var(--c-subtext); font-size:13px; cursor:pointer; }
+
+/* Grid Layout */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+/* Toast */
+.toast { position:fixed; top:80px; left:50%; transform:translateX(-50%); z-index:999; background:var(--c-text); color:#fff; padding:10px 24px; border-radius:20px; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast.show { opacity:1; }
+
+/* Activity Card */
+.activity-card { background:var(--c-surface); border-radius:var(--radius); padding:16px; margin-bottom:12px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.activity-card .ac-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.activity-card .ac-title { font-size:16px; font-weight:600; flex:1; }
+.activity-card .ac-time { font-size:13px; color:var(--c-subtext); display:flex; align-items:center; gap:4px; }
+.activity-card .ac-location { font-size:13px; color:var(--c-subtext); margin-top:4px; }
+.activity-card .ac-footer { display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); }
+.activity-card .ac-people { display:flex; align-items:center; gap:4px; font-size:13px; color:var(--c-subtext); }
+
+/* Comment area */
+.comment-section { background:#F9FAFB; border-radius:var(--radius-sm); padding:12px; margin-top:12px; }
+.comment-item { margin-bottom:10px; }
+.comment-item:last-child { margin-bottom:0; }
+.comment-user { font-size:13px; font-weight:500; color:var(--c-primary-dark); }
+.comment-text { font-size:13px; color:var(--c-text); margin-top:2px; }
+.comment-time { font-size:11px; color:var(--c-subtext); }
+
+/* Red-black bar */
+.rb-bar { display:flex; gap:12px; margin-top:8px; }
+.rb-item { flex:1; display:flex; align-items:center; gap:4px; font-size:13px; }
+.rb-rec { color:var(--c-secondary); }
+.rb-avoid { color:var(--c-danger); }
+
+/* Vote/Support */
+.vote-bar { display:flex; align-items:center; gap:12px; margin-top:10px; }
+.vote-count { font-size:14px; font-weight:600; color:var(--c-primary); }
+.vote-threshold { font-size:12px; color:var(--c-subtext); }
+.vote-btn { padding:8px 16px; border-radius:20px; font-size:13px; font-weight:500; }
+
+/* Admin Panel */
+.admin-row { display:flex; align-items:center; padding:12px; border:1px solid var(--c-border); border-radius:var(--radius-sm); margin-bottom:8px; gap:12px; background:var(--c-surface); }
+.admin-avatar { width:40px; height:40px; border-radius:50%; background:var(--c-primary-light); display:flex; align-items:center; justify-content:center; color:var(--c-primary); flex-shrink:0; }
+.admin-info { flex:1; }
+.admin-actions { display:flex; gap:8px; }
+
+/* Home Grid */
+.home-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:12px 16px; }
+.home-card { background:var(--c-surface); border-radius:var(--radius); padding:18px 14px; box-shadow:var(--shadow); cursor:pointer; transition:transform .15s; display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; }
+.home-card:active { transform:scale(0.97); }
+.home-card .hc-icon { font-size:32px; }
+.home-card .hc-title { font-size:14px; font-weight:600; }
+.home-card .hc-desc { font-size:11px; color:var(--c-subtext); line-height:1.4; }
+
+/* Banner */
+.banner { background:linear-gradient(135deg,#FDE8D0,#FEF3C7); border-radius:var(--radius); padding:20px; margin:0 16px 12px; text-align:center; }
+.banner h3 { font-size:16px; font-weight:600; margin-bottom:6px; }
+.banner p { font-size:13px; color:var(--c-primary-dark); }
+
+/* Stars */
+.stars { color:var(--c-warning); font-size:14px; }
+.stars .gray { color:var(--c-border); }
+
+/* Phone link */
+.phone-link { color:var(--c-info); font-weight:600; text-decoration:none; }
+
+/* Price */
+.price { font-size:20px; font-weight:700; color:var(--c-primary-dark); }
+.price-unit { font-size:13px; font-weight:400; color:var(--c-subtext); }
+
+/* Toast for demo */
+.demo-badge { position:absolute; top:8px; right:8px; background:var(--c-text); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px; opacity:0.7; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== PAGE: HOME ===== -->
+  <div class="page active" id="page-home">
+    <div class="header">
+      <span style="font-size:20px;font-weight:700;color:var(--c-primary);">新天泽首誉久誉</span>
+      <span class="badge" style="margin-left:auto;">切换小区</span>
+    </div>
+
+    <!-- Guest warning -->
+    <div class="banner" id="guest-banner">
+      <h3>你当前为游客模式</h3>
+      <p>认证业主身份，解锁全部邻里功能</p>
+      <button class="btn btn-primary btn-sm" style="margin-top:8px;" onclick="navTo('auth')">立即认证</button>
+    </div>
+
+    <div class="section-header"><h2>全部板块</h2></div>
+    <div class="home-grid">
+      <div class="home-card" onclick="navTo('notice')">
+        <span class="hc-icon">📋</span>
+        <span class="hc-title">小区公告栏</span>
+        <span class="hc-desc">物业通知·居委公示</span>
+      </div>
+      <div class="home-card" onclick="navTo('forum')">
+        <span class="hc-icon">💬</span>
+        <span class="hc-title">社区线上广场</span>
+        <span class="hc-desc">BBS论坛·邻里闲聊</span>
+      </div>
+      <div class="home-card" onclick="navTo('proposal')">
+        <span class="hc-icon">🗳️</span>
+        <span class="hc-title">提案与投票</span>
+        <span class="hc-desc">业主联名·催办跟进</span>
+      </div>
+      <div class="home-card" onclick="navTo('activity')">
+        <span class="hc-icon">🎉</span>
+        <span class="hc-title">邻里活动市集</span>
+        <span class="hc-desc">线下聚会·诚信保证金</span>
+      </div>
+      <div class="home-card" onclick="navTo('skill')">
+        <span class="hc-icon">🤝</span>
+        <span class="hc-title">邻里技能服务</span>
+        <span class="hc-desc">互助·信任变现</span>
+      </div>
+      <div class="home-card" onclick="navTo('idle')">
+        <span class="hc-icon">♻️</span>
+        <span class="hc-title">邻里闲置通道</span>
+        <span class="hc-desc">断舍离·线下自提</span>
+      </div>
+      <div class="home-card" onclick="navTo('yellowpage')">
+        <span class="hc-icon">📞</span>
+        <span class="hc-title">便民电子黄页</span>
+        <span class="hc-desc">周边商家·红黑榜</span>
+      </div>
+      <div class="home-card" onclick="navTo('auth')">
+        <span class="hc-icon">🛡️</span>
+        <span class="hc-title">业主认证中心</span>
+        <span class="hc-desc">小区防火墙·楼长审核</span>
+      </div>
+      <div class="home-card" onclick="navTo('admin')">
+        <span class="hc-icon">⚙️</span>
+        <span class="hc-title">管理后台</span>
+        <span class="hc-desc">审核·楼长授权</span>
+      </div>
+      <div class="home-card" onclick="navTo('launch')">
+        <span class="hc-icon">🚀</span>
+        <span class="hc-title">社区启动计划</span>
+        <span class="hc-desc">参与开发·运营志愿者</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: LAUNCH ===== -->
+  <div id="page-launch" class="page">
+    <div class="header">
+      <span class="back-btn" onclick="navTo('home')">‹ 返回</span>
+      <span class="header-title">社区启动计划</span>
+      <span></span>
+    </div>
+    <div class="page-content">
+      <div class="section-title">项目概述</div>
+      <div class="card">
+        <p>本项目旨在为本小区搭建一个线上社区平台，利用 AI 辅助功能提升邻里互动体验，增强社区凝聚力。平台将结合本小区的实际需求进行定制，打造真正属于业主自己的数字化家园。</p>
+        <p style="margin-top:8px;">当前版本为原型阶段，欢迎各位业主参与开发与完善，共同推动项目成长。如有任何想法、建议或使用反馈，随时提出。</p>
+      </div>
+
+      <div class="section-title">核心目标</div>
+      <div class="card">
+        <div class="info-item"><span class="info-label">AI 辅助互动</span><span>通过智能问答、信息聚合等功能，让社区交流更高效</span></div>
+        <div class="info-item"><span class="info-label">增强凝聚力</span><span>打破邻里隔阂，促进日常互助与资源共享</span></div>
+        <div class="info-item"><span class="info-label">因地制宜</span><span>根据本小区实际情况定制功能，不做千篇一律的模板</span></div>
+      </div>
+
+      <div class="section-title">参与方式</div>
+      <div class="card">
+        <div class="info-item"><span class="info-label">功能开发</span><span>欢迎有编程经验或对技术感兴趣的业主加入开发团队，共同参与功能设计与代码实现</span></div>
+        <div class="info-item"><span class="info-label">日常维护</span><span>平台上线后，将组建业主志愿者队伍，负责日常运营管理，包括内容审核、邻里纠纷调解、活动组织等</span></div>
+      </div>
+
+      <div class="section-title">费用说明</div>
+      <div class="card">
+        <p>平台预计年度运营成本约 <strong>2000 元/年</strong>，主要用于服务器和 AI 接口费用。</p>
+        <p style="margin-top:8px;">资金来源计划：</p>
+        <ul style="margin:4px 0 0 16px;color:#666;">
+          <li>周边商家赞助（广告位或合作推广形式）</li>
+          <li>小区业主自愿打赏</li>
+        </ul>
+        <p style="margin-top:8px;color:#10B981;">预计以上方式可覆盖日常运营成本，无需额外向业主摊派。</p>
+      </div>
+
+      <div class="section-title">联系我们</div>
+      <div class="card">
+        <div class="info-item"><span class="info-label">反馈与建议</span><span>欢迎在社区群内直接提出</span></div>
+        <div class="info-item"><span class="info-label">加入开发</span><span>私聊项目发起人报名</span></div>
+        <div class="info-item"><span class="info-label">加入志愿者</span><span>待志愿者招募启动后统一登记</span></div>
+        <div class="info-item"><img style="max-width: 100%;" src="/weixing.jpg" alt="联系信息"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: FORUM ===== -->
+  <div class="page" id="page-forum">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">社区线上广场</span></div>
+    <div class="page-content">
+      <div class="card" style="background:linear-gradient(135deg,#E8F5E9,#F1F8E9);">
+        <p style="font-size:16px;font-weight:600;margin-bottom:4px;">💬 邻里闲聊 · 信息共享</p>
+        <p style="font-size:12px;color:var(--c-subtext);">发帖需完成业主认证，游客仅可浏览</p>
+      </div>
+
+      <!-- Post composer -->
+      <div class="card">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--c-primary-light);display:flex;align-items:center;justify-content:center;font-size:18px;">😊</div>
+          <input class="form-input" style="flex:1;margin:0;" placeholder="分享你的邻里生活，支持文字和图片...">
+          <button class="btn btn-primary btn-sm" onclick="showToast('请先完成业主认证')">发帖</button>
+        </div>
+      </div>
+
+      <!-- Post: 1 -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--c-primary-light);display:flex;align-items:center;justify-content:center;font-size:20px;">🐱</div>
+            <div>
+              <p style="font-size:14px;font-weight:600;">6栋老王</p>
+              <p style="font-size:11px;color:var(--c-subtext);">6栋2单元 · 3小时前</p>
+            </div>
+          </div>
+          <span class="badge" style="background:var(--c-warning);color:#fff;">热帖</span>
+        </div>
+        <div class="card-title" style="margin-bottom:8px;">小区流浪猫投喂点更新，欢迎加入喂养群</div>
+        <p style="font-size:14px;color:var(--c-text);line-height:1.7;">各位邻居好！4栋后面的投喂点已经重新布置了，换了新的防水猫窝和自动喂食器。目前有6只常驻流浪猫，都已绝育。有兴趣一起照顾的邻居扫码入群~</p>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:13px;color:var(--c-subtext);">
+          <span>❤️ 32</span><span>💬 15</span><span>👁 286</span>
+        </div>
+      </div>
+
+      <!-- Post: 2 -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--c-secondary-light);display:flex;align-items:center;justify-content:center;font-size:20px;">🏃</div>
+            <div>
+              <p style="font-size:14px;font-weight:600;">爱跑步的小李</p>
+              <p style="font-size:11px;color:var(--c-subtext);">5栋1单元 · 5小时前</p>
+            </div>
+          </div>
+          <span class="card-tag" style="margin:0;">活动</span>
+        </div>
+        <div class="card-title" style="margin-bottom:8px;">每天早6:30小区晨跑队招新，配速6分半</div>
+        <p style="font-size:14px;color:var(--c-text);line-height:1.7;">晨跑队成立半年了，每天绕小区跑3圈约5公里，配速6:30左右，新手友好。在小区南门集合，跑完可以一起去南门早餐店。不收费，纯粹兴趣小组~</p>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:13px;color:var(--c-subtext);">
+          <span>❤️ 28</span><span>💬 22</span><span>👁 412</span>
+        </div>
+      </div>
+
+      <!-- Post: 3 -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--c-primary-light);display:flex;align-items:center;justify-content:center;font-size:20px;">🌸</div>
+            <div>
+              <p style="font-size:14px;font-weight:600;">阳台花园君</p>
+              <p style="font-size:11px;color:var(--c-subtext);">8栋3单元 · 昨天</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-title" style="margin-bottom:8px;">阳台种菜的避坑指南（附失败案例）</div>
+        <p style="font-size:14px;color:var(--c-text);line-height:1.7;">种了一年阳台菜，踩过的坑比菜还多。总结几条血泪教训：1. 朝北阳台就别折腾番茄了，只长叶子不结果；2. 薄荷一定要单独盆种，不然会霸占整个阳台；3. 买种子比买苗划算，但育苗要有耐心...欢迎有种菜经验的邻居交流！</p>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:13px;color:var(--c-subtext);">
+          <span>❤️ 56</span><span>💬 38</span><span>👁 731</span>
+        </div>
+      </div>
+
+      <!-- Post: 4 -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--c-primary-light);display:flex;align-items:center;justify-content:center;font-size:20px;">🎮</div>
+            <div>
+              <p style="font-size:14px;font-weight:600;">游戏宅不想出门</p>
+              <p style="font-size:11px;color:var(--c-subtext);">2栋1单元 · 2天前</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-title" style="margin-bottom:8px;">有没有邻居一起玩双人成行？Switch在线联机</div>
+        <p style="font-size:14px;color:var(--c-text);line-height:1.7;">最近买了Switch版双人成行，需要找个搭档一起通关。最好是同小区的，以后还能线下一起玩别的游戏。LOL、王者、原神也都可以，周末有时间~</p>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:13px;color:var(--c-subtext);">
+          <span>❤️ 18</span><span>💬 41</span><span>👁 523</span>
+        </div>
+      </div>
+
+      <!-- Post: 5 -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--c-secondary-light);display:flex;align-items:center;justify-content:center;font-size:20px;">👶</div>
+            <div>
+              <p style="font-size:14px;font-weight:600;">新手宝妈阿琳</p>
+              <p style="font-size:11px;color:var(--c-subtext);">7栋4单元 · 3天前</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-title" style="margin-bottom:8px;">求推荐靠谱的周末带娃去处（3岁以内）</div>
+        <p style="font-size:14px;color:var(--c-text);line-height:1.7;">宝宝刚满2岁，想带她多接触其他小朋友。小区附近有没有适合小宝宝的游乐场所或者早教中心？最好步行可达，一般周末去。有好推荐的邻居麻烦分享一下~</p>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:13px;color:var(--c-subtext);">
+          <span>❤️ 23</span><span>💬 29</span><span>👁 398</span>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:16px;color:var(--c-subtext);font-size:13px;">— 仅显示最近帖子，认证后可查看更多 —</div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: AUTH ===== -->
+  <div class="page" id="page-auth">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">真邻居认证系统</span></div>
+    <div class="page-content">
+      <div class="card">
+        <div class="card-title"><span style="font-size:24px;">🛡️</span>小区防火墙</div>
+        <p style="font-size:13px;color:var(--c-subtext);margin-bottom:16px;">认证后可发布内容、报名活动、预约服务。游客仅可浏览公告和黄页。</p>
+
+        <div class="form-group">
+          <label class="form-label">楼栋号 - 单元 - 房号</label>
+          <input class="form-input" placeholder="例如：3栋 - 2单元 - 501" id="auth-room">
+        </div>
+        <div class="form-group">
+          <label class="form-label">上传住址凭证</label>
+          <input class="form-input" type="file" accept="image/*" style="padding:8px;">
+          <div class="form-hint">支持：近期水电费账单 / 购房合同 / 物业费发票截图</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">真实姓名</label>
+          <input class="form-input" placeholder="请输入真实姓名" id="auth-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <input class="form-input" placeholder="请输入手机号" id="auth-phone">
+        </div>
+
+        <div class="card" style="background:#F8FAFC;box-shadow:none;">
+          <div class="card-title" style="font-size:14px;">⚠️ 审核说明</div>
+          <p style="font-size:12px;color:var(--c-subtext);">楼长或管理员将在24小时内核对您上传的凭证与房号是否一致。信息不实将被永久拒绝认证。</p>
+        </div>
+
+        <button class="btn btn-primary btn-block btn-lg" onclick="showToast('认证申请已提交，等待楼长审核')">提交认证申请</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: NOTICE ===== -->
+  <div class="page" id="page-notice">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">小区官方公告栏</span></div>
+    <div class="filter-tabs">
+      <span class="filter-tab active">全部</span>
+      <span class="filter-tab">物业通知</span>
+      <span class="filter-tab">居委通知</span>
+      <span class="filter-tab">社区改造</span>
+      <span class="filter-tab">紧急公告</span>
+    </div>
+    <div class="page-content">
+      <div class="card">
+        <div class="demo-badge">置顶</div>
+        <span class="card-tag tag-red" style="margin-bottom:8px;">紧急公告</span>
+        <div class="card-title">关于3栋电梯停运维修的紧急通知</div>
+        <p style="font-size:13px;color:var(--c-subtext);margin-bottom:8px;">发布方：翠苑物业服务中心 &nbsp;|&nbsp; 2026-06-04</p>
+        <p style="font-size:14px;line-height:1.7;">3栋2单元电梯因钢缆磨损于6月3日晚间停运，已联系维保单位紧急抢修，预计6月6日恢复运行。期间请3栋业主使用1单元电梯，给您带来不便敬请谅解。</p>
+
+        <div class="comment-section" id="notice-comment-1">
+          <p style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--c-subtext);">💬 邻里讨论（不干扰正文）</p>
+          <div class="comment-item">
+            <span class="comment-user">3-2-502 老王</span>
+            <div class="comment-text">理解理解，安全第一。就是老人上下有点不方便</div>
+            <span class="comment-time">2小时前 · 12赞</span>
+          </div>
+          <div class="comment-item">
+            <span class="comment-user">3-2-301 小李</span>
+            <div class="comment-text">物业反应很快，点赞。希望能按时恢复</div>
+            <span class="comment-time">1小时前 · 8赞</span>
+          </div>
+          <div class="comment-item">
+            <span class="comment-user">3-1-801 张姐</span>
+            <div class="comment-text">我这边有轮椅需要的可以来借，私聊我</div>
+            <span class="comment-time">30分钟前 · 15赞</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <input class="form-input" placeholder="友善发言，参与讨论..." style="flex:1;font-size:13px;">
+            <button class="btn btn-primary btn-sm">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-blue" style="margin-bottom:8px;">物业通知</span>
+        <div class="card-title">6月份绿化喷药作业时间安排</div>
+        <p style="font-size:13px;color:var(--c-subtext);margin-bottom:8px;">发布方：翠苑物业服务中心 &nbsp;|&nbsp; 2026-06-01</p>
+        <p style="font-size:14px;">6月10日-12日将对全小区绿化带进行季度喷药，请家长提醒儿童勿触碰绿植，养宠物的邻居注意遛狗区域。</p>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-green" style="margin-bottom:8px;">居委通知</span>
+        <div class="card-title">65岁以上老人免费体检登记通知</div>
+        <p style="font-size:13px;color:var(--c-subtext);margin-bottom:8px;">发布方：翠苑社区居委会 &nbsp;|&nbsp; 2026-05-28</p>
+        <p style="font-size:14px;">请携带身份证到居委会登记，体检时间：6月15日-20日，地点：社区卫生服务中心。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: PROPOSAL ===== -->
+  <div class="page" id="page-proposal">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">提案与投票</span><button class="btn btn-primary btn-sm" onclick="showToast('请先完成业主认证')">发起提案</button></div>
+    <div class="page-content">
+      <!-- Pinned proposal -->
+      <div class="card" style="border-left:4px solid var(--c-danger);">
+        <div class="demo-badge" style="background:var(--c-danger);">待办置顶</div>
+        <span class="card-tag tag-red" style="margin-bottom:8px;">🚨 已达门槛 62/50 户</span>
+        <div class="card-title">维修3栋2单元电梯 — 业主联名催办</div>
+        <p style="font-size:13px;color:var(--c-subtext);">发起人：3-2-1201 陈先生 · 2026-06-02</p>
+        <p style="font-size:14px;margin:8px 0;">电梯已运行15年，近半年故障频发（记录12次），存在严重安全隐患。要求物业启动大修基金进行全面维修。</p>
+        <div class="progress-bar" style="margin:10px 0;"><div class="progress-fill" style="width:100%;background:var(--c-danger);"></div></div>
+        <div class="vote-bar">
+          <span class="vote-count">62 户已附议</span>
+          <span class="vote-threshold">门槛 50 户 ✓</span>
+          <span class="badge" style="background:var(--c-danger-light);color:var(--c-danger);">催办函已生成</span>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--c-subtext);">
+          管理员回复：已将该催办函发至物业经理，物业承诺 6月8日前书面回复维修方案。
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="showToast('你已附议该提案')">我已附议 ✓</button>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-orange" style="margin-bottom:8px;">进行中</span>
+        <div class="card-title">小区西门增设电动车充电桩</div>
+        <p style="font-size:13px;color:var(--c-subtext);">发起人：5-1-602 小刘 · 2026-06-04</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:66%;"></div></div>
+        <div class="vote-bar">
+          <span class="vote-count">33 户已附议</span>
+          <span class="vote-threshold">门槛 50 户</span>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="showToast('附议成功！还差 17 户')">附议支持</button>
+      </div>
+
+      <div class="card">
+        <span class="card-tag tag-gray" style="margin-bottom:8px;">新提案</span>
+        <div class="card-title">小区儿童游乐区铺设防摔地垫</div>
+        <p style="font-size:13px;color:var(--c-subtext);">发起人：7-2-303 宝妈联盟 · 2026-06-05</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:16%;"></div></div>
+        <div class="vote-bar">
+          <span class="vote-count">8 户已附议</span>
+          <span class="vote-threshold">门槛 50 户</span>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="showToast('附议成功！还差 42 户')">附议支持</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: ACTIVITY ===== -->
+  <div class="page" id="page-activity">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">邻里活动市集</span><button class="btn btn-primary btn-sm" onclick="showToast('请先完成业主认证')">发起活动</button></div>
+    <div class="filter-tabs">
+      <span class="filter-tab active">全部</span>
+      <span class="filter-tab">运动</span>
+      <span class="filter-tab">亲子</span>
+      <span class="filter-tab">宠物</span>
+      <span class="filter-tab">兴趣</span>
+    </div>
+    <div class="page-content">
+      <div class="activity-card">
+        <div class="ac-header">
+          <span class="card-tag tag-orange">运动</span>
+          <span class="badge">保证金 ¥5</span>
+        </div>
+        <div class="ac-title">周末晨跑团 — 翠湖公园5公里</div>
+        <div class="ac-time">🗓️ 6月7日 周六 06:30 - 08:00</div>
+        <div class="ac-location">📍 翠湖公园南门集合</div>
+        <div class="ac-footer">
+          <div class="ac-people">👥 12/20人 · 发起人：3-1-502 跑者老张</div>
+          <button class="btn btn-primary btn-sm" onclick="showToast('报名成功！保证金将在签到时原路退回')">立即报名 ¥5</button>
+        </div>
+      </div>
+
+      <div class="activity-card">
+        <div class="ac-header">
+          <span class="card-tag tag-green">亲子</span>
+          <span class="badge">保证金 ¥0</span>
+        </div>
+        <div class="ac-title">周末集体遛娃 — 小区中心花园</div>
+        <div class="ac-time">🗓️ 6月8日 周日 15:00 - 17:00</div>
+        <div class="ac-location">📍 小区中心花园游乐区</div>
+        <div class="ac-footer">
+          <div class="ac-people">👥 8/30人 · 发起人：7-2-303 宝妈联盟</div>
+          <button class="btn btn-primary btn-sm" onclick="showToast('报名成功！扫码加入活动群')">免费报名</button>
+        </div>
+      </div>
+
+      <div class="activity-card">
+        <div class="ac-header">
+          <span class="card-tag tag-blue">宠物</span>
+          <span class="badge">保证金 ¥5</span>
+        </div>
+        <div class="ac-title">狗狗社交日 — 宠物友好公园聚会</div>
+        <div class="ac-time">🗓️ 6月14日 周六 10:00 - 12:00</div>
+        <div class="ac-location">📍 西门外宠物友好公园</div>
+        <div class="ac-footer">
+          <div class="ac-people">👥 6/15人 · 发起人：5-1-802 铲屎官小美</div>
+          <button class="btn btn-primary btn-sm" onclick="showToast('报名成功！保证金 ¥5 已冻结')">立即报名 ¥5</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: SKILL ===== -->
+  <div class="page" id="page-skill">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">邻里技能服务</span></div>
+    <div class="filter-tabs">
+      <span class="filter-tab active">全部</span>
+      <span class="filter-tab">家政</span>
+      <span class="filter-tab">照看</span>
+      <span class="filter-tab">维修</span>
+      <span class="filter-tab">其他</span>
+    </div>
+    <div class="page-content">
+      <div class="list-item">
+        <div class="avatar">👩‍🍳</div>
+        <div class="info">
+          <div class="name">上门做饭（家常菜）<span class="badge" style="margin-left:6px;">同楼栋</span></div>
+          <div class="meta">服务：2荤2素+1汤 · <span class="price" style="font-size:16px;">¥50</span>/次</div>
+          <div class="meta">⏰ 工作日 18:00 后 &nbsp;|&nbsp; <span class="stars">★★★★★</span> 4.9</div>
+        </div>
+        <div class="extra">
+          <div style="font-size:13px;color:var(--c-secondary);margin-bottom:4px;">26人推荐</div>
+          <button class="btn btn-outline btn-sm">预约</button>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">🐶</div>
+        <div class="info">
+          <div class="name">遛狗 / 上门喂猫</div>
+          <div class="meta">服务：每次30分钟 · <span class="price" style="font-size:16px;">¥20</span>/次</div>
+          <div class="meta">⏰ 每日早晚各一次 &nbsp;|&nbsp; <span class="stars">★★★★☆</span> 4.7</div>
+        </div>
+        <div class="extra">
+          <div style="font-size:13px;color:var(--c-secondary);margin-bottom:4px;">18人推荐</div>
+          <button class="btn btn-outline btn-sm">预约</button>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">🔧</div>
+        <div class="info">
+          <div class="name">山姆代购</div>
+          <div class="meta">服务：山姆超市商品代购 · <span class="price" style="font-size:16px;">¥10</span>/次</div>
+          <div class="meta">⏰ 周末全天 &nbsp;|&nbsp; <span class="stars">★★★★★</span> 5.0</div>
+        </div>
+        <div class="extra">
+          <div style="font-size:13px;color:var(--c-secondary);margin-bottom:4px;">35人推荐</div>
+          <button class="btn btn-outline btn-sm">预约</button>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">🧹</div>
+        <div class="info">
+          <div class="name">老人照顾</div>
+          <div class="meta">服务：帮忙看护老人 · <span class="price" style="font-size:16px;">¥20</span>/次</div>
+          <div class="meta">⏰ 周一至周五 9:00-17:00 &nbsp;|&nbsp; <span class="stars">★★★★☆</span> 4.6</div>
+        </div>
+        <div class="extra">
+          <div style="font-size:13px;color:var(--c-secondary);margin-bottom:4px;">22人推荐</div>
+          <button class="btn btn-outline btn-sm">预约</button>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">👶</div>
+        <div class="info">
+          <div class="name">接送孩子上学/幼儿园</div>
+          <div class="meta">服务：单程接送 · <span class="price" style="font-size:16px;">¥15</span>/趟</div>
+          <div class="meta">⏰ 工作日早晚 &nbsp;|&nbsp; <span class="stars">★★★★★</span> 4.9</div>
+        </div>
+        <div class="extra">
+          <div style="font-size:13px;color:var(--c-secondary);margin-bottom:4px;">14人推荐</div>
+          <button class="btn btn-outline btn-sm">预约</button>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">👶</div>
+        <div class="info">
+          <div class="name">小孩托管</div>
+          <div class="meta">服务：帮忙带小孩 · <span class="price" style="font-size:16px;">¥15</span>/趟</div>
+          <div class="meta">⏰ 工作日早晚 &nbsp;|&nbsp; <span class="stars">★★★★★</span> 4.9</div>
+        </div>
+        <div class="extra">
+          <div style="font-size:13px;color:var(--c-secondary);margin-bottom:4px;">14人推荐</div>
+          <button class="btn btn-outline btn-sm">预约</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: IDLE ===== -->
+  <div class="page" id="page-idle">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">邻里闲置通道</span><button class="btn btn-primary btn-sm" onclick="showToast('请先完成业主认证')">发布闲置</button></div>
+    <div class="page-content">
+      <div class="card">
+        <div style="display:flex;gap:12px;">
+          <div style="width:80px;height:80px;background:var(--c-primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;">📚</div>
+          <div style="flex:1;">
+            <span class="card-tag tag-green" style="margin-bottom:4px;">免费送</span>
+            <div class="card-title" style="font-size:15px;">儿童绘本 30 本打包送</div>
+            <p style="font-size:13px;color:var(--c-subtext);">9成新 · 适龄 3-6 岁</p>
+            <p style="font-size:12px;color:var(--c-subtext);">发布者：7-2-303 宝妈 · 2小时前</p>
+            <div style="margin-top:6px;display:flex;gap:8px;">
+              <button class="btn btn-outline btn-sm" onclick="showToast('已发送虚拟号码联系请求')">📞 联系TA</button>
+              <button class="btn btn-sm" style="background:#F1F5F9;color:var(--c-subtext);">留言</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:12px;">
+          <div style="width:80px;height:80px;background:var(--c-primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;">🪑</div>
+          <div style="flex:1;">
+            <span class="card-tag tag-orange" style="margin-bottom:4px;">低价转</span>
+            <div class="card-title" style="font-size:15px;">宜家书桌+转椅 搬家急出</div>
+            <p style="font-size:13px;color:var(--c-subtext);">8成新 · 书桌120cm · <span class="price" style="font-size:16px;">¥150</span> 两件套</p>
+            <p style="font-size:12px;color:var(--c-subtext);">发布者：3-1-201 小李 · 5小时前</p>
+            <div style="margin-top:6px;display:flex;gap:8px;">
+              <button class="btn btn-outline btn-sm" onclick="showToast('已发送虚拟号码联系请求')">📞 联系TA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:12px;">
+          <div style="width:80px;height:80px;background:var(--c-primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;">🚲</div>
+          <div style="flex:1;">
+            <span class="card-tag tag-blue" style="margin-bottom:4px;">等价置换</span>
+            <div class="card-title" style="font-size:15px;">捷安特山地车（换小轮折叠车）</div>
+            <p style="font-size:13px;color:var(--c-subtext);">7成新 · 26寸 · 只换不出</p>
+            <p style="font-size:12px;color:var(--c-subtext);">发布者：5-1-1201 骑行爱好者 · 1天前</p>
+            <div style="margin-top:6px;display:flex;gap:8px;">
+              <button class="btn btn-outline btn-sm" onclick="showToast('已发送虚拟号码联系请求')">📞 联系TA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background:#FEF2F2;border:1px solid #FECACA;">
+        <div style="font-size:13px;color:var(--c-danger);">
+          ⚠️ <strong>线下自提提醒：</strong>本平台不提供线上付款，所有交易当面完成。请勿发送任何形式的线上转账。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: YELLOW PAGE ===== -->
+  <div class="page" id="page-yellowpage">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">便民电子黄页</span></div>
+    <div class="filter-tabs">
+      <span class="filter-tab active">全部</span>
+      <span class="filter-tab">维修</span>
+      <span class="filter-tab">生活</span>
+      <span class="filter-tab">餐饮</span>
+      <span class="filter-tab">健康</span>
+    </div>
+    <div class="page-content">
+      <div class="section-header" style="padding-top:0;"><h2 style="font-size:15px;">🔧 维修服务</h2></div>
+
+      <div class="list-item">
+        <div class="avatar">🔑</div>
+        <div class="info">
+          <div class="name">老张开锁 — 24小时上门</div>
+          <div class="meta">开锁/换锁/汽车锁 · 均价 ¥80-150</div>
+          <div class="rb-bar">
+            <span class="rb-item rb-rec">👍 靠谱 47</span>
+            <span class="rb-item rb-avoid">👎 避雷 2</span>
+          </div>
+        </div>
+        <div class="extra"><a class="phone-link" onclick="showToast('拨号中：138-xxxx-1234')">📞 拨打</a></div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">💧</div>
+        <div class="info">
+          <div class="name">小周水电维修</div>
+          <div class="meta">水管/电路/马桶/热水器</div>
+          <div class="rb-bar">
+            <span class="rb-item rb-rec">👍 靠谱 52</span>
+            <span class="rb-item rb-avoid">👎 避雷 5</span>
+          </div>
+        </div>
+        <div class="extra"><a class="phone-link" onclick="showToast('拨号中：139-xxxx-5678')">📞 拨打</a></div>
+      </div>
+
+      <div class="list-item" style="opacity:0.4;">
+        <div class="avatar">🔧</div>
+        <div class="info">
+          <div class="name">某通维修服务站 <span class="badge" style="background:var(--c-danger-light);color:var(--c-danger);">已下架</span></div>
+          <div class="meta">避雷率超过30%，已自动隐藏电话</div>
+          <div class="rb-bar">
+            <span class="rb-item rb-rec">👍 靠谱 8</span>
+            <span class="rb-item rb-avoid">👎 避雷 12 (35%)</span>
+          </div>
+        </div>
+        <div class="extra"><span style="color:var(--c-danger);font-size:12px;">已下架</span></div>
+      </div>
+
+      <div class="section-header"><h2 style="font-size:15px;">🥡 周边餐饮外卖</h2></div>
+
+      <div class="list-item">
+        <div class="avatar">🍜</div>
+        <div class="info">
+          <div class="name">翠苑面馆</div>
+          <div class="meta">本帮面/盖浇饭 · 人均 ¥20</div>
+          <div class="rb-bar">
+            <span class="rb-item rb-rec">👍 靠谱 89</span>
+            <span class="rb-item rb-avoid">👎 避雷 3</span>
+          </div>
+        </div>
+        <div class="extra">
+          <a class="phone-link" onclick="showToast('拨号中：0571-xxxx-1111')">📞</a>
+          &nbsp;
+          <span style="font-size:12px;color:var(--c-subtext);cursor:pointer;" onclick="showToast('跳转美团店铺')">美团</span>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="avatar">🥬</div>
+        <div class="info">
+          <div class="name">钱大妈（翠苑店）<span class="badge" style="background:#FEF3C7;color:#92400E;">广告位</span></div>
+          <div class="meta">不卖隔夜肉 · 每日特价</div>
+          <div class="rb-bar">
+            <span class="rb-item rb-rec">👍 靠谱 156</span>
+            <span class="rb-item rb-avoid">👎 避雷 1</span>
+          </div>
+        </div>
+        <div class="extra"><span style="font-size:12px;color:var(--c-subtext);">大众点评</span></div>
+      </div>
+
+      <div class="card" style="text-align:center;border:2px dashed var(--c-border);background:transparent;box-shadow:none;">
+        <p style="font-size:14px;color:var(--c-subtext);margin-bottom:8px;">周边商家老板？</p>
+        <button class="btn btn-primary btn-sm" onclick="showToast('商家入驻通道即将开放')">商家自助入驻</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: ADMIN ===== -->
+  <div class="page" id="page-admin">
+    <div class="header"><button class="back" onclick="navTo('home')">‹</button><span class="title">管理后台</span></div>
+    <div class="page-content">
+      <div class="card">
+        <div class="card-title">📋 待审核认证（3）</div>
+
+        <div class="admin-row">
+          <div class="admin-avatar">👤</div>
+          <div class="admin-info">
+            <div style="font-weight:500;">张伟</div>
+            <div style="font-size:12px;color:var(--c-subtext);">3栋-2单元-501 · 水电账单已上传</div>
+            <div style="font-size:11px;color:var(--c-subtext);">提交时间：2026-06-05 14:30</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary btn-sm">通过</button>
+            <button class="btn btn-danger btn-sm">驳回</button>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-avatar">👤</div>
+          <div class="admin-info">
+            <div style="font-weight:500;">李芳</div>
+            <div style="font-size:12px;color:var(--c-subtext);">5栋-1单元-802 · 物业费发票已上传</div>
+            <div style="font-size:11px;color:var(--c-subtext);">提交时间：2026-06-05 10:15</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary btn-sm">通过</button>
+            <button class="btn btn-danger btn-sm">驳回</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="border-color:#FECACA;background:#FFF5F5;">
+          <div class="admin-avatar">👤</div>
+          <div class="admin-info">
+            <div style="font-weight:500;">王某</div>
+            <div style="font-size:12px;color:var(--c-danger);">3栋-2单元-1501 · 地址与账单不一致</div>
+            <div style="font-size:11px;color:var(--c-subtext);">提交时间：2026-06-04 09:00</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-danger btn-sm">驳回</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏠 楼长授权管理</div>
+        <p style="font-size:13px;color:var(--c-subtext);margin-bottom:12px;">楼长拥有本楼栋的审核权限，分担管理员压力。</p>
+
+        <div class="admin-row">
+          <div class="admin-avatar">👩</div>
+          <div class="admin-info">
+            <div style="font-weight:500;">3栋楼长 — 王阿姨</div>
+            <div style="font-size:12px;color:var(--c-subtext);">已审核 23 人 · 任职 3 个月</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-outline btn-sm">撤销</button>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-avatar">👨</div>
+          <div class="admin-info">
+            <div style="font-weight:500;">5栋楼长 — 刘叔</div>
+            <div style="font-size:12px;color:var(--c-subtext);">已审核 18 人 · 任职 2 个月</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-outline btn-sm">撤销</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="border-style:dashed;">
+          <div class="admin-avatar" style="background:#F1F5F9;color:var(--c-subtext);">+</div>
+          <div class="admin-info">
+            <div style="font-weight:500;color:var(--c-subtext);">招募新楼长</div>
+            <div style="font-size:12px;color:var(--c-subtext);">7栋暂无楼长</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary btn-sm">招募</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 今日数据</div>
+        <div class="grid-2" style="margin-top:8px;">
+          <div style="text-align:center;padding:12px;background:var(--c-primary-light);border-radius:var(--radius-sm);">
+            <div style="font-size:24px;font-weight:700;color:var(--c-primary-dark);">287</div>
+            <div style="font-size:12px;color:var(--c-subtext);">已认证业主</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:#D1FAE5;border-radius:var(--radius-sm);">
+            <div style="font-size:24px;font-weight:700;color:#065F46;">3</div>
+            <div style="font-size:12px;color:var(--c-subtext);">活跃楼长</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Bottom Tab Bar ===== -->
+  <div class="tab-bar">
+    <div class="tab-item active" onclick="navTo('home')">
+      <span class="icon">🏠</span>
+      <span>首页</span>
+    </div>
+    <div class="tab-item" onclick="navTo('forum')">
+      <span class="icon">💬</span>
+      <span>广场</span>
+    </div>
+    <div class="tab-item" onclick="navTo('notice')">
+      <span class="icon">📋</span>
+      <span>公告</span>
+    </div>
+    <div class="tab-item" onclick="navTo('activity')">
+      <span class="icon">🎉</span>
+      <span>活动</span>
+    </div>
+    <div class="tab-item" onclick="navTo('auth')">
+      <span class="icon">👤</span>
+      <span>我的</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentPage = 'home';
+
+function navTo(pageId) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Show target
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+
+  // Update tab bar
+  const tabMap = { home:0, forum:1, notice:2, activity:3, auth:4 };
+  const tabs = document.querySelectorAll('.tab-item');
+  tabs.forEach((t,i) => t.classList.remove('active'));
+  if (tabMap[pageId] !== undefined) tabs[tabMap[pageId]].classList.add('active');
+
+  currentPage = pageId;
+  window.scrollTo(0,0);
+
+  // Update guest banner based on auth status
+  const banner = document.getElementById('guest-banner');
+  if (banner && pageId === 'home') {
+    banner.style.display = 'block';
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// Filter tab interactivity
+document.querySelectorAll('.filter-tabs').forEach(container => {
+  container.addEventListener('click', function(e) {
+    if (e.target.classList.contains('filter-tab')) {
+      this.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
