@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+
+// 户外经历卡片数据 —— 请根据你的真实经历修改
+const outdoorPosts = [
+  {
+    title: '徒步',
+    desc: '中登协初级户外指导员，带过队伍走山路。在山上脑子里只有下一步踩哪，是最好的关机方式。',
+    tag: '徒步领队',
+    icon: '⛰️'
+  },
+  {
+    title: '摩旅',
+    desc: '机车 + 公路 = 自由。没什么比风从耳边过去更解压。',
+    tag: '摩托车骑行',
+    icon: '🏍️'
+  },
+  {
+    title: '户外领队',
+    desc: '考了中国登山协会初级户外指导员证，带队伍走山路，负责路线规划和安全保障。',
+    tag: '中登协认证',
+    icon: '🧭'
+  }
+];
+
+// 小红书精选笔记 —— 请替换为你最受欢迎的笔记主题
+const xhsNotes = [
+  {
+    title: '重庆周边徒步路线推荐',
+    summary: '作为重庆的户外领队，分享几条亲测好走的徒步路线，适合周末出行。',
+    tag: '徒步',
+    date: '2026'
+  },
+  {
+    title: '新手徒步装备清单',
+    summary: '从鞋袜到背包，一份实用不花哨的装备清单，帮你少花冤枉钱。',
+    tag: '装备',
+    date: '2026'
+  },
+  {
+    title: '摩旅日记：重庆到XX',
+    summary: '机车、公路、风景。记录一次说走就走的摩旅。',
+    tag: '摩旅',
+    date: '2026'
+  }
+];
+---
+
+<Base
+  title="生活 · 旺仔"
+  description="代码之外，我是户外领队、摩旅爱好者。徒步、机车、山路，记录生活的另一面。"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+
+    <!-- Hero -->
+    <section class="mb-12">
+      <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
+        代码之外
+      </h1>
+      <p class="mt-3 text-lg text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
+        徒步爱好者 · 摩托车骑行 · 户外领队 · 中登协山地户外指导员
+      </p>
+      <p class="mt-2 text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
+        写代码是谋生，进山是生活。
+      </p>
+    </section>
+
+    <!-- 户外身份卡片 -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-6">
+        我的户外身份
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {outdoorPosts.map((post) => (
+          <div class="p-5 rounded-xl bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
+            <div class="text-3xl mb-3">{post.icon}</div>
+            <div class="inline-block text-xs px-2 py-0.5 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] mb-2">
+              {post.tag}
+            </div>
+            <h3 class="text-base font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-2">{post.title}</h3>
+            <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">{post.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 小红书精选 -->
+    <section class="mb-12">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
+          小红书精选
+        </h2>
+        <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55"
+           class="text-sm text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] hover:underline">
+          查看全部 →
+        </a>
+      </div>
+      <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-4">
+        更多户外内容在小红书 <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55" class="text-[var(--color-accent)] hover:underline">@旺仔爱运动</a>，1千+获赞与收藏
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {xhsNotes.map((note) => (
+          <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55"
+             class="block p-5 rounded-xl bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)] hover:border-[var(--color-accent)] dark:hover:border-[var(--color-accent-dark)] transition-colors no-underline group">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">{note.tag}</span>
+              <span class="text-xs text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">{note.date}</span>
+            </div>
+            <h3 class="text-base font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-2 group-hover:text-[var(--color-accent)] transition-colors">
+              {note.title}
+            </h3>
+            <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
+              {note.summary}
+            </p>
+            <div class="mt-3 text-xs text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
+              小红书查看 →
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 为什么写代码的人也需要进山 -->
+    <section class="mb-12">
+      <div class="p-6 rounded-xl bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border-l-4 border-[var(--color-accent)]">
+        <h2 class="text-lg font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-3">
+          为什么写代码的人也需要进山
+        </h2>
+        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
+          坐在电脑前，脑子里装的是 bug、deadline、转型焦虑。进了山，脑子里只有下一步踩哪块石头、还有多远到顶、水还够不够喝。
+        </p>
+        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed mt-2">
+          山不会跟你谈绩效，路不会问你几岁。走就是了。这是最好的关机方式，比任何冥想App都管用。
+        </p>
+        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed mt-2">
+          骑摩托车也一样。风从耳边过去的时候，脑子里什么都没有，只有路和下一个弯。那种干净的感觉，在城市的格子间里找不到。
+        </p>
+      </div>
+    </section>
+
+    <!-- 关注引导 -->
+    <section class="text-center py-8">
+      <p class="text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-4">
+        想看更多户外内容？来小红书找我
+      </p>
+      <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55"
+         class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors no-underline">
+        <span>小红书 @旺仔爱运动</span>
+        <span>→</span>
+      </a>
+    </section>
+
+  </div>
+</Base>

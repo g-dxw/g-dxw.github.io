@@ -3,24 +3,143 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base
-  title="关于我"
-  description="关于我和这个博客"
+  title="关于我 · 旺仔"
+  description="11年前端，正在转型AI Agent开发。全栈+AI+户外领队，出来混身份都是自己给的。"
 >
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-    <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)]">关于我</h1>
-    <div class="mt-8 prose prose-lg dark:prose-invert max-w-none">
-      <p>
-        你好！我是这个博客的作者。
+
+    <!-- 头部：一句话让人记住你 -->
+    <div class="mb-12">
+      <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
+        旺仔
+      </h1>
+      <p class="mt-2 text-lg text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] font-medium">
+        11年前端 · 手写Agent · 户外领队
       </p>
-      <p>
-        现在是一个重度AI使用患者，古法编程继承者。中登协初级户外指导员、户外领队、摩旅爱好者。。。。  出来混身份都是自己给的🤣
+      <p class="mt-3 text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
+        重度AI使用患者，古法编程继承者。出来混身份都是自己给的 🤣
       </p>
+    </div>
+
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+
+      <!-- 一句话定位 -->
+      <blockquote class="border-l-4 border-[var(--color-accent)] pl-4 italic text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
+        能一个人从0到1做出AI Agent产品的全栈工程师。<br>
+        前端 + 后端 + AI + 部署，全链路打通。
+      </blockquote>
+
+      <!-- 经历 -->
+      <h2>写过11年前端代码</h2>
+
       <p>
-        这里记录了我的技术探索、生活感悟和摄影作品。欢迎交流分享。
+        从jQuery写到React18，从切页面写到搭架构。猪八戒、平安智慧城、马上消费金融，都待过。干过前端、带过12人的团队、做过项目经理、搞过工程化升级——<strong>什么活都干过，什么坑都踩过</strong>。
       </p>
-      <h2>联系我</h2>
-      <p>GitHub: <a href="https://github.com/g-dxw">g-dxw</a></p>
-      <p>小红书: <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55">旺仔爱运动</a></p>
+
+      <p>
+        在马上消费金融的时候，第一次接触AI Agent在生产环境落地——基于公司的Agent系统，用AI结合业务场景提升电销系统体验。那会儿就意识到：AI不是噱头，是真能解决业务问题的工具。
+      </p>
+
+      <!-- 现在 -->
+      <h2>现在在干什么</h2>
+
+      <p>
+        2026年，给自己按了个暂停键。一边考证、做户外领队调节身心，一边系统学习AI Agent开发。
+      </p>
+
+      <p>
+        给自己设计了一个12周学习计划，核心原则：<strong>不做Demo，做底座</strong>。不追求"跑通一个例子"，而是理解底层原理，做出能真正用的东西。
+      </p>
+
+      <p>已完成三个产出：</p>
+
+      <ul>
+        <li>
+          <strong>手写Agent框架</strong>——不依赖LangChain，自己实现了Agent Loop、工具注册、循环检测、Token统计。写完才真正搞懂了Agent的底层原理，而不是只会调框架API。
+        </li>
+        <li>
+          <strong>Agentic RAG系统</strong>——不是普通的"embedding→检索→生成"，而是让Agent自主决策检索策略：混合检索、IDF权重、查询扩展、质量评估、多策略合并。
+        </li>
+        <li>
+          <strong>养老护工管理系统</strong>——React + FastAPI + AI审核，10个Phase的完整开发计划，正在逐步实现中。
+        </li>
+      </ul>
+
+      <p>
+        学习目录在 <a href="https://github.com/g-dxw">GitHub</a> 持续更新。学习笔记用TypeScript对照Python——不是从零学新语言，是做知识迁移。
+      </p>
+
+      <!-- 技术栈 -->
+      <h2>技术栈</h2>
+
+      <div class="grid grid-cols-2 gap-3 mt-4 mb-6 not-prose">
+        <div class="p-4 rounded-lg bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
+          <div class="text-xs font-bold text-[var(--color-accent)] mb-2 uppercase tracking-wide">前端</div>
+          <div class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
+            React 16/18 · Vue 2.7 · TypeScript<br>Vite / Webpack · Echarts · AntvX6
+          </div>
+        </div>
+        <div class="p-4 rounded-lg bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
+          <div class="text-xs font-bold text-[var(--color-accent)] mb-2 uppercase tracking-wide">后端</div>
+          <div class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
+            Python (FastAPI) · Java (SpringCloud)<br>MySQL · Nginx · Docker
+          </div>
+        </div>
+        <div class="p-4 rounded-lg bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
+          <div class="text-xs font-bold text-[var(--color-accent)] mb-2 uppercase tracking-wide">AI Agent</div>
+          <div class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
+            LLM API · Prompt工程 · RAG<br>Tool Use · 手写Agent Loop
+          </div>
+        </div>
+        <div class="p-4 rounded-lg bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
+          <div class="text-xs font-bold text-[var(--color-accent)] mb-2 uppercase tracking-wide">工程化</div>
+          <div class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
+            脚手架搭建 · 打包优化 · 组件库<br>CI/CD · Jenkins · 部署运维
+          </div>
+        </div>
+      </div>
+
+      <!-- 代码之外 -->
+      <h2>代码之外</h2>
+
+      <p>我是个闲不住的人。写代码不是生活的全部。</p>
+
+      <ul>
+        <li>
+          <strong>户外领队</strong>——考了中登协初级户外指导员证，带队伍走山路。在山上脑子里只有下一步踩哪，是最好的"关机"方式。
+        </li>
+        <li>
+          <strong>摩旅爱好者</strong>——机车 + 公路 = 自由。没什么比风从耳边过去更解压。
+        </li>
+        <li>
+          <strong>独立开发</strong>——用AI编程工具做过团队管理工具和邻里社区原型。享受一个人从0到1做出东西的感觉。
+        </li>
+        <li>
+          <strong>小红书运营</strong>——"旺仔爱运动"，分享户外和生活。不是技术能力，但做独立产品时能获客。
+        </li>
+      </ul>
+
+      <!-- 博客 -->
+      <h2>这个博客</h2>
+
+      <p>
+        记录技术探索、学习笔记和生活的胡思乱想。写博客的初衷很简单：遇到的好问题、踩过的坑、实际用上的思路，不记下来很快就忘了。写出来自己能翻，也看看能不能跟同路人聊起来。
+      </p>
+
+      <!-- 联系 -->
+      <h2>找到我</h2>
+
+      <div class="flex flex-col gap-3 not-prose mt-4">
+        <a href="https://github.com/g-dxw" class="inline-flex items-center gap-2 text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline">
+          <span class="text-sm">GitHub</span>
+          <span class="text-sm text-[var(--color-accent)]">@g-dxw</span>
+        </a>
+        <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55" class="inline-flex items-center gap-2 text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline">
+          <span class="text-sm">小红书</span>
+          <span class="text-sm text-[var(--color-accent)]">旺仔爱运动</span>
+        </a>
+      </div>
+
     </div>
   </div>
 </Base>

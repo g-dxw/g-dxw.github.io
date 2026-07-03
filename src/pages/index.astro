@@ -10,18 +10,26 @@ const posts = (await getCollection('blog'))
 ---
 
 <Base
-  title="我的博客"
-  description="一个关于技术、生活和摄影的个人博客"
+  title="旺仔的博客"
+  description="10年前端工程师转型AI Agent开发，记录技术探索、学习笔记和生活感悟"
 >
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
     <!-- Hero -->
-    <section class="text-center mb-12 sm:mb-16">
-      <h1 class="text-4xl sm:text-5xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] tracking-tight">
-        我的博客
-      </h1>
-      <p class="mt-4 text-lg text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] max-w-lg mx-auto">
-        技术、生活、摄影 — 记录我所见所想
-      </p>
+    <section class="relative text-center mb-12 sm:mb-16">
+      <div class="hero-bg"></div>
+      <div class="relative z-10 animate-fade-in-up px-6 py-8 sm:px-12 sm:py-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-code-bg)] dark:bg-[var(--color-code-bg-dark)] mb-5">
+          <span class="w-2 h-2 rounded-full bg-[var(--color-accent)] dark:bg-[var(--color-accent-dark)] animate-pulse"></span>
+          <span class="text-xs font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">正在转型AI Agent开发</span>
+        </div>
+        <p class="text-lg font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
+          AI应用工程师 · 全栈开发 · 手写Agent
+        </p>
+        <p class="mt-4 text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] max-w-lg mx-auto leading-relaxed">
+          10年前端 + AI Agent实战 + 户外领队<br>
+          记录技术探索、学习笔记和生活的胡思乱想
+        </p>
+      </div>
     </section>
 
     <!-- 搜索 -->
