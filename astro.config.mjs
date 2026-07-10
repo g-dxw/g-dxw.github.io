@@ -8,9 +8,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://myblog.vercel.app',
+  site: 'https://g-dxw.github.io',
   integrations: [mdx(), sitemap()],
-
+  trailingSlash: "always",
   server: {
     host: true,
   },
