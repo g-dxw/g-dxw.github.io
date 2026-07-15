@@ -16,7 +16,7 @@ const { title, description, image } = Astro.props;
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} image={image} />
 
     <!-- 防止暗色模式闪白 -->
     <script is:inline>
