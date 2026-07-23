@@ -1,6 +1,7 @@
 ---
 title: 'AI 思维框架：用统计力学看懂大模型黑盒'
 date: 2026-07-23
+cover: "/images/ai-thinking-framework-cover.jpeg"
 tags: ["AI", "Prompt", "学习笔记"]
 summary: "从玻尔兹曼分布到小球地形模型，用统计力学的视角拆解大模型推理的六大性质，以及实战中的隐式语义、掺杂剂、催化剂等技巧。"
 ---
