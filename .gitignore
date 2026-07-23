@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# obsidian editor config
+**/.obsidian/
+
+# trae internal files
+.trae/

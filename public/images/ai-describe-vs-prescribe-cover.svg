@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fafaf8"/>
+      <stop offset="100%" style="stop-color:#f0ede8"/>
+    </linearGradient>
+    <linearGradient id="leftGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fff8f0"/>
+      <stop offset="100%" style="stop-color:#fafaf8"/>
+    </linearGradient>
+    <linearGradient id="rightGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fafaf8"/>
+      <stop offset="100%" style="stop-color:#f0f0ee"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="6" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.1"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1600" height="900" fill="url(#bgGrad)"/>
+
+  <!-- 网格点阵装饰 -->
+  <g fill="#e5e5df" opacity="0.5">
+    <circle cx="100" cy="100" r="3"/>
+    <circle cx="150" cy="100" r="3"/>
+    <circle cx="200" cy="100" r="3"/>
+    <circle cx="100" cy="150" r="3"/>
+    <circle cx="100" cy="200" r="3"/>
+    <circle cx="150" cy="150" r="2"/>
+    <circle cx="1450" cy="800" r="3"/>
+    <circle cx="1500" cy="800" r="3"/>
+    <circle cx="1550" cy="800" r="3"/>
+    <circle cx="1500" cy="750" r="3"/>
+    <circle cx="1500" cy="700" r="3"/>
+    <circle cx="1450" cy="750" r="2"/>
+    <circle cx="150" cy="800" r="3"/>
+    <circle cx="100" cy="800" r="2"/>
+    <circle cx="150" cy="750" r="2"/>
+    <circle cx="1450" cy="100" r="3"/>
+    <circle cx="1500" cy="100" r="2"/>
+    <circle cx="1450" cy="150" r="2"/>
+  </g>
+
+  <!-- 中间分隔线（虚线） -->
+  <line x1="800" y1="120" x2="800" y2="780" stroke="#e5e5df" stroke-width="2" stroke-dasharray="8,8"/>
+
+  <!-- ========== 左侧：描述现象 ========== -->
+  <g>
+    <!-- 左侧背景区 -->
+    <rect x="60" y="120" width="680" height="660" rx="24" fill="url(#leftGrad)" opacity="0.5"/>
+
+    <!-- 标题 -->
+    <text x="400" y="190" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="600" fill="#e87b35">描述现象</text>
+    <text x="400" y="230" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6b6b65">Describe the Symptoms</text>
+
+    <!-- 对话气泡 1 -->
+    <g filter="url(#softShadow)">
+      <rect x="140" y="280" width="380" height="70" rx="20" fill="#ffffff" stroke="#e87b35" stroke-width="2"/>
+      <polygon points="160,350 180,350 170,370" fill="#ffffff" stroke="#e87b35" stroke-width="2"/>
+      <text x="330" y="323" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#2d2d2a">"接口偶发返回空"</text>
+    </g>
+
+    <!-- 对话气泡 2 -->
+    <g filter="url(#softShadow)" transform="translate(0, 40)">
+      <rect x="200" y="360" width="340" height="70" rx="20" fill="#fff8f0" stroke="#f0984a" stroke-width="1.5"/>
+      <polygon points="520,430 540,430 530,450" fill="#fff8f0" stroke="#f0984a" stroke-width="1.5"/>
+      <text x="370" y="403" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" fill="#6b6b65">"日志没报错，状态码 200"</text>
+    </g>
+
+    <!-- 对话气泡 3 -->
+    <g filter="url(#softShadow)">
+      <rect x="140" y="500" width="380" height="70" rx="20" fill="#ffffff" stroke="#e87b35" stroke-width="2"/>
+      <polygon points="160,570 180,570 170,590" fill="#ffffff" stroke="#e87b35" stroke-width="2"/>
+      <text x="330" y="543" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#2d2d2a">"你看看可能是什么原因？"</text>
+    </g>
+
+   
+    <text x="400" y="720" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="500" fill="#e87b35">→ 找到根因，精准解决</text>
+  </g>
+
+  <!-- ========== 右侧：下达命令 ========== -->
+  <g>
+    <!-- 右侧背景区 -->
+    <rect x="860" y="120" width="680" height="660" rx="24" fill="url(#rightGrad)" opacity="0.5"/>
+
+    <!-- 标题 -->
+    <text x="1200" y="190" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="600" fill="#6b6b65">下达命令</text>
+    <text x="1200" y="230" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#99998f">Give Direct Orders</text>
+
+    <!-- 命令箭头 1 -->
+    <g filter="url(#softShadow)">
+      <rect x="1000" y="280" width="380" height="70" rx="20" fill="#ffffff" stroke="#c5c5c0" stroke-width="2"/>
+      <text x="1190" y="323" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6b6b65">→ "给这个请求加重试"</text>
+    </g>
+
+    <!-- 命令箭头 2 -->
+    <g filter="url(#softShadow)">
+      <rect x="1000" y="380" width="340" height="70" rx="20" fill="#fafaf8" stroke="#d5d5d0" stroke-width="1.5"/>
+      <text x="1170" y="423" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" fill="#99998f">→ "优化渲染性能"</text>
+    </g>
+
+    <!-- 命令箭头 3 -->
+    <g filter="url(#softShadow)">
+      <rect x="1000" y="480" width="380" height="70" rx="20" fill="#ffffff" stroke="#c5c5c0" stroke-width="2"/>
+      <text x="1190" y="523" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6b6b65">→ "这里加个锁"</text>
+    </g>
+
+    <text x="1200" y="720" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="500" fill="#99998f">→ 方向错误，治标不治本</text>
+  </g>
+
+  <!-- 中间 AI 节点 -->
+  <g transform="translate(750, 400)">
+    <circle cx="50" cy="50" r="54" fill="#fafaf8" stroke="#e87b35" stroke-width="3"/>
+    <circle cx="50" cy="50" r="40" fill="#fff8f0"/>
+    <text x="50" y="46" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#e87b35">AI</text>
+    <text x="50" y="70" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="#f0984a">分析</text>
+  </g>
+
+  <!-- 底部装饰线 -->
+  <line x1="200" y1="830" x2="1400" y2="830" stroke="#e5e5df" stroke-width="1"/>
+</svg>

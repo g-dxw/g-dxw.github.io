@@ -6,15 +6,16 @@ import Base from '../layouts/Base.astro';
   title="页面不存在 - 404"
   description="你访问的页面不存在"
 >
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-20 sm:py-32 text-center">
-    <h1 class="text-6xl font-bold text-[var(--color-accent)]">404</h1>
-    <p class="mt-4 text-xl text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-24 text-center">
+    <p class="text-6xl font-bold text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">404</p>
+    <p class="mt-4 text-lg text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
       抱歉，你访问的页面不存在
     </p>
-    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-      <a href="/" class="inline-flex items-center px-6 py-3 rounded-xl bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors no-underline font-medium">
-        返回首页
-      </a>
-    </div>
+    <a href="/" class="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors no-underline text-sm font-medium">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      返回首页
+    </a>
   </div>
 </Base>

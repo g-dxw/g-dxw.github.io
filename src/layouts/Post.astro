@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import TagBadge from '../components/TagBadge.astro';
 import ImageViewer from '../components/ImageViewer.astro';
+import { SITE_TITLE } from '../consts';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -16,15 +17,50 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
   month: 'long',
   day: 'numeric',
 });
+
+const articleURL = new URL(`/blog/${post.id}/`, Astro.site);
+const coverURL = cover ? new URL(cover, Astro.site).toString() : undefined;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  datePublished: date.toISOString(),
+  dateModified: date.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: SITE_TITLE,
+  },
+  publisher: {
+    '@type': 'Person',
+    name: SITE_TITLE,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': articleURL.toString(),
+  },
+  ...(coverURL ? { image: coverURL } : {}),
+  ...(post.data.summary ? { description: post.data.summary } : {}),
+  ...(tags.length > 0 ? { keywords: tags.join(', ') } : {}),
+};
 ---
 
-<Base title={title} description={post.data.summary || title} image={cover}>
+<Base
+  title={title}
+  description={post.data.summary || title}
+  image={cover}
+  type="article"
+  publishedTime={date}
+  author={SITE_TITLE}
+  tags={tags}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <article class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
-    <header class="mb-8 sm:mb-12">
+    <header class="mb-10">
       <time class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]" datetime={date.toISOString()}>
         {formattedDate}
       </time>
-      <h1 class="mt-4 text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] tracking-tight">
+      <h1 class="mt-4 text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] leading-tight">
         {title}
       </h1>
       {tags.length > 0 && (
@@ -38,12 +74,22 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
       <img
         src={cover}
         alt={title}
-        class="w-full rounded-2xl mb-8 sm:mb-12 object-cover cursor-pointer"
+        class="w-full rounded-xl mb-10 object-cover cursor-pointer"
       />
     )}
 
-    <div class="prose prose-lg dark:prose-invert max-w-none">
+    <div class="prose prose-lg max-w-none">
       <slot />
+    </div>
+
+    <div class="mt-12 pt-6 border-t border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
+      <a href="/"
+         class="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        返回首页
+      </a>
     </div>
 
     <ImageViewer />

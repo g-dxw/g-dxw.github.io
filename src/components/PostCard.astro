@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import TagBadge from './TagBadge.astro';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -12,12 +11,12 @@ const cover = post.data.cover;
 
 const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
   year: 'numeric',
-  month: 'long',
+  month: 'short',
   day: 'numeric',
 });
 ---
 
-<article class="card-glow group bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] rounded-2xl overflow-hidden border border-[var(--color-border)] dark:border-[var(--color-border-dark)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[var(--color-accent)]/5 dark:hover:shadow-black/30 hover:border-[var(--color-accent)]/30 dark:hover:border-[var(--color-accent-dark)]/30">
+<article class="card-glow group bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] rounded-xl overflow-hidden border border-[var(--color-border)] dark:border-[var(--color-border-dark)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-accent)]/20 dark:hover:border-[var(--color-accent-dark)]/20">
   <a href={`/blog/${post.id}`} class="block no-underline">
     {cover && (
       <div class="aspect-[16/9] overflow-hidden bg-[var(--color-code-bg)] dark:bg-[var(--color-code-bg-dark)]">
@@ -29,34 +28,28 @@ const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
         />
       </div>
     )}
-    <div class="p-5 sm:p-6">
-      <div class="flex items-center gap-3 mb-2">
-        <time class="text-xs text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] font-mono" datetime={date.toISOString()}>
+    <div class="p-5">
+      <div class="flex items-center gap-2 mb-2">
+        <time class="text-xs text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]" datetime={date.toISOString()}>
           {formattedDate}
         </time>
         {tags.length > 0 && (
-          <span class="text-xs text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">·</span>
-        )}
-        {tags.length > 0 && (
-          <span class="text-xs text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] font-medium">
-            {tags[0]}
-          </span>
+          <>
+            <span class="text-[var(--color-border)] dark:text-[var(--color-border-dark)]">·</span>
+            <span class="text-xs text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
+              #{tags[0]}
+            </span>
+          </>
         )}
       </div>
-      <h2 class="text-lg sm:text-xl font-semibold text-[var(--color-text)] dark:text-[var(--color-text-dark)] group-hover:text-[var(--color-accent)] dark:group-hover:text-[var(--color-accent-dark)] transition-colors line-clamp-2 leading-snug">
+      <h2 class="text-base sm:text-lg font-semibold text-[var(--color-text)] dark:text-[var(--color-text-dark)] group-hover:text-[var(--color-accent)] dark:group-hover:text-[var(--color-accent-dark)] transition-colors line-clamp-2">
         {title}
       </h2>
       {summary && (
-        <p class="mt-2 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] line-clamp-3 leading-relaxed">
+        <p class="mt-2 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] line-clamp-2 leading-relaxed">
           {summary}
         </p>
       )}
-      <div class="mt-4 flex items-center gap-2 text-xs text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] opacity-0 group-hover:opacity-100 transition-opacity">
-        <span>阅读全文</span>
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </div>
     </div>
   </a>
 </article>

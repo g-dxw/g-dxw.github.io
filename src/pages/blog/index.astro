@@ -6,14 +6,21 @@ import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .sort((a, b) => {
+    const dateDiff = b.data.date.getTime() - a.data.date.getTime();
+    if (dateDiff !== 0) return dateDiff;
+    return b.id.localeCompare(a.id);
+  });
 ---
 
 <Base title="博客归档" description="所有博客文章">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-    <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] text-center mb-8 sm:mb-12">
+    <h1 class="text-3xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-4">
       博客归档
     </h1>
+    <p class="text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-10">
+      共 {posts.length} 篇文章
+    </p>
 
     <SearchBox />
 

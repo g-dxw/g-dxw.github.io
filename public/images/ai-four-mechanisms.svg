@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="1200" height="680">
+  <defs>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#fafaf8"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.08"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1200" height="680" fill="#fafaf8" rx="16"/>
+
+  <!-- 标题 -->
+  <text x="600" y="60" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="600" fill="#2d2d2a">为什么"描述现象"比"下达命令"更有效？</text>
+  <text x="600" y="90" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#6b6b65">四个底层机制，四个容易踩的坑</text>
+
+  <!-- ========== 卡片 1：信息丢失 ========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="130" width="500" height="230" rx="16" fill="url(#cardGrad)" stroke="#e5e5df" stroke-width="1"/>
+    <!-- 左侧色条 -->
+    <rect x="60" y="130" width="6" height="230" rx="3" fill="#e87b35"/>
+    <!-- 图标：文档/病历 -->
+    <g transform="translate(100, 170)">
+      <rect x="0" y="0" width="36" height="44" rx="4" fill="#fff8f0" stroke="#e87b35" stroke-width="1.5"/>
+      <line x1="8" y1="12" x2="28" y2="12" stroke="#e87b35" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="8" y1="20" x2="28" y2="20" stroke="#f0984a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="8" y1="28" x2="20" y2="28" stroke="#f0984a" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <!-- 标题 -->
+    <text x="160" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#2d2d2a">信息丢失</text>
+    <text x="160" y="224" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#6b6b65">Information Loss</text>
+    <!-- 正文 -->
+    <text x="100" y="268" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">下达"怎么做"时，丢掉了诊断材料：</text>
+    <text x="100" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">症状、报错、上下文、试过的方案……</text>
+    <text x="100" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#e87b35">→ AI 只能优化你给的解法，无法解决真问题</text>
+  </g>
+
+  <!-- ========== 卡片 2：锚定效应 ========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="640" y="130" width="500" height="230" rx="16" fill="url(#cardGrad)" stroke="#e5e5df" stroke-width="1"/>
+    <rect x="640" y="130" width="6" height="230" rx="3" fill="#e87b35"/>
+    <!-- 图标：锚 -->
+    <g transform="translate(680, 170)">
+      <circle cx="18" cy="8" r="6" fill="none" stroke="#e87b35" stroke-width="1.5"/>
+      <line x1="18" y1="14" x2="18" y2="38" stroke="#e87b35" stroke-width="1.5"/>
+      <path d="M6,38 Q18,48 30,38" fill="none" stroke="#e87b35" stroke-width="1.5"/>
+      <line x1="18" y1="20" x2="6" y2="20" stroke="#f0984a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="18" y1="28" x2="30" y2="28" stroke="#f0984a" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <text x="740" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#2d2d2a">锚定效应</text>
+    <text x="740" y="224" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#6b6b65">Anchoring Effect</text>
+    <text x="680" y="268" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">你陈述的解法成为模型推理的"锚点"，</text>
+    <text x="680" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">模型在你画的圈子里找答案，不敢出圈。</text>
+    <text x="680" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#e87b35">→ 解法越具体，模型的探索空间越窄</text>
+  </g>
+
+  <!-- ========== 卡片 3：谄媚效应 ========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="400" width="500" height="230" rx="16" fill="url(#cardGrad)" stroke="#e5e5df" stroke-width="1"/>
+    <rect x="60" y="400" width="6" height="230" rx="3" fill="#e87b35"/>
+    <!-- 图标：点赞/顺从 -->
+    <g transform="translate(100, 440)">
+      <path d="M12,24 L12,12 L18,12 L18,8 L26,2 L32,8 L32,20 L26,26 L18,26 L18,24 Z" fill="#fff8f0" stroke="#e87b35" stroke-width="1.5"/>
+      <rect x="0" y="14" width="10" height="16" rx="2" fill="#fff8f0" stroke="#e87b35" stroke-width="1.5"/>
+      <line x1="3" y1="18" x2="7" y2="18" stroke="#f0984a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="3" y1="22" x2="7" y2="22" stroke="#f0984a" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <text x="160" y="470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#2d2d2a">谄媚效应</text>
+    <text x="160" y="494" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#6b6b65">Sycophancy（RLHF 副作用）</text>
+    <text x="100" y="538" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">RLHF 训练让模型倾向于顺从用户，</text>
+    <text x="100" y="562" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">即使你错了，它也常常不会反驳。</text>
+    <text x="100" y="590" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#e87b35">→ 你给错方向，AI 帮你把错路走得更"漂亮"</text>
+  </g>
+
+  <!-- ========== 卡片 4：XY 问题 ========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="640" y="400" width="500" height="230" rx="16" fill="url(#cardGrad)" stroke="#e5e5df" stroke-width="1"/>
+    <rect x="640" y="400" width="6" height="230" rx="3" fill="#e87b35"/>
+    <!-- 图标：XY 坐标 + 错位箭头 -->
+    <g transform="translate(680, 440)">
+      <line x1="4" y1="40" x2="36" y2="40" stroke="#e87b35" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="4" y1="40" x2="4" y2="4" stroke="#e87b35" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="38" y="44" font-family="sans-serif" font-size="12" fill="#e87b35">X</text>
+      <text x="0" y="2" font-family="sans-serif" font-size="12" fill="#e87b35">Y</text>
+      <!-- 错位箭头：从 Y 指向错误方向 -->
+      <circle cx="20" cy="28" r="3" fill="#e87b35"/>
+      <path d="M20,28 L32,16" stroke="#99998f" stroke-width="2" stroke-dasharray="3,3" stroke-linecap="round"/>
+      <polygon points="32,16 28,14 30,20" fill="#99998f"/>
+      <text x="34" y="14" font-family="sans-serif" font-size="10" fill="#99998f">你的解法Y</text>
+      <!-- 正确方向 -->
+      <path d="M20,28 L16,14" stroke="#e87b35" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="16,14 12,18 18,18" fill="#e87b35"/>
+    </g>
+    <text x="740" y="470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#2d2d2a">XY 问题</text>
+    <text x="740" y="494" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#6b6b65">XY Problem</text>
+    <text x="680" y="538" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">你观察到现象 X，误以为解法是 Y，</text>
+    <text x="680" y="562" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#2d2d2a">于是让 AI 做 Y，但 Y 根本不对症。</text>
+    <text x="680" y="590" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#e87b35">→ 描述 X 而不是命令 Y，才能找到真因</text>
+  </g>
+</svg>

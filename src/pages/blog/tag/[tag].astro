@@ -24,13 +24,16 @@ const { posts, tag } = Astro.props;
   description={`包含标签"${tag}"的文章列表`}
 >
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-    <a href="/" class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline inline-flex items-center gap-1 mb-6">
-      &larr; 返回首页
+    <a href="/" class="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline mb-6">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      返回首页
     </a>
     <h1 class="text-3xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-2">
       #{tag}
     </h1>
-    <p class="text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-8">
+    <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-10">
       {posts.length} 篇文章
     </p>
     <PostGrid posts={posts} />

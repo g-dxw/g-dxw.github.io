@@ -2,20 +2,16 @@
 import ThemeToggle from './ThemeToggle.astro';
 ---
 
-<header class="nav-blur sticky top-0 z-50 bg-[var(--color-bg)]/80 dark:bg-[var(--color-bg-dark)]/80 border-b border-[var(--color-border)]/60 dark:border-[var(--color-border-dark)]/60">
-  <nav class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-    <a href="/" class="text-xl font-bold text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] hover:text-[var(--color-accent-hover)] dark:hover:text-[var(--color-accent-hover-dark)] transition-colors no-underline flex items-center gap-2">
-      <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent)] to-[#c2571a] flex items-center justify-center text-white text-sm font-bold">
-        旺
-      </span>
-      <span class="hidden sm:inline">旺仔</span>
+<header class="nav-blur sticky top-0 z-50 bg-[var(--color-bg)]/80 dark:bg-[var(--color-bg-dark)]/80 border-b border-[var(--color-border)]">
+  <nav class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <a href="/" class="text-lg font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline">
+      旺仔
     </a>
-    <div class="flex items-center gap-1 sm:gap-2">
-      <a href="/" class="hidden sm:inline-flex px-3 py-1.5 text-sm font-medium text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)] rounded-lg transition-all no-underline">首页</a>
-      <a href="/blog" class="px-3 py-1.5 text-sm font-medium text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)] rounded-lg transition-all no-underline">文章</a>
-      <a href="/lingweave/" class="px-3 py-1.5 text-sm font-medium text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)] rounded-lg transition-all no-underline">项目</a>
-      <a href="/life" class="px-3 py-1.5 text-sm font-medium text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)] rounded-lg transition-all no-underline">生活</a>
-      <a href="/about" class="px-3 py-1.5 text-sm font-medium text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)] rounded-lg transition-all no-underline">关于</a>
+    <div class="flex items-center gap-1">
+      <a href="/" class="px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">首页</a>
+      <a href="/blog" class="px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">文章</a>
+      <a href="/about" class="px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">关于</a>
+      <a href="/life" class="px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">生活</a>
       <ThemeToggle />
     </div>
   </nav>

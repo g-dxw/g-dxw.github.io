@@ -22,16 +22,21 @@
   const img = document.getElementById('image-viewer-img') as HTMLImageElement;
   const closeBtn = document.getElementById('image-viewer-close')!;
 
+  let lastFocused: HTMLElement | null = null;
+
   function openViewer(src: string, alt: string) {
+    lastFocused = document.activeElement as HTMLElement;
     img.src = src;
     img.alt = alt;
     viewer.classList.remove('opacity-0', 'pointer-events-none');
     document.body.style.overflow = 'hidden';
+    closeBtn.focus();
   }
 
   function closeViewer() {
     viewer.classList.add('opacity-0', 'pointer-events-none');
     document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
   }
 
   // 点击文章中的图片触发
@@ -48,8 +53,22 @@
     if (e.target === viewer) closeViewer();
   });
 
-  // 键盘控制
+  // 键盘控制：Escape 关闭，Tab 焦点陷阱
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeViewer();
+    if (viewer.classList.contains('pointer-events-none')) return;
+    if (e.key === 'Escape') {
+      closeViewer();
+    } else if (e.key === 'Tab') {
+      // 焦点陷阱：在关闭按钮和图片之间循环
+      const focusable = [closeBtn, img];
+      const index = focusable.indexOf(document.activeElement as HTMLElement);
+      if (e.shiftKey) {
+        e.preventDefault();
+        focusable[index <= 0 ? focusable.length - 1 : index - 1].focus();
+      } else {
+        e.preventDefault();
+        focusable[index >= focusable.length - 1 ? 0 : index + 1].focus();
+      }
+    }
   });
 </script>

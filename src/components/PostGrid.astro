@@ -14,7 +14,7 @@ const { posts } = Astro.props;
     {posts.map((post) => <PostCard post={post} />)}
   </div>
 ) : (
-  <div class="text-center py-16">
+  <div class="text-center py-20">
     <p class="text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">暂无文章</p>
   </div>
 )}
