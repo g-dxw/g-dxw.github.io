@@ -33,7 +33,12 @@ function rehypeLazyImages() {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://g-dxw.github.io',
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !page.endsWith('/resume/'),
+    }),
+  ],
   trailingSlash: "always",
   server: {
     host: true,

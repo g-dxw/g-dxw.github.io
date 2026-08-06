@@ -12,15 +12,16 @@ export interface Props {
   publishedTime?: Date;
   author?: string;
   tags?: string[];
+  noindex?: boolean;
 }
 
-const { title, description, image, type, publishedTime, author, tags } = Astro.props;
+const { title, description, image, type, publishedTime, author, tags, noindex } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={title} description={description} image={image} type={type} publishedTime={publishedTime} author={author} tags={tags} />
+    <BaseHead title={title} description={description} image={image} type={type} publishedTime={publishedTime} author={author} tags={tags} noindex={noindex} />
 
     <!-- 防止暗色模式闪白 -->
     <script is:inline>
