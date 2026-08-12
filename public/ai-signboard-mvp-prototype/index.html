@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>AI 门头设计 MVP 原型演示</title>
+    <style>
+      :root { color-scheme: light dark; }
+      html, body { margin: 0; min-height: 100%; }
+      body {
+        padding: 24px;
+        background: light-dark(#eef2f8, #0b1019);
+      }
+      @media (max-width: 720px) {
+        body { padding: 0; }
+        #as-prototype .as-shell { border-radius: 0; border-left: 0; border-right: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="as-prototype">
+      <style>
+        #as-prototype {
+          --as-ink: light-dark(#172033, #eef3ff);
+          --as-muted: light-dark(#667085, #a9b5cb);
+          --as-line: light-dark(#e5e9f2, #344158);
+          --as-soft: light-dark(#f5f7fb, #151d2b);
+          --as-panel: light-dark(#ffffff, #202a3c);
+          --as-blue: #246bfe;
+          --as-blue-dark: #1856d7;
+          --as-green: #12a575;
+          --as-warn: #e99b19;
+          --as-danger: #df4b5f;
+          color: var(--as-ink);
+          font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+          width: 100%;
+          background: transparent;
+        }
+        #as-prototype * { box-sizing: border-box; }
+        #as-prototype button,
+        #as-prototype input,
+        #as-prototype textarea { font: inherit; }
+        #as-prototype .as-shell {
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          overflow: hidden;
+          border: 1px solid var(--as-line);
+          border-radius: 24px;
+          background: var(--as-panel);
+          box-shadow: 0 20px 54px light-dark(rgba(32, 52, 88, .12), rgba(0, 0, 0, .3));
+        }
+        #as-prototype .as-topbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 14px 18px;
+          border-bottom: 1px solid var(--as-line);
+          background: var(--as-panel);
+        }
+        #as-prototype .as-brand { display: flex; align-items: center; gap: 10px; font-weight: 750; }
+        #as-prototype .as-mark {
+          width: 34px;
+          height: 34px;
+          border-radius: 11px;
+          display: grid;
+          place-items: center;
+          color: white;
+          background: linear-gradient(135deg, #246bfe, #64a2ff);
+          box-shadow: 0 8px 18px rgba(36,107,254,.24);
+        }
+        #as-prototype .as-product-switch {
+          display: inline-flex;
+          gap: 4px;
+          padding: 4px;
+          border: 1px solid var(--as-line);
+          border-radius: 12px;
+          background: var(--as-soft);
+          min-width: 0;
+        }
+        #as-prototype .as-product-switch button {
+          border: 0;
+          border-radius: 8px;
+          padding: 8px 14px;
+          color: var(--as-muted);
+          background: transparent;
+          cursor: pointer;
+          min-width: 0;
+        }
+        #as-prototype .as-product-switch button[aria-pressed="true"] {
+          color: var(--as-ink);
+          background: var(--as-panel);
+          box-shadow: 0 2px 7px rgba(25, 40, 70, .09);
+          font-weight: 700;
+        }
+        #as-prototype .as-canvas {
+          min-height: 720px;
+          padding: 24px;
+          background:
+            radial-gradient(circle at 15% 0%, rgba(36,107,254,.08), transparent 28%),
+            var(--as-soft);
+        }
+        #as-prototype .as-client-layout {
+          display: grid;
+          grid-template-columns: minmax(220px, 1fr) minmax(340px, 430px) minmax(220px, 1fr);
+          gap: 24px;
+          align-items: start;
+          max-width: 1180px;
+          margin: 0 auto;
+        }
+        #as-prototype .as-context,
+        #as-prototype .as-notes {
+          border: 1px solid var(--as-line);
+          border-radius: 18px;
+          background: var(--as-panel);
+          padding: 18px;
+        }
+        #as-prototype .as-context h2,
+        #as-prototype .as-notes h2 { font-size: 15px; margin: 0 0 14px; }
+        #as-prototype .as-context-list { display: grid; gap: 8px; }
+        #as-prototype .as-step-button {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 28px 1fr;
+          align-items: center;
+          gap: 9px;
+          text-align: left;
+          border: 0;
+          border-radius: 11px;
+          padding: 9px;
+          color: var(--as-muted);
+          background: transparent;
+          cursor: pointer;
+        }
+        #as-prototype .as-step-button[aria-current="step"] { color: var(--as-blue); background: rgba(36,107,254,.09); font-weight: 700; }
+        #as-prototype .as-step-number {
+          width: 28px;
+          height: 28px;
+          display: grid;
+          place-items: center;
+          border: 1px solid var(--as-line);
+          border-radius: 50%;
+          font-size: 12px;
+          background: var(--as-panel);
+        }
+        #as-prototype .as-step-button[aria-current="step"] .as-step-number { color: white; border-color: var(--as-blue); background: var(--as-blue); }
+        #as-prototype .as-phone {
+          position: relative;
+          width: 100%;
+          border: 9px solid light-dark(#152033, #0b1019);
+          border-radius: 36px;
+          background: var(--as-panel);
+          box-shadow: 0 24px 60px rgba(24, 35, 58, .2);
+          overflow: hidden;
+          min-width: 0;
+        }
+        #as-prototype .as-phone::before {
+          content: "";
+          position: absolute;
+          top: 8px;
+          left: 50%;
+          width: 88px;
+          height: 20px;
+          transform: translateX(-50%);
+          border-radius: 15px;
+          background: light-dark(#152033, #0b1019);
+          z-index: 5;
+        }
+        #as-prototype .as-mobile-head {
+          height: 62px;
+          display: flex;
+          align-items: end;
+          justify-content: space-between;
+          padding: 0 17px 11px;
+          border-bottom: 1px solid var(--as-line);
+          background: var(--as-panel);
+        }
+        #as-prototype .as-mobile-title { font-size: 16px; font-weight: 750; }
+        #as-prototype .as-mobile-status { color: var(--as-blue); font-size: 12px; }
+        #as-prototype .as-screen { min-height: 650px; display: none; background: var(--as-panel); }
+        #as-prototype .as-screen.is-active { display: block; }
+        #as-prototype .as-screen-body { padding: 17px; min-width: 0; }
+        #as-prototype .as-progress { height: 4px; background: var(--as-soft); }
+        #as-prototype .as-progress span { display: block; height: 100%; background: var(--as-blue); transition: width .25s ease; }
+        #as-prototype .as-eyebrow { color: var(--as-blue); font-size: 12px; font-weight: 750; margin-bottom: 7px; }
+        #as-prototype .as-screen h1 { margin: 0; font-size: 23px; line-height: 1.3; }
+        #as-prototype .as-lead { margin: 7px 0 17px; color: var(--as-muted); line-height: 1.55; font-size: 13px; }
+        #as-prototype .as-upload-zone {
+          min-height: 210px;
+          display: grid;
+          place-items: center;
+          border: 1.5px dashed #9fb9ec;
+          border-radius: 16px;
+          text-align: center;
+          background: rgba(36,107,254,.045);
+          padding: 22px;
+        }
+        #as-prototype .as-camera {
+          width: 52px;
+          height: 52px;
+          display: grid;
+          place-items: center;
+          margin: 0 auto 12px;
+          border-radius: 16px;
+          color: white;
+          background: var(--as-blue);
+          font-size: 23px;
+        }
+        #as-prototype .as-primary,
+        #as-prototype .as-secondary {
+          border-radius: 12px;
+          padding: 12px 16px;
+          cursor: pointer;
+          font-weight: 700;
+        }
+        #as-prototype .as-primary { border: 1px solid var(--as-blue); color: white; background: var(--as-blue); }
+        #as-prototype .as-primary:hover { background: var(--as-blue-dark); }
+        #as-prototype .as-secondary { border: 1px solid var(--as-line); color: var(--as-ink); background: var(--as-panel); }
+        #as-prototype .as-full { width: 100%; }
+        #as-prototype .as-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin: 14px 0; }
+        #as-prototype .as-field { display: grid; gap: 6px; min-width: 0; }
+        #as-prototype .as-field.as-wide { grid-column: 1 / -1; }
+        #as-prototype .as-field label { color: var(--as-muted); font-size: 12px; }
+        #as-prototype .as-field input {
+          width: 100%;
+          border: 1px solid var(--as-line);
+          border-radius: 11px;
+          padding: 11px 12px;
+          color: var(--as-ink);
+          background: var(--as-panel);
+          min-width: 0;
+        }
+        #as-prototype .as-chat { display: grid; gap: 12px; }
+        #as-prototype .as-message { max-width: 88%; padding: 11px 13px; border-radius: 15px; font-size: 13px; line-height: 1.55; }
+        #as-prototype .as-agent-message { justify-self: start; background: var(--as-soft); border-bottom-left-radius: 5px; }
+        #as-prototype .as-user-message { justify-self: end; color: white; background: var(--as-blue); border-bottom-right-radius: 5px; }
+        #as-prototype .as-chat-screen {
+          position: relative;
+          min-height: 650px;
+          display: flex;
+          flex-direction: column;
+          background: var(--as-panel);
+        }
+        #as-prototype .as-chat-head {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 14px 17px;
+          border-bottom: 1px solid var(--as-line);
+        }
+        #as-prototype .as-agent-avatar {
+          width: 38px;
+          height: 38px;
+          flex: 0 0 38px;
+          display: grid;
+          place-items: center;
+          border-radius: 13px;
+          color: white;
+          background: linear-gradient(135deg, #246bfe, #64a2ff);
+          font-weight: 700;
+        }
+        #as-prototype .as-chat-head strong { display: block; font-size: 14px; }
+        #as-prototype .as-chat-head span { color: var(--as-muted); font-size: 12px; }
+        #as-prototype .as-confirmed-design {
+          display: grid;
+          grid-template-columns: 62px 1fr auto;
+          gap: 9px;
+          align-items: center;
+          margin: 10px 12px 0;
+          padding: 8px;
+          border: 1px solid rgba(18,165,117,.3);
+          border-radius: 12px;
+          background: light-dark(rgba(238,251,246,.97), rgba(20,56,48,.97));
+          box-shadow: 0 8px 22px light-dark(rgba(24,39,68,.13), rgba(0,0,0,.3));
+          cursor: pointer;
+          z-index: 4;
+        }
+        #as-prototype .as-confirmed-design[hidden] { display: none; }
+        #as-prototype .as-confirmed-design-image {
+          position: relative;
+          height: 46px;
+          overflow: hidden;
+          border-radius: 8px;
+          background: linear-gradient(#9ab0c4 0 28%, #1b3852 29% 63%, #c5c3ba 64%);
+        }
+        #as-prototype .as-confirmed-design-image::after {
+          content: "山野咖啡";
+          position: absolute;
+          left: 3px;
+          right: 3px;
+          top: 17px;
+          color: #f8ead0;
+          text-align: center;
+          font-size: 7px;
+          font-weight: 800;
+        }
+        #as-prototype .as-confirmed-design-copy { min-width: 0; }
+        #as-prototype .as-confirmed-design-copy strong { display: block; color: var(--as-green); font-size: 11px; }
+        #as-prototype .as-confirmed-design-copy span { display: block; margin-top: 3px; color: var(--as-ink); font-size: 11px; font-weight: 700; }
+        #as-prototype .as-confirmed-design-copy small { display: block; margin-top: 2px; color: var(--as-muted); font-size: 9px; }
+        #as-prototype .as-confirmed-design-arrow { color: var(--as-green); font-size: 18px; }
+        #as-prototype .as-chat-scroll {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          padding: 15px 17px;
+          background: light-dark(#f6f8fc, #171f2e);
+        }
+        #as-prototype .as-chat-time { align-self: center; color: var(--as-muted); font-size: 11px; }
+        #as-prototype .as-chat-row { display: flex; align-items: flex-start; gap: 8px; }
+        #as-prototype .as-chat-row.is-user { justify-content: flex-end; }
+        #as-prototype .as-chat-mini-avatar {
+          width: 28px;
+          height: 28px;
+          flex: 0 0 28px;
+          display: grid;
+          place-items: center;
+          border-radius: 10px;
+          color: white;
+          background: var(--as-blue);
+          font-size: 11px;
+        }
+        #as-prototype .as-chat-bubble {
+          max-width: 82%;
+          border-radius: 14px;
+          padding: 10px 12px;
+          font-size: 13px;
+          line-height: 1.55;
+          color: var(--as-ink);
+          background: var(--as-panel);
+          box-shadow: 0 2px 8px light-dark(rgba(28, 45, 75, .06), rgba(0, 0, 0, .18));
+        }
+        #as-prototype .as-chat-row.is-agent .as-chat-bubble { border-top-left-radius: 4px; }
+        #as-prototype .as-chat-row.is-user .as-chat-bubble { color: white; background: var(--as-blue); border-top-right-radius: 4px; }
+        #as-prototype .as-chat-row.is-user .as-chat-bubble.has-attachment { padding: 6px; text-align: left; }
+        #as-prototype .as-sent-design-quote {
+          display: grid;
+          grid-template-columns: 62px 1fr;
+          gap: 8px;
+          padding: 7px;
+          border-radius: 10px;
+          color: var(--as-ink);
+          background: var(--as-panel);
+        }
+        #as-prototype .as-sent-design-quote .as-design-reference-image { height: 46px; }
+        #as-prototype .as-sent-design-quote strong { display: block; font-size: 11px; }
+        #as-prototype .as-sent-design-quote span { display: block; margin-top: 3px; color: var(--as-muted); font-size: 9px; }
+        #as-prototype .as-sent-image {
+          width: 176px;
+          overflow: hidden;
+          border-radius: 10px;
+          color: var(--as-ink);
+          background: var(--as-panel);
+        }
+        #as-prototype .as-sent-image-preview {
+          height: 104px;
+          display: grid;
+          place-items: center;
+          color: white;
+          background: linear-gradient(145deg, #9bb2bd 0 34%, #d7d0bd 35% 64%, #4c6b59 65%);
+          font-size: 24px;
+        }
+        #as-prototype .as-sent-image-copy { padding: 7px 9px; }
+        #as-prototype .as-sent-image-copy strong { display: block; font-size: 11px; }
+        #as-prototype .as-sent-image-copy span { display: block; margin-top: 2px; color: var(--as-muted); font-size: 9px; }
+        #as-prototype .as-sent-message-text { padding: 7px 5px 3px; color: white; font-size: 13px; line-height: 1.5; }
+        #as-prototype .as-reference-preview {
+          display: none;
+          align-items: center;
+          gap: 9px;
+          margin: 0 12px 8px;
+          padding: 8px;
+          border: 1px solid var(--as-line);
+          border-radius: 11px;
+          background: var(--as-soft);
+        }
+        #as-prototype .as-reference-preview.is-active { display: flex; }
+        #as-prototype .as-reference-thumb {
+          width: 42px;
+          height: 42px;
+          display: grid;
+          place-items: center;
+          flex: 0 0 42px;
+          border-radius: 8px;
+          color: var(--as-blue);
+          background: rgba(36,107,254,.1);
+          font-size: 18px;
+        }
+        #as-prototype .as-reference-copy { min-width: 0; flex: 1; }
+        #as-prototype .as-reference-copy strong { display: block; font-size: 12px; }
+        #as-prototype .as-reference-copy span { display: block; color: var(--as-muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #as-prototype .as-reference-remove { border: 0; color: var(--as-muted); background: transparent; cursor: pointer; }
+        #as-prototype .as-design-reference {
+          display: grid;
+          grid-template-columns: 70px 1fr;
+          gap: 9px;
+          margin: 0 12px 8px;
+          padding: 8px;
+          border: 1px solid rgba(36,107,254,.32);
+          border-radius: 11px;
+          background: rgba(36,107,254,.06);
+        }
+        #as-prototype .as-design-reference[hidden] { display: none; }
+        #as-prototype .as-design-reference-image {
+          position: relative;
+          height: 52px;
+          overflow: hidden;
+          border-radius: 8px;
+          background: linear-gradient(#9ab0c4 0 28%, #1b3852 29% 63%, #c5c3ba 64%);
+        }
+        #as-prototype .as-design-reference-image::after {
+          content: "山野咖啡";
+          position: absolute;
+          left: 4px;
+          right: 4px;
+          top: 19px;
+          color: #f8ead0;
+          text-align: center;
+          font-size: 8px;
+          font-weight: 800;
+        }
+        #as-prototype .as-design-reference-copy { min-width: 0; align-self: center; }
+        #as-prototype .as-design-reference-copy strong { display: block; color: var(--as-blue); font-size: 12px; }
+        #as-prototype .as-design-reference-copy span { display: block; margin-top: 4px; color: var(--as-muted); font-size: 10px; }
+        #as-prototype .as-chat-composer {
+          padding: 10px 12px 12px;
+          border-top: 1px solid var(--as-line);
+          background: var(--as-panel);
+        }
+        #as-prototype .as-composer-row { display: flex; align-items: flex-end; gap: 8px; }
+        #as-prototype .as-attach-button,
+        #as-prototype .as-send-button {
+          width: 40px;
+          height: 40px;
+          flex: 0 0 40px;
+          display: grid;
+          place-items: center;
+          border-radius: 12px;
+          cursor: pointer;
+        }
+        #as-prototype .as-attach-button { border: 1px solid var(--as-line); color: var(--as-blue); background: var(--as-panel); font-size: 19px; }
+        #as-prototype .as-send-button { border: 1px solid var(--as-blue); color: white; background: var(--as-blue); font-size: 17px; }
+        #as-prototype .as-chat-input {
+          min-height: 40px;
+          max-height: 90px;
+          flex: 1;
+          resize: none;
+          border: 1px solid var(--as-line);
+          border-radius: 12px;
+          padding: 10px 11px;
+          color: var(--as-ink);
+          background: var(--as-soft);
+        }
+        #as-prototype .as-composer-hint { margin: 7px 48px 0; color: var(--as-muted); text-align: center; font-size: 10px; }
+        #as-prototype .as-chat-nav {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+          margin-top: 10px;
+        }
+        #as-prototype .as-chat-nav button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          min-height: 42px;
+          border: 1px solid var(--as-line);
+          border-radius: 11px;
+          color: var(--as-ink);
+          background: var(--as-panel);
+          cursor: pointer;
+          font-weight: 700;
+        }
+        #as-prototype .as-chat-nav button:last-child { color: var(--as-blue); border-color: rgba(36,107,254,.35); background: rgba(36,107,254,.06); }
+        #as-prototype .as-nav-count {
+          min-width: 20px;
+          height: 20px;
+          display: inline-grid;
+          place-items: center;
+          border-radius: 10px;
+          color: white;
+          background: var(--as-blue);
+          font-size: 10px;
+        }
+        #as-prototype .as-version-sheet {
+          display: none;
+          position: absolute;
+          left: 10px;
+          right: 10px;
+          bottom: 122px;
+          z-index: 8;
+          border: 1px solid var(--as-line);
+          border-radius: 16px;
+          padding: 13px;
+          background: var(--as-panel);
+          box-shadow: 0 18px 45px light-dark(rgba(24, 39, 68, .18), rgba(0, 0, 0, .38));
+        }
+        #as-prototype .as-version-sheet.is-active { display: block; }
+        #as-prototype .as-version-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+        #as-prototype .as-version-head strong { font-size: 14px; }
+        #as-prototype .as-version-close { border: 0; color: var(--as-muted); background: transparent; cursor: pointer; font-size: 18px; }
+        #as-prototype .as-summary-back {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          border: 0;
+          padding: 4px 0;
+          color: var(--as-blue);
+          background: transparent;
+          cursor: pointer;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        #as-prototype .as-version-list { display: grid; gap: 8px; }
+        #as-prototype .as-version-item {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 58px 1fr auto;
+          gap: 10px;
+          align-items: center;
+          border: 1px solid var(--as-line);
+          border-radius: 12px;
+          padding: 8px;
+          color: var(--as-ink);
+          text-align: left;
+          background: var(--as-panel);
+          cursor: pointer;
+        }
+        #as-prototype .as-version-image {
+          width: 58px;
+          height: 43px;
+          border-radius: 8px;
+          background: linear-gradient(#9ab0c4 0 28%, #1b3852 29% 63%, #c5c3ba 64%);
+        }
+        #as-prototype .as-version-copy strong { display: block; font-size: 12px; }
+        #as-prototype .as-version-copy span { display: block; margin-top: 3px; color: var(--as-muted); font-size: 10px; }
+        #as-prototype .as-version-arrow { color: var(--as-blue); }
+        #as-prototype .as-summary-sheet {
+          display: none;
+          position: absolute;
+          left: 10px;
+          right: 10px;
+          bottom: 122px;
+          z-index: 8;
+          border: 1px solid var(--as-line);
+          border-radius: 16px;
+          padding: 13px;
+          background: var(--as-panel);
+          box-shadow: 0 18px 45px light-dark(rgba(24, 39, 68, .18), rgba(0, 0, 0, .38));
+        }
+        #as-prototype .as-summary-sheet.is-active { display: block; }
+        #as-prototype .as-summary-sheet .as-summary { max-height: 280px; overflow: auto; }
+        #as-prototype .as-summary-confirm { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 11px; }
+        #as-prototype .as-summary-confirm button { min-height: 40px; }
+        #as-prototype .as-choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+        #as-prototype .as-choice {
+          border: 1px solid var(--as-line);
+          border-radius: 12px;
+          padding: 11px;
+          color: var(--as-ink);
+          text-align: left;
+          background: var(--as-panel);
+          cursor: pointer;
+          font-size: 12px;
+        }
+        #as-prototype .as-choice.is-selected { border-color: var(--as-blue); box-shadow: inset 0 0 0 1px var(--as-blue); background: rgba(36,107,254,.06); }
+        #as-prototype .as-summary { display: grid; gap: 10px; }
+        #as-prototype .as-summary-row { display: grid; grid-template-columns: 88px 1fr; gap: 10px; padding-bottom: 9px; border-bottom: 1px solid var(--as-line); font-size: 13px; }
+        #as-prototype .as-summary-row span:first-child { color: var(--as-muted); }
+        #as-prototype .as-storefront {
+          position: relative;
+          height: 178px;
+          border-radius: 14px;
+          overflow: hidden;
+          background: linear-gradient(#9ab0c4 0 22%, #d7d4c9 22% 72%, #abb3b7 72%);
+          border: 1px solid var(--as-line);
+        }
+        #as-prototype .as-storefront::before {
+          content: "";
+          position: absolute;
+          left: 9%; right: 9%; top: 30%; height: 35%;
+          background: #1b3852;
+          border: 4px solid #69533e;
+          box-shadow: inset 0 0 0 2px #c89f67;
+        }
+        #as-prototype .as-storefront::after {
+          content: "山野咖啡";
+          position: absolute;
+          left: 18%; right: 18%; top: 37%;
+          color: #f8ead0;
+          text-align: center;
+          font-size: 21px;
+          font-weight: 800;
+          letter-spacing: 4px;
+          text-shadow: 0 0 10px rgba(255,230,180,.55);
+        }
+        #as-prototype .as-door { position: absolute; left: 37%; width: 26%; bottom: 0; height: 61px; background: linear-gradient(90deg,#31536b 48%,#a7b6c0 49% 51%,#31536b 52%); border: 3px solid #6b7b82; }
+        #as-prototype .as-window-left,
+        #as-prototype .as-window-right { position: absolute; bottom: 0; width: 23%; height: 55px; background: #6e8b9d; border: 3px solid #6b7b82; }
+        #as-prototype .as-window-left { left: 10%; }
+        #as-prototype .as-window-right { right: 10%; }
+        #as-prototype .as-scheme-gallery { display: grid; gap: 8px; }
+        #as-prototype .as-scheme-gallery .as-storefront { height: 178px; }
+        #as-prototype .as-gallery-label { position: absolute; left: 8px; top: 8px; z-index: 2; border-radius: 999px; padding: 4px 7px; color: white; background: rgba(17,28,48,.72); font-size: 9px; font-weight: 750; }
+        #as-prototype .as-angle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        #as-prototype .as-angle-view { position: relative; height: 88px; overflow: hidden; border: 1px solid var(--as-line); border-radius: 11px; background: linear-gradient(#9ab0c4 0 25%, #d7d4c9 26% 72%, #abb3b7 73%); }
+        #as-prototype .as-angle-view::before { content: ""; position: absolute; top: 28%; height: 38%; background: #1b3852; border: 3px solid #69533e; box-shadow: inset 0 0 0 2px #c89f67; }
+        #as-prototype .as-angle-view::after { content: "山野咖啡"; position: absolute; top: 38%; color: #f8ead0; text-align: center; font-size: 10px; font-weight: 800; text-shadow: 0 0 7px rgba(255,230,180,.55); }
+        #as-prototype .as-angle-left::before { left: 6%; right: 18%; transform: skewY(-2deg); }
+        #as-prototype .as-angle-left::after { left: 12%; right: 24%; transform: skewY(-2deg); }
+        #as-prototype .as-angle-right::before { left: 18%; right: 6%; transform: skewY(2deg); }
+        #as-prototype .as-angle-right::after { left: 24%; right: 12%; transform: skewY(2deg); }
+        #as-prototype .as-scheme-tabs { display: flex; gap: 7px; margin: 12px 0; }
+        #as-prototype .as-scheme-tabs button { flex: 1; border: 1px solid var(--as-line); border-radius: 9px; padding: 8px 4px; color: var(--as-muted); background: var(--as-panel); cursor: pointer; }
+        #as-prototype .as-scheme-tabs button[aria-pressed="true"] { color: var(--as-blue); border-color: var(--as-blue); background: rgba(36,107,254,.06); font-weight: 700; }
+        #as-prototype .as-scheme-info { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start; margin: 12px 0; }
+        #as-prototype .as-scheme-info strong { display: block; font-size: 14px; }
+        #as-prototype .as-scheme-info span { color: var(--as-muted); font-size: 12px; }
+        #as-prototype .as-budget-tag { color: var(--as-green) !important; border: 1px solid rgba(18,165,117,.28); background: rgba(18,165,117,.08); border-radius: 10px; padding: 6px 9px; white-space: nowrap; font-weight: 750; }
+        #as-prototype .as-final-mark { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 5px; border-radius: 999px; padding: 4px 8px; color: white; background: var(--as-green); font-size: 10px; font-weight: 800; }
+        #as-prototype .as-final-mark[hidden] { display: none; }
+        #as-prototype .as-design-actions[hidden] { display: none; }
+        #as-prototype .as-price-note { margin: -5px 0 10px; color: var(--as-muted); text-align: right; font-size: 10px; }
+        #as-prototype .as-input-bar { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 13px; }
+        #as-prototype .as-input-bar input { min-width: 0; border: 1px solid var(--as-line); border-radius: 11px; padding: 11px; color: var(--as-ink); background: var(--as-panel); }
+        #as-prototype .as-check { display: flex; gap: 10px; align-items: flex-start; padding: 11px; border-radius: 12px; background: rgba(18,165,117,.08); color: var(--as-green); font-size: 13px; }
+        #as-prototype .as-materials { display: grid; gap: 8px; margin: 14px 0; }
+        #as-prototype .as-material { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--as-line); padding: 8px 0; font-size: 12px; }
+        #as-prototype .as-material span { color: var(--as-muted); text-align: right; }
+        #as-prototype .as-note-list { display: grid; gap: 10px; }
+        #as-prototype .as-note-item { display: grid; grid-template-columns: 24px 1fr; gap: 9px; color: var(--as-muted); font-size: 12px; line-height: 1.5; }
+        #as-prototype .as-note-dot { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 8px; color: var(--as-blue); background: rgba(36,107,254,.09); font-weight: 800; }
+        #as-prototype .as-admin { display: none; max-width: 1180px; margin: 0 auto; }
+        #as-prototype .as-admin.is-active { display: block; }
+        #as-prototype .as-admin-layout { display: grid; grid-template-columns: 200px 1fr; min-height: 660px; border: 1px solid var(--as-line); border-radius: 18px; overflow: hidden; background: var(--as-panel); }
+        #as-prototype .as-admin-nav { padding: 18px 12px; border-right: 1px solid var(--as-line); background: light-dark(#f9fafc, #192233); }
+        #as-prototype .as-admin-nav strong { display: block; padding: 0 10px 16px; }
+        #as-prototype .as-admin-nav button { width: 100%; border: 0; border-radius: 9px; padding: 10px; color: var(--as-muted); background: transparent; text-align: left; cursor: pointer; }
+        #as-prototype .as-admin-nav button[aria-current="page"] { color: var(--as-blue); background: rgba(36,107,254,.09); font-weight: 700; }
+        #as-prototype .as-admin-main { min-width: 0; }
+        #as-prototype .as-admin-head { padding: 18px 22px; border-bottom: 1px solid var(--as-line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        #as-prototype .as-admin-head h1 { margin: 0; font-size: 20px; }
+        #as-prototype .as-admin-content { padding: 20px 22px; }
+        #as-prototype .as-filter-row { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 16px; }
+        #as-prototype .as-filter-row input,
+        #as-prototype .as-filter-row select { border: 1px solid var(--as-line); border-radius: 9px; padding: 9px 11px; color: var(--as-ink); background: var(--as-panel); }
+        #as-prototype .as-table-wrap { overflow-x: auto; border: 1px solid var(--as-line); border-radius: 12px; }
+        #as-prototype table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 680px; }
+        #as-prototype th,
+        #as-prototype td { text-align: left; padding: 12px; border-bottom: 1px solid var(--as-line); }
+        #as-prototype th { color: var(--as-muted); font-weight: 650; background: var(--as-soft); }
+        #as-prototype tbody tr { cursor: pointer; }
+        #as-prototype tbody tr:hover { background: rgba(36,107,254,.04); }
+        #as-prototype .as-status { display: inline-flex; padding: 4px 8px; border-radius: 999px; color: var(--as-blue); background: rgba(36,107,254,.09); white-space: nowrap; }
+        #as-prototype .as-admin-detail { display: none; }
+        #as-prototype .as-admin-detail.is-active { display: block; }
+        #as-prototype .as-admin-list.is-hidden { display: none; }
+        #as-prototype .as-detail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        #as-prototype .as-back { border: 1px solid var(--as-line); border-radius: 9px; padding: 7px 10px; color: var(--as-ink); background: var(--as-panel); cursor: pointer; }
+        #as-prototype .as-detail-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 16px; }
+        #as-prototype .as-detail-section { border: 1px solid var(--as-line); border-radius: 13px; padding: 15px; }
+        #as-prototype .as-detail-section h2 { margin: 0 0 12px; font-size: 14px; }
+        #as-prototype .as-mini-row { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; font-size: 12px; border-bottom: 1px solid var(--as-line); }
+        #as-prototype .as-mini-row:last-child { border-bottom: 0; }
+        #as-prototype .as-mini-row span:first-child { color: var(--as-muted); }
+        #as-prototype .as-admin-note { width: 100%; min-height: 90px; resize: vertical; border: 1px solid var(--as-line); border-radius: 9px; padding: 10px; color: var(--as-ink); background: var(--as-panel); }
+        #as-prototype .as-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        #as-prototype .as-hidden { display: none !important; }
+        @media (max-width: 900px) {
+          #as-prototype .as-client-layout { grid-template-columns: minmax(320px, 430px) minmax(220px, 1fr); justify-content: center; }
+          #as-prototype .as-context { display: none; }
+        }
+        @media (max-width: 650px) {
+          #as-prototype .as-topbar { align-items: flex-start; flex-direction: column; }
+          #as-prototype .as-product-switch { width: 100%; }
+          #as-prototype .as-product-switch button { flex: 1 1 0; padding-left: 8px; padding-right: 8px; }
+          #as-prototype .as-canvas { padding: 12px; min-height: auto; }
+          #as-prototype .as-client-layout { display: block; }
+          #as-prototype .as-notes { display: none; }
+          #as-prototype .as-phone { max-width: 430px; margin: 0 auto; }
+          #as-prototype .as-admin-layout { grid-template-columns: 1fr; }
+          #as-prototype .as-admin-nav { display: flex; align-items: center; gap: 5px; border-right: 0; border-bottom: 1px solid var(--as-line); overflow-x: auto; }
+          #as-prototype .as-admin-nav strong { padding: 0 8px; white-space: nowrap; }
+          #as-prototype .as-admin-nav button { width: auto; white-space: nowrap; }
+          #as-prototype .as-detail-grid { grid-template-columns: 1fr; }
+          #as-prototype .as-admin-head,
+          #as-prototype .as-admin-content { padding-left: 14px; padding-right: 14px; }
+        }
+      </style>
+    
+      <div class="as-shell">
+        <header class="as-topbar">
+          <div class="as-brand"><span class="as-mark">门</span><span>门头设计 Agent · MVP</span></div>
+          <div class="as-product-switch" aria-label="原型视图">
+            <button type="button" data-view="client" aria-pressed="true">客户 H5</button>
+            <button type="button" data-view="admin" aria-pressed="false">简单后台</button>
+          </div>
+        </header>
+    
+        <main class="as-canvas">
+          <section class="as-client-layout" data-panel="client">
+            <aside class="as-context">
+              <h2>客户流程</h2>
+              <div class="as-context-list">
+                <button type="button" class="as-step-button" data-step="0" aria-current="step"><span class="as-step-number">1</span><span>上传与信息</span></button>
+                <button type="button" class="as-step-button" data-step="1"><span class="as-step-number">2</span><span>Agent 沟通与修改</span></button>
+                <button type="button" class="as-step-button" data-step="2"><span class="as-step-number">3</span><span>查看设计方案</span></button>
+              </div>
+            </aside>
+    
+            <div class="as-phone" aria-label="客户移动端原型">
+              <div class="as-mobile-head"><span class="as-mobile-title">招牌侠-门头设计</span><span class="as-mobile-status">自动保存</span></div>
+              <div class="as-progress"><span style="width:16.6%"></span></div>
+    
+              <section class="as-screen is-active" data-screen="0">
+                <div class="as-screen-body">
+                  <div class="as-eyebrow">第 1 步 · 创建项目</div>
+                  <h1>拍下现在的门店</h1>
+                  <p class="as-lead">请尽量正对门店拍摄，保证门头左右边界、门窗和柱体完整可见。</p>
+                  <div class="as-upload-zone">
+                    <div>
+                      <div class="as-camera">⌁</div>
+                      <strong>上传门店正面照片</strong>
+                      <p class="as-lead">支持拍照或从相册选择</p>
+                      <button type="button" class="as-primary" data-demo-upload>选择照片</button>
+                    </div>
+                  </div>
+                  <div class="as-fields">
+                    <div class="as-field"><label>门头宽度</label><input value="6.2 米" aria-label="门头宽度"></div>
+                    <div class="as-field"><label>门头高度</label><input value="1.4 米" aria-label="门头高度"></div>
+                    <div class="as-field"><label>店名</label><input value="山野咖啡" aria-label="店名"></div>
+                    <div class="as-field"><label>行业</label><input value="咖啡轻餐" aria-label="行业"></div>
+                    <div class="as-field as-wide"><label>预算</label><input value="1 万～2 万元" aria-label="预算"></div>
+                  </div>
+                  <button type="button" class="as-primary as-full" data-next>登陆提交后免费设计</button>
+                </div>
+              </section>
+    
+              <section class="as-screen" data-screen="1">
+                <div class="as-chat-screen">
+                  <div class="as-chat-head">
+                    <div class="as-agent-avatar">侠</div>
+                    <div><strong>招牌侠设计 Agent</strong><span>在线 · 正在为你整理门头需求</span></div>
+                  </div>
+                  <button type="button" class="as-confirmed-design" data-confirmed-design hidden>
+                    <span class="as-confirmed-design-image" aria-label="已确认方案缩略图"></span>
+                    <span class="as-confirmed-design-copy"><strong>✓ 已确认最终方案</strong><span>方案 V2 · 品牌形象型</span><small>系统估算 ¥12,000～16,000</small></span>
+                    <span class="as-confirmed-design-arrow">›</span>
+                  </button>
+                  <div class="as-chat-scroll" data-chat-scroll>
+                    <div class="as-chat-time">今天 10:28</div>
+                    <div class="as-chat-row is-agent">
+                      <div class="as-chat-mini-avatar">侠</div>
+                      <div class="as-chat-bubble">你好，我是招牌侠设计 Agent。照片、门头尺寸、店名、行业和预算已经收到。</div>
+                    </div>
+                    <div class="as-chat-row is-agent">
+                      <div class="as-chat-mini-avatar">侠</div>
+                      <div class="as-chat-bubble">我会通过几轮简单沟通了解你的设计想法。你希望新门头给顾客什么感觉？也可以上传喜欢的门头参考图。</div>
+                    </div>
+                    <div class="as-chat-row is-user">
+                      <div class="as-chat-bubble">想做得自然简约一些，用木色和深绿色，晚上需要发光。</div>
+                    </div>
+                    <div class="as-chat-row is-agent">
+                      <div class="as-chat-mini-avatar">侠</div>
+                      <div class="as-chat-bubble">明白。结合当前预算，我建议采用浅木纹饰面、深绿色店名字和暖白背发光。你可以继续描述，或者上传参考图让我对风格理解得更准确。</div>
+                    </div>
+                  </div>
+                  <div class="as-reference-preview" data-reference-preview>
+                    <div class="as-reference-thumb">▧</div>
+                    <div class="as-reference-copy"><strong>门头参考图.jpg</strong><span>已添加到本次设计沟通</span></div>
+                    <button type="button" class="as-reference-remove" data-remove-reference aria-label="移除参考图">×</button>
+                  </div>
+                  <div class="as-design-reference" data-design-reference hidden>
+                    <div class="as-design-reference-image" aria-label="方案 V2 缩略图"></div>
+                    <div class="as-design-reference-copy"><strong>正在引用：方案 V2 · 品牌形象型</strong><span>发送修改意见时将基于此方案调整</span></div>
+                  </div>
+                  <div class="as-chat-composer">
+                    <div class="as-composer-row">
+                      <button type="button" class="as-attach-button" data-add-reference aria-label="上传参考图">＋</button>
+                      <textarea class="as-chat-input" data-agent-input aria-label="输入设计想法" placeholder="描述你的想法，或告诉我哪里需要保留…"></textarea>
+                      <button type="button" class="as-send-button" data-agent-send aria-label="发送消息">➤</button>
+                    </div>
+                    <div class="as-composer-hint">点击 ＋ 可上传门头参考图</div>
+                    <div class="as-chat-nav">
+                      <button type="button" data-open-summary>需求摘要</button>
+                      <button type="button" data-open-versions>设计方案 <span class="as-nav-count">3</span></button>
+                    </div>
+                  </div>
+                  <div class="as-version-sheet" data-version-sheet>
+                    <div class="as-version-head"><strong>设计方案版本</strong><button type="button" class="as-version-close" data-close-versions aria-label="关闭">×</button></div>
+                    <div class="as-version-list">
+                      <button type="button" class="as-version-item" data-version-detail="3">
+                        <span class="as-version-image"></span>
+                        <span class="as-version-copy"><strong>方案 V3 · 创意特色型</strong><span>刚刚生成 · 可查看详情</span></span>
+                        <span class="as-version-arrow">›</span>
+                      </button>
+                      <button type="button" class="as-version-item" data-version-detail="3">
+                        <span class="as-version-image"></span>
+                        <span class="as-version-copy"><strong>方案 V2 · 品牌形象型</strong><span>木纹格栅、暖白背发光</span></span>
+                        <span class="as-version-arrow">›</span>
+                      </button>
+                      <button type="button" class="as-version-item" data-version-detail="3">
+                        <span class="as-version-image"></span>
+                        <span class="as-version-copy"><strong>方案 V1 · 经济实用型</strong><span>铝板底板、正面发光字</span></span>
+                        <span class="as-version-arrow">›</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="as-summary-sheet" data-summary-sheet>
+                    <div class="as-version-head"><button type="button" class="as-summary-back" data-close-summary aria-label="返回沟通">← 返回沟通</button><strong>需求摘要</strong><span aria-hidden="true" style="width:58px"></span></div>
+                    <div class="as-summary">
+                      <div class="as-summary-row"><span>店名</span><strong>山野咖啡</strong></div>
+                      <div class="as-summary-row"><span>尺寸</span><strong>6.2m × 1.4m</strong></div>
+                      <div class="as-summary-row"><span>预算</span><strong>1 万～2 万元</strong></div>
+                      <div class="as-summary-row"><span>风格</span><strong>自然简约、木色、深绿色</strong></div>
+                      <div class="as-summary-row"><span>发光</span><strong>暖白背发光字</strong></div>
+                      <div class="as-summary-row"><span>保留</span><strong>门洞、柱体、二楼窗户</strong></div>
+                    </div>
+                    <div class="as-summary-confirm">
+                      <button type="button" class="as-secondary" data-summary-revise>继续沟通修改</button>
+                      <button type="button" class="as-primary" data-summary-confirm>确认需求并出图</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+    
+              <section class="as-screen" data-screen="2">
+                <div class="as-screen-body">
+                  <div class="as-scheme-tabs">
+                    <button type="button" data-scheme="0" aria-pressed="false">经济实用</button>
+                    <button type="button" data-scheme="1" aria-pressed="true">品牌形象</button>
+                    <button type="button" data-scheme="2" aria-pressed="false">创意特色</button>
+                  </div>
+                  <div class="as-scheme-gallery">
+                    <div class="as-storefront"><span class="as-gallery-label">主图 · 正面效果</span><span class="as-door"></span><span class="as-window-left"></span><span class="as-window-right"></span></div>
+                    <div class="as-angle-grid">
+                      <div class="as-angle-view as-angle-left"><span class="as-gallery-label">辅图 · 左侧视角</span></div>
+                      <div class="as-angle-view as-angle-right"><span class="as-gallery-label">辅图 · 右侧视角</span></div>
+                    </div>
+                  </div>
+                  <div class="as-scheme-info">
+                    <div><span class="as-final-mark" data-final-mark hidden>✓ 已确认方案</span><strong data-scheme-title>方案 B · 木纹格栅与背发光字</strong><span data-scheme-desc>温暖自然，保留建筑结构，强化咖啡品牌氛围。</span></div>
+                    <span class="as-budget-tag" data-scheme-price>系统估算 ¥12,000～16,000</span>
+                  </div>
+                  <div class="as-price-note">根据门头尺寸、材料和工艺自动估算，最终以现场复尺报价为准</div>
+                  <div class="as-materials">
+                    <div class="as-material"><strong>门头饰面</strong><span data-scheme-material>浅木纹铝方通</span></div>
+                    <div class="as-material"><strong>招牌字材质</strong><span data-scheme-letter>不锈钢烤漆背发光字</span></div>
+                    <div class="as-material"><strong>灯光配置</strong><span data-scheme-light>暖白 LED 模组</span></div>
+                    <div class="as-material"><strong>基层与安装</strong><span data-scheme-base>镀锌方管骨架、防水电源及安装辅材</span></div>
+                  </div>
+                  <div class="as-actions as-design-actions" data-design-actions>
+                    <button type="button" class="as-secondary" data-return-agent>在 Agent 中修改</button>
+                    <button type="button" class="as-primary" data-confirm-design>确认最终方案</button>
+                  </div>
+                </div>
+              </section>
+    
+            </div>
+    
+            <aside class="as-notes">
+              <h2>当前原型重点</h2>
+              <div class="as-note-list">
+                <div class="as-note-item"><span class="as-note-dot">1</span><span>五项必填信息集中在创建项目阶段。</span></div>
+                <div class="as-note-item"><span class="as-note-dot">2</span><span>前期需求沟通和后续方案修改都在同一个 Agent 对话中完成。</span></div>
+                <div class="as-note-item"><span class="as-note-dot">3</span><span>生图前和最终方案各有一次明确确认。</span></div>
+                <div class="as-note-item"><span class="as-note-dot">4</span><span>客户确认后，自动转入报价参数和人工跟进。</span></div>
+              </div>
+            </aside>
+          </section>
+    
+          <section class="as-admin" data-panel="admin">
+            <div class="as-admin-layout">
+              <nav class="as-admin-nav" aria-label="后台导航">
+                <strong>门头 Agent</strong>
+                <button type="button" aria-current="page">项目列表</button>
+                <button type="button">退出登录</button>
+              </nav>
+              <div class="as-admin-main">
+                <div class="as-admin-list">
+                  <header class="as-admin-head"><div><h1>项目列表</h1><span style="color:var(--as-muted);font-size:12px">查看客户进度并跟进已确认项目</span></div><button type="button" class="as-secondary">导出列表</button></header>
+                  <div class="as-admin-content">
+                    <div class="as-filter-row">
+                      <input value="" placeholder="搜索项目、门店或手机号" aria-label="搜索项目">
+                      <select aria-label="项目状态"><option>全部状态</option><option>客户已确认</option><option>待人工联系</option><option>人工跟进中</option></select>
+                    </div>
+                    <div class="as-table-wrap">
+                      <table>
+                        <thead><tr><th>项目</th><th>行业</th><th>预算</th><th>状态</th><th>更新时间</th></tr></thead>
+                        <tbody>
+                          <tr data-open-project><td><strong>AS-260811-001</strong><br>山野咖啡</td><td>咖啡轻餐</td><td>1万～2万</td><td><span class="as-status">待人工联系</span></td><td>16:30</td></tr>
+                          <tr data-open-project><td><strong>AS-260811-002</strong><br>小满烘焙</td><td>烘焙甜品</td><td>2万～5万</td><td><span class="as-status">客户已确认</span></td><td>15:46</td></tr>
+                          <tr data-open-project><td><strong>AS-260810-017</strong><br>一木花店</td><td>鲜花零售</td><td>5千～1万</td><td><span class="as-status">人工跟进中</span></td><td>昨天</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="as-admin-detail">
+                  <header class="as-admin-head"><div class="as-detail-head" style="margin:0"><button type="button" class="as-back" data-back-list>← 返回</button><div><h1>山野咖啡门头设计</h1><span style="color:var(--as-muted);font-size:12px">AS-260811-001 · 待人工联系</span></div></div><button type="button" class="as-primary">下载项目资料</button></header>
+                  <div class="as-admin-content">
+                    <div class="as-detail-grid">
+                      <div class="as-detail-section">
+                        <h2>最终确认方案</h2>
+                        <div class="as-storefront"><span class="as-door"></span><span class="as-window-left"></span><span class="as-window-right"></span></div>
+                        <div class="as-actions"><button type="button" class="as-secondary">查看全部方案</button><button type="button" class="as-secondary">查看对话记录</button></div>
+                      </div>
+                      <div class="as-detail-section">
+                        <h2>项目信息</h2>
+                        <div class="as-mini-row"><span>门头尺寸</span><strong>6.2m × 1.4m</strong></div>
+                        <div class="as-mini-row"><span>店名 / 行业</span><strong>山野咖啡 / 咖啡轻餐</strong></div>
+                        <div class="as-mini-row"><span>预算</span><strong>1万～2万元</strong></div>
+                        <div class="as-mini-row"><span>最终版本</span><strong>V2</strong></div>
+                        <div class="as-mini-row"><span>客户确认</span><strong>08-11 16:30</strong></div>
+                      </div>
+                      <div class="as-detail-section">
+                        <h2>材料与报价参数</h2>
+                        <div class="as-mini-row"><span>主要材料</span><strong>木纹铝方通</strong></div>
+                        <div class="as-mini-row"><span>店名字体</span><strong>金属背发光字</strong></div>
+                        <div class="as-mini-row"><span>灯光</span><strong>暖白 LED</strong></div>
+                        <div class="as-mini-row"><span>报价状态</span><strong>等待计算规则</strong></div>
+                      </div>
+                      <div class="as-detail-section">
+                        <h2>内部跟进</h2>
+                        <div class="as-field"><label>跟进状态</label><input value="待人工联系" aria-label="跟进状态"></div>
+                        <div class="as-field" style="margin-top:10px"><label>内部备注</label><textarea class="as-admin-note">明日上午联系客户，确认现场复尺时间。</textarea></div>
+                        <div class="as-actions"><button type="button" class="as-primary">保存备注</button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    
+      <script>
+        (() => {
+          const root = document.getElementById('as-prototype');
+          const viewButtons = root.querySelectorAll('[data-view]');
+          const clientPanel = root.querySelector('[data-panel="client"]');
+          const adminPanel = root.querySelector('[data-panel="admin"]');
+          const screens = [...root.querySelectorAll('[data-screen]')];
+          const stepButtons = [...root.querySelectorAll('[data-step]')];
+          const progress = root.querySelector('.as-progress span');
+          let currentStep = 0;
+    
+          function showView(view) {
+            viewButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
+            clientPanel.classList.toggle('as-hidden', view !== 'client');
+            adminPanel.classList.toggle('is-active', view === 'admin');
+          }
+    
+          function showStep(index) {
+            currentStep = Math.max(0, Math.min(screens.length - 1, index));
+            screens.forEach((screen, i) => screen.classList.toggle('is-active', i === currentStep));
+            stepButtons.forEach(button => {
+              if (Number(button.dataset.step) === currentStep) button.setAttribute('aria-current', 'step');
+              else button.removeAttribute('aria-current');
+            });
+            progress.style.width = `${((currentStep + 1) / screens.length) * 100}%`;
+          }
+    
+          viewButtons.forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
+          stepButtons.forEach(button => button.addEventListener('click', () => showStep(Number(button.dataset.step))));
+          root.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', () => showStep(currentStep + 1)));
+    
+          root.querySelectorAll('.as-choice').forEach(button => button.addEventListener('click', () => {
+            const group = button.parentElement;
+            group.querySelectorAll('.as-choice').forEach(choice => choice.classList.remove('is-selected'));
+            button.classList.add('is-selected');
+          }));
+    
+          const schemeData = [
+            ['方案 A · 平板底板与正面发光字', '结构简单、识别直接，优先控制制作成本。', '深绿色烤漆铝板', '亚克力面板正面发光字', '暖白 LED 模组', '镀锌方管骨架、防水电源及安装辅材', '系统估算 ¥8,000～11,000'],
+            ['方案 B · 木纹格栅与背发光字', '温暖自然，保留建筑结构，强化咖啡品牌氛围。', '浅木纹铝方通', '不锈钢烤漆背发光字', '暖白 LED 模组', '镀锌方管骨架、防水电源及安装辅材', '系统估算 ¥12,000～16,000'],
+            ['方案 C · 无底板金属字与线性灯', '更轻盈、更有设计感，突出原建筑立面。', '原墙面 + 金属构件', '拉丝不锈钢精工字', '户外防水线性灯', '金属连接件、隐藏走线及安装辅材', '系统估算 ¥15,000～20,000']
+          ];
+          root.querySelectorAll('[data-scheme]').forEach(button => button.addEventListener('click', () => {
+            const index = Number(button.dataset.scheme);
+            root.querySelectorAll('[data-scheme]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+            root.querySelector('[data-scheme-title]').textContent = schemeData[index][0];
+            root.querySelector('[data-scheme-desc]').textContent = schemeData[index][1];
+            root.querySelector('[data-scheme-material]').textContent = schemeData[index][2];
+            root.querySelector('[data-scheme-letter]').textContent = schemeData[index][3];
+            root.querySelector('[data-scheme-light]').textContent = schemeData[index][4];
+            root.querySelector('[data-scheme-base]').textContent = schemeData[index][5];
+            root.querySelector('[data-scheme-price]').textContent = schemeData[index][6];
+          }));
+    
+          const adminList = root.querySelector('.as-admin-list');
+          const adminDetail = root.querySelector('.as-admin-detail');
+          root.querySelectorAll('[data-open-project]').forEach(row => row.addEventListener('click', () => {
+            adminList.classList.add('is-hidden');
+            adminDetail.classList.add('is-active');
+          }));
+          root.querySelector('[data-back-list]').addEventListener('click', () => {
+            adminDetail.classList.remove('is-active');
+            adminList.classList.remove('is-hidden');
+          });
+    
+          root.querySelector('[data-demo-upload]').addEventListener('click', event => {
+            event.currentTarget.textContent = '照片已选择 ✓';
+            event.currentTarget.style.background = 'var(--as-green)';
+            event.currentTarget.style.borderColor = 'var(--as-green)';
+          });
+    
+          const referencePreview = root.querySelector('[data-reference-preview]');
+          root.querySelector('[data-add-reference]').addEventListener('click', () => {
+            referencePreview.classList.add('is-active');
+          });
+          root.querySelector('[data-remove-reference]').addEventListener('click', () => {
+            referencePreview.classList.remove('is-active');
+          });
+          root.querySelector('[data-agent-send]').addEventListener('click', () => {
+            const input = root.querySelector('[data-agent-input]');
+            const value = input.value.trim();
+            const designReference = root.querySelector('[data-design-reference]');
+            const hasDesignReference = !designReference.hidden;
+            const hasUploadedImage = referencePreview.classList.contains('is-active');
+            if (!value && !hasDesignReference && !hasUploadedImage) return;
+            const row = document.createElement('div');
+            row.className = 'as-chat-row is-user';
+            const bubble = document.createElement('div');
+            bubble.className = 'as-chat-bubble';
+            if (hasDesignReference || hasUploadedImage) {
+              bubble.classList.add('has-attachment');
+            }
+            if (hasDesignReference) {
+              bubble.innerHTML = '<div class="as-sent-design-quote"><div class="as-design-reference-image" aria-label="方案 V2 缩略图"></div><div><strong>方案 V2 · 品牌形象型</strong><span>引用此方案进行修改</span></div></div>';
+              designReference.hidden = true;
+            }
+            if (hasUploadedImage) {
+              bubble.insertAdjacentHTML('beforeend', '<div class="as-sent-image"><div class="as-sent-image-preview" aria-label="上传的门头参考图">▧</div><div class="as-sent-image-copy"><strong>门头参考图.jpg</strong><span>图片已发送</span></div></div>');
+              referencePreview.classList.remove('is-active');
+            }
+            if (value) {
+              const messageText = document.createElement('div');
+              messageText.className = 'as-sent-message-text';
+              messageText.textContent = value;
+              bubble.appendChild(messageText);
+            } else if (!hasDesignReference && !hasUploadedImage) {
+              bubble.textContent = value;
+            }
+            row.appendChild(bubble);
+            const chatScroll = root.querySelector('[data-chat-scroll]');
+            chatScroll.appendChild(row);
+            input.value = '';
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+          });
+    
+          const versionSheet = root.querySelector('[data-version-sheet]');
+          const summarySheet = root.querySelector('[data-summary-sheet]');
+          root.querySelector('[data-open-summary]').addEventListener('click', () => {
+            versionSheet.classList.remove('is-active');
+            summarySheet.classList.toggle('is-active');
+          });
+          root.querySelector('[data-open-versions]').addEventListener('click', () => {
+            summarySheet.classList.remove('is-active');
+            versionSheet.classList.toggle('is-active');
+          });
+          root.querySelector('[data-close-versions]').addEventListener('click', () => {
+            versionSheet.classList.remove('is-active');
+          });
+          root.querySelectorAll('[data-version-detail]').forEach(button => button.addEventListener('click', () => {
+            versionSheet.classList.remove('is-active');
+            showStep(2);
+          }));
+          root.querySelector('[data-return-agent]').addEventListener('click', () => {
+            showStep(1);
+            root.querySelector('[data-design-reference]').hidden = false;
+            root.querySelector('[data-agent-input]').placeholder = '例如：木色再浅一点，店名字体放大…';
+            root.querySelector('[data-agent-input]').focus();
+          });
+          root.querySelector('[data-confirm-design]').addEventListener('click', () => {
+            showStep(1);
+            root.querySelector('[data-confirmed-design]').hidden = false;
+            root.querySelector('[data-final-mark]').hidden = false;
+            root.querySelector('[data-design-actions]').hidden = true;
+            const chatScroll = root.querySelector('[data-chat-scroll]');
+            const agentRow = document.createElement('div');
+            agentRow.className = 'as-chat-row is-agent';
+            agentRow.innerHTML = '<div class="as-chat-mini-avatar">侠</div><div class="as-chat-bubble">最终方案已确认。我已整理报价参数和材料清单，接下来将由工作人员与你联系并进行现场复尺。</div>';
+            chatScroll.appendChild(agentRow);
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+          });
+          root.querySelector('[data-confirmed-design]').addEventListener('click', () => showStep(2));
+          root.querySelector('[data-close-summary]').addEventListener('click', () => {
+            summarySheet.classList.remove('is-active');
+          });
+          root.querySelector('[data-summary-revise]').addEventListener('click', () => {
+            summarySheet.classList.remove('is-active');
+            root.querySelector('[data-agent-input]').focus();
+          });
+          root.querySelector('[data-summary-confirm]').addEventListener('click', () => {
+            summarySheet.classList.remove('is-active');
+            const chatScroll = root.querySelector('[data-chat-scroll]');
+            const userRow = document.createElement('div');
+            userRow.className = 'as-chat-row is-user';
+            const userBubble = document.createElement('div');
+            userBubble.className = 'as-chat-bubble';
+            userBubble.textContent = '确认以上需求，开始生成设计图。';
+            userRow.appendChild(userBubble);
+            chatScroll.appendChild(userRow);
+    
+            const agentRow = document.createElement('div');
+            agentRow.className = 'as-chat-row is-agent';
+            agentRow.innerHTML = '<div class="as-chat-mini-avatar">侠</div><div class="as-chat-bubble">需求已确认，正在生成设计方案……完成后可在底部“设计方案”中查看各个版本。</div>';
+            chatScroll.appendChild(agentRow);
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+          });
+        })();
+      </script>
+    </div>
+  </body>
+</html>
