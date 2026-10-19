@@ -15,7 +15,7 @@ const capabilities = [
     index: '贰',
     title: '架构与工程治理',
     text: '具备前端架构及全栈交付经验，能够治理复杂画布、历史代码和性能问题，完成领域拆分、模块化、类型规范、可观测性与 CI/CD 建设。',
-    evidence: '前端工程体系与构建效率治理 · 复杂业务流程画布领域化重构 · 线上可观测性 · 跨项目基础架构与 DevOps 体系',
+    evidence: '前端工程体系与构建效率治理 · 复杂业务流程画布领域化重构 · 桌面集成与插件兼容 · 跨项目基础架构与 DevOps 体系',
   },
   {
     index: '叁',
@@ -39,6 +39,8 @@ const experiences = [
     summary: '围绕桌面工作台、业务自动化和生活中的工具，实践从理解需求、方案判断到开发、验证与交付的完整过程。',
     stats: ['e宝工坊', '业务自动化', '产品实践'],
     bullets: [
+      '围绕 e宝工坊开展 Electron 桌面集成与插件化开发，将 DeepSeek Harness 的本地客户端、Host 与插件系统组织成 Windows / macOS 桌面应用。',
+      '处理 Profile 配置隔离、插件依赖准备、Stable / Beta 兼容与启动恢复，并通过类型检查、自动化测试和打包验证推进交付。',
       '参与自托管 AI API 网关 Niffler 的二次开发，负责配套应用的需求调研、方案设计、AI 协作研发、测试验收与交付。',
       '完成 Vue 3 生图工作台、LingWeave 无限画布及 DramaClaw AI 短剧平台的配套开发，处理模型接入、任务状态、配置隔离和会话鉴权。',
       '独立规划本地优先的养老机构桌面管理系统“安养台”，开展复杂业务建模、数据隔离、桌面架构和高保真交互原型实践。',
@@ -97,15 +99,44 @@ const experiences = [
 
 const { projects: portfolioProjects } = await getPortfolio();
 const experienceProjectLinks = new Map([
+  ['e宝工坊', portfolioProjects.find((project) => project.id === 'ebao-studio')?.data.repository],
   ['Niffler', 'https://github.com/g-dxw/Niffler'],
   ['LingWeave', portfolioProjects.find((project) => project.id === 'lingweave')?.data.repository],
   ['安养台', portfolioProjects.find((project) => project.id === 'caredock')?.data.repository],
 ]);
+const resumeProjectNotes: Record<string, { highlights: string[]; status: string }> = {
+  'ebao-studio': {
+    highlights: [
+      '桌面集成：围绕窗口、托盘、原生终端与 Host 生命周期组织本地工作台，保留固定版本的上游源码边界。',
+      '配置与插件：处理 Profile 隔离、插件组合、依赖准备与启动恢复，维护 Stable / Beta 的共享能力和版本差异。',
+      '业务工作流：衔接内容、账号、任务与发布执行，关注队列状态、失败反馈和配置恢复。',
+      '工程交付：结合类型检查、自动化测试、Profile 启动检查与打包验证，推进 Windows / macOS 桌面交付。',
+    ],
+    status: '已提供 Windows 与 macOS 安装包；具体能力随 Profile、插件和运行环境变化，真实平台登录与发布结果分别验收。',
+  },
+  'xianyu-auto-reply': {
+    highlights: [
+      '在开源系统上扩展 MCP 商品发布与卡券管理，约束个人 Token、权限范围、账号范围与资源归属。',
+      '使用请求号、操作记录和未知结果状态处理重复请求与执行中断，补充测试、构建产物交付和失败回滚流程。',
+    ],
+    status: '持续开发；平台登录、风控与真实上架效果仍需实际账户验收，目前没有公开体验入口。',
+  },
+  'sam-group-buy': {
+    highlights: [
+      '将选品、团购期次、顾客自选、按份拼单与订单汇总串成业务流程，区分售价、整件规格与实际采购数量。',
+      '以 SQLite 保存商品与订单，接入飞书手动备份与导出，兼顾价格时效、删除恢复和日常维护。',
+    ],
+    status: '已具备商品、期次、订单和拼单流程；付款确认、采购与履约由团长完成。',
+  },
+};
 const projectDetails = portfolioProjects.filter((project) => project.data.featured).map((project, index) => ({
+  id: project.id,
   label: `${String(index + 1).padStart(2, '0')} · ${project.data.origin}`,
   title: project.data.title,
   repository: project.data.repository,
   text: project.data.summary,
+  highlights: resumeProjectNotes[project.id]?.highlights ?? [],
+  status: resumeProjectNotes[project.id]?.status,
   tech: project.data.stack.join(' · '),
   href: `/projects/${project.id}/`,
   link: '阅读项目案例',
@@ -135,6 +166,7 @@ const skillGroups = [
     title: '项目开发实践',
     skills: [
       'Node.js 业务开发与历史项目交付',
+      'Electron 桌面集成、Profile 与插件管理',
       'Python / FastAPI 项目开发实践',
       'MySQL / SQLite、Rust / Tauri 项目实践',
       'API 集成、数据建模与本地优先应用设计',
@@ -146,6 +178,7 @@ const skillGroups = [
       '技术方案评估与架构升级',
       '领域拆分、历史系统迁移与兼容方案',
       'CI/CD、Jenkins、Docker 基础使用',
+      'Windows / macOS 打包、版本兼容与启动恢复',
       '自动化测试、浏览器验收、日志与可观测性',
       'Git 协作、版本管理与回滚控制',
     ],
@@ -272,7 +305,7 @@ const credentials = [
                   <p>{experience.summary}</p>
                   <ul>{experience.stats.map((stat) => <li>{stat}</li>)}</ul>
                   <div class="experience-details">
-                    {experience.bullets.map((bullet) => <p><span class="experience-detail-marker" aria-hidden="true"></span><span class="experience-detail-copy">{bullet.split(/(Niffler|LingWeave|安养台)/g).map((part) => {
+                    {experience.bullets.map((bullet) => <p><span class="experience-detail-marker" aria-hidden="true"></span><span class="experience-detail-copy">{bullet.split(/(e宝工坊|Niffler|LingWeave|安养台)/g).map((part) => {
                       const href = experienceProjectLinks.get(part);
                       return href ? <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`在新标签页查看${part}的 GitHub 仓库`}>{part}</a> : part;
                     })}</span></p>)}
@@ -289,16 +322,18 @@ const credentials = [
           <header class="section-heading section-heading--light reveal">
             <p>CHAPTER III · 当前实践</p>
             <h2 id="ecosystem-title">近期项目实践</h2>
-            <p class="section-intro">从桌面工具到具体业务，围绕真实问题推进产品设计与实现。案例中保留具体工作、开源来源、关键取舍和当前状态。</p>
+            <p class="section-intro">以 e宝工坊的桌面集成与插件开发为重点，展示从 AI 工具到具体业务的工程实践。每个项目说明开发内容、实现选择与当前交付状态。</p>
           </header>
 
           <div class="project-ledger">
             {projectDetails.map((project, index) => (
-              <article class="project-entry reveal" style={`--delay:${index * 80}ms`}>
+              <article id={`project-${project.id}`} class="project-entry reveal" style={`--delay:${index * 80}ms`}>
                 <p>{project.label}</p>
                 <div>
                   <h3>{project.title}</h3>
                   <p>{project.text}</p>
+                  {project.highlights.length > 0 && <ul class="project-highlights" aria-label={`${project.title}的开发实践`}>{project.highlights.map((highlight) => <li>{highlight}</li>)}</ul>}
+                  {project.status && <p class="project-status">{project.status}</p>}
                   <RepositoryLink repository={project.repository} title={project.title} />
                 </div>
                 <div class="project-entry__meta">
@@ -646,8 +681,9 @@ const credentials = [
 
   .ecosystem-section { position: relative; padding: 150px 0 190px; background: radial-gradient(circle at 72% 50%, rgba(53,91,109,.3), transparent 35%); }
   .ecosystem-layout { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
-  .section-heading--light { margin-left: 0; }
+  .section-heading--light { display: block; margin-left: 0; }
   .section-heading--light h2 { font-size: clamp(46px, 6vw, 76px); }
+  .section-heading--light .section-intro { margin-top: 24px; }
   .ecosystem-map { position: relative; min-height: 650px; }
   .ecosystem-map > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .map-string { fill: none; stroke: rgba(210,176,106,.46); stroke-width: 1.2; stroke-dasharray: 5 8; }
@@ -668,10 +704,13 @@ const credentials = [
   .ecosystem-node--provider { left: 50%; bottom: 2%; width: 220px; transform: translateX(-50%); border-top-color: var(--gold); }
 
   .project-ledger { grid-column: 1 / -1; margin-top: 34px; border-top: 1px solid rgba(210,176,106,.28); }
-  .project-entry { display: grid; grid-template-columns: 150px minmax(0,1fr) minmax(240px,.7fr); gap: 34px; align-items: start; padding: 34px 0; border-bottom: 1px solid rgba(158,180,189,.17); }
+  .project-entry { display: grid; grid-template-columns: 150px minmax(0,1fr) minmax(240px,.7fr); gap: 34px; align-items: start; padding: 34px 0; border-bottom: 1px solid rgba(158,180,189,.17); scroll-margin-top: 96px; }
   .project-entry > p { margin: 2px 0 0; color: var(--gold); font: 700 10px/1.5 ui-monospace, monospace; letter-spacing: .08em; }
   .project-entry h3 { margin: 0 0 10px; color: var(--paper-light); font: 800 24px/1.4 "Songti SC", STSong, serif; }
   .project-entry div > p { margin: 0; color: rgba(231,220,195,.73); font-size: 15px; line-height: 1.8; }
+  .project-highlights { display: grid; gap: 10px; margin: 20px 0 0; padding-left: 18px; color: rgba(231,220,195,.83); font-size: 14px; line-height: 1.85; }
+  .project-highlights li::marker { color: var(--gold); }
+  .project-entry .project-status { margin-top: 18px; padding-left: 12px; border-left: 2px solid rgba(210,176,106,.4); font-size: 12px; line-height: 1.85; }
   .project-entry :global(.repository-link) { color: var(--pale-gold); margin: 8px 0 0; }
   .project-entry__meta { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
   .project-entry__meta span { color: rgba(158,180,189,.7); font: 600 11px/1.8 ui-monospace, monospace; }
