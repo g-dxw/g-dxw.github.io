@@ -4,6 +4,9 @@ date: 2026-07-22
 cover: "/images/agent-cover-4-advanced-practice.svg"
 tags: ["AI Agent", "学习笔记", "Agent 进阶"]
 summary: "当 Agent 学会反思、多个 Agent 开始协作、安全护栏架起来——恭喜你，从入门走到了进阶。附完整概念速查表和学习路线。"
+topics: ["ai-practice"]
+projects: []
+featured: false
 ---
 
 ## 实习生长大了

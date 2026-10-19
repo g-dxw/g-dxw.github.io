@@ -3,8 +3,11 @@ import { getCollection, render } from 'astro:content';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function GET() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  const sorted = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const [posts, notes] = await Promise.all([
+    getCollection('blog', ({ data }) => !data.draft),
+    getCollection('notes', ({ data }) => !data.draft),
+  ]);
+  const sorted = [...posts, ...notes].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
   const items = await Promise.all(
     sorted.map(async (post) => {
@@ -15,7 +18,7 @@ export async function GET() {
         title: post.data.title,
         pubDate: post.data.date,
         description: post.data.summary || '',
-        link: `/blog/${post.id}`,
+        link: `/${post.collection === 'notes' ? 'notes' : 'blog'}/${post.id}/`,
         content,
       };
     })

@@ -3,6 +3,9 @@ title: Strapi 使用初体验
 date: 2026-06-04
 tags: ["笔记", "博客"]
 summary: "Strapi结合AI能节省大量时间和精力，用AI生成前端代码，在结合Strapi生成可以预测的后端接口"
+topics: ["product-making"]
+projects: []
+featured: false
 ---
 
 ## 我的场景：一个人 + AI，要做一个小程序

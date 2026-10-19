@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">山姆代购与小区团购：从选品到分货的业务流程示意</title>
+  <desc id="desc">从选品定价、发起团购、顾客按包或按份下单，到确认成团、采购分货；本地订单数据与可选飞书备份分别保留。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#e87b35" stroke-width="1.5"/></marker></defs>
+  <rect width="1200" height="750" fill="#fafaf8"/>
+  <circle cx="1085" cy="678" r="265" fill="#f3eee5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#2d2d2a">
+    <text x="70" y="100" font-size="17" letter-spacing="3" fill="#877f73">EVERYDAY / BUSINESS</text>
+    <text x="70" y="164" font-size="45" font-weight="650">从一份订单，到一次交付。</text>
+    <rect x="990" y="65" width="140" height="40" rx="20" fill="#eeeae2"/><text x="1060" y="91" font-size="17" text-anchor="middle" fill="#6e675e">流程示意</text>
+    <path d="M258 345 H281 M478 345 H501 M698 345 H721 M918 345 H941" stroke="#e87b35" stroke-width="2" marker-end="url(#arrow)"/>
+    <g fill="#fff" stroke="#ddd8cf" stroke-width="1.5"><rect x="70" y="270" width="180" height="150" rx="22"/><rect x="290" y="270" width="180" height="150" rx="22"/><rect x="510" y="270" width="180" height="150" rx="22"/><rect x="730" y="270" width="180" height="150" rx="22"/><rect x="950" y="270" width="180" height="150" rx="22"/></g>
+    <g fill="#e87b35" font-size="18" font-family="monospace"><text x="94" y="309">01</text><text x="314" y="309">02</text><text x="534" y="309">03</text><text x="754" y="309">04</text><text x="974" y="309">05</text></g>
+    <g font-size="26" font-weight="600"><text x="94" y="357">选品定价</text><text x="314" y="357">发起团购</text><text x="534" y="357">顾客下单</text><text x="754" y="357">确认成团</text><text x="974" y="357">采购分货</text></g>
+    <g font-size="17" fill="#777168"><text x="94" y="391">商品与价格规则</text><text x="314" y="391">期次与分享入口</text><text x="534" y="391">整包 / 按份拼单</text><text x="754" y="391">核对包数与余份</text><text x="974" y="391">采购与分货清单</text></g>
+    <path d="M600 445 V489" stroke="#bdb6aa" stroke-width="1.5" stroke-dasharray="5 6"/>
+    <rect x="270" y="510" width="660" height="110" rx="22" fill="#f7e9dc"/>
+    <text x="305" y="555" font-size="25" font-weight="600">把现实里的规则，落到每张订单里。</text>
+    <text x="305" y="592" font-size="20" fill="#817264">价格快照 · 成团分配 · 本地数据 · 可选飞书备份</text>
+    <text x="70" y="707" font-size="15" fill="#8d8578">山姆代购与小区团购管理 · 产品业务流程</text>
+  </g>
+</svg>

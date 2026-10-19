@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">闲鱼自动化工具：消息、订单与发货工作流示意</title>
+  <desc id="desc">消息与订单进入系统，由回复规则和卡券管理连接自动回复、自动发货与结果记录；AI 和 MCP 作为受权限及账号范围约束的操作入口。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#e87b35" stroke-width="1.5"/></marker>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#ddd9d1"/></pattern>
+  </defs>
+  <rect width="1200" height="750" fill="#fafaf8"/>
+  <rect x="675" width="525" height="750" fill="url(#dots)" opacity=".6"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#2d2d2a">
+    <text x="70" y="100" font-size="17" letter-spacing="3" fill="#877f73">COMMERCE / AUTOMATION</text>
+    <text x="70" y="164" font-size="45" font-weight="650">让重复操作，有序发生。</text>
+    <rect x="990" y="65" width="140" height="40" rx="20" fill="#eeeae2"/>
+    <text x="1060" y="91" font-size="17" text-anchor="middle" fill="#6e675e">流程示意</text>
+    <g fill="#fff" stroke="#ddd8cf" stroke-width="1.5">
+      <rect x="70" y="270" width="300" height="220" rx="24"/>
+      <rect x="450" y="270" width="300" height="220" rx="24"/>
+      <rect x="830" y="270" width="300" height="220" rx="24"/>
+    </g>
+    <g fill="#e87b35" font-size="18" font-family="monospace"><text x="100" y="315">01 / RECEIVE</text><text x="480" y="315">02 / ORGANIZE</text><text x="860" y="315">03 / EXECUTE</text></g>
+    <g font-size="29" font-weight="600"><text x="100" y="369">消息与订单</text><text x="480" y="369">规则与卡券</text><text x="860" y="369">执行与记录</text></g>
+    <g font-size="21" fill="#777168"><text x="100" y="420">账号管理 · 消息接收</text><text x="100" y="453">订单同步</text><text x="480" y="420">回复规则 · 库存管理</text><text x="480" y="453">发货配置</text><text x="860" y="420">自动回复 · 自动发货</text><text x="860" y="453">发送结果记录</text></g>
+    <g stroke="#e87b35" stroke-width="2" marker-end="url(#arrow)"><path d="M387 380 H431"/><path d="M767 380 H811"/></g>
+    <path d="M600 508 V556" stroke="#bdb6aa" stroke-width="1.5" stroke-dasharray="5 6"/>
+    <rect x="255" y="570" width="690" height="87" rx="20" fill="#f7e9dc"/>
+    <text x="288" y="605" font-size="22" font-weight="600">AI / MCP 操作入口</text><text x="288" y="636" font-size="19" fill="#817264">个人 Token · 权限控制 · 账号范围</text>
+    <text x="70" y="707" font-size="15" fill="#8d8578">基于开源系统扩展的项目实践</text>
+  </g>
+</svg>

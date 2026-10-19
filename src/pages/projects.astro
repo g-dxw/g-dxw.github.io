@@ -1,131 +1,65 @@
 ---
 import Base from '../layouts/Base.astro';
-
-const projects = [
-  {
-    name: 'LingWeave · 灵织',
-    tagline: 'AI 无限画布创作工作台',
-    description:
-      '面向个人创作者的 AI 无限画布。把提示词、参考素材、模型配置和生成结果连接在同一张画布上，支持图像/视频/音频连续创作，节点式组织、连线表达引用关系，本地优先，数据在你自己手里。',
-    tags: ['React 19', 'Vite 7', 'TypeScript', '无限画布', 'AI 生图', '本地优先'],
-    link: 'https://github.com/g-dxw/lingweave',
-    license: 'AGPL-3.0',
-    highlight: true,
-  },
-  {
-    name: '这个博客',
-    tagline: 'Astro + Vercel 个人博客',
-    description:
-      '你现在看的这个博客。基于 Astro 6 静态生成，Tailwind CSS 4 样式，Pagefind 全文搜索，暗色模式防闪白。源码即内容，推送即部署。',
-    tags: ['Astro', 'Tailwind CSS', 'Pagefind', 'Markdown'],
-    link: 'https://github.com/g-dxw/g-dxw.github.io',
-    license: 'MIT',
-    highlight: false,
-  },
-];
+import ProjectCard from '../components/ProjectCard.astro';
+import { getPortfolio, projectCategories } from '../utils/portfolio';
+import { topics } from '../data/topics';
+const { projects } = await getPortfolio();
 ---
-
-<Base
-  title="开源项目 · 旺仔"
-  description="我做的开源项目：LingWeave AI 无限画布、个人博客系统，以及其他折腾过的东西。"
->
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-
-    <!-- Hero -->
-    <section class="mb-14">
-      <h1 class="text-3xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-3">
-        开源项目
-      </h1>
-      <p class="text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
-        AI 应用开发 · 前端工程 · 工具向小玩意<br>
-        做自己会用的东西，顺便开源出来。
-      </p>
+<Base title="作品 · 旺仔" description="从桌面工作台、日常自动化，到轨迹工具与生活中的小实验。看看旺仔在做的项目，以及背后的问题与选择。" image="/images/projects/ebao-home.jpg">
+  <div class="site-wrap">
+    <header class="page-intro"><span class="eyebrow">WORK / THINGS I'VE BEEN MAKING</span><h1>从一个问题开始，<br />做出一点改变。</h1><p>有些是想认真打磨的产品，有些只是解决一个小麻烦的工具。这里收录了 {projects.length} 个项目，也保留它们的来处、取舍和当前进度。</p></header>
+    <section aria-label="筛选作品" class="project-filters" data-pagefind-ignore>
+      <div class="filter-bar" aria-label="作品类型"><button class="filter-button" type="button" data-category="all" aria-pressed="true">全部作品 <span>{projects.length}</span></button>{Object.entries(projectCategories).map(([id, label]) => <button class="filter-button" type="button" data-category={id} aria-pressed="false">{label} <span>{projects.filter((project) => project.data.category === id).length}</span></button>)}</div>
+      <label class="topic-select">按兴趣看看 <select id="project-topic"><option value="all">所有主题</option>{topics.map((topic) => <option value={topic.id}>{topic.title}</option>)}</select></label>
     </section>
-
-    <!-- 项目列表 -->
-    <section class="space-y-6 mb-14">
-      {projects.map((project) => (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block group rounded-2xl border border-[var(--color-border)] dark:border-[var(--color-border-dark)] bg-white dark:bg-[var(--color-card-dark)] p-6 sm:p-8 transition-all duration-300 hover:border-[var(--color-accent)] dark:hover:border-[var(--color-accent-dark)] hover:shadow-lg hover:-translate-y-0.5 no-underline"
-        >
-          <div class="flex items-start gap-4 sm:gap-6">
-            <div class={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center flex-shrink-0 ${
-              project.highlight
-                ? 'bg-[#fff5ee] dark:bg-[#2a1f15]'
-                : 'bg-[var(--color-code-bg)] dark:bg-[var(--color-code-bg-dark)]'
-            }`}>
-              <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M24 6C14.06 6 6 14.06 6 24c0 7.92 5.14 14.62 12.28 16.98.9.16 1.23-.39 1.23-.86v-3.02c-5-.96-6.06-2.42-6.06-2.42-.82-2.08-2-2.64-2-2.64-1.64-1.12.12-1.1.12-1.1 1.8.12 2.74 1.84 2.74 1.84 1.6 2.74 4.2 1.94 5.22 1.48.16-1.16.62-1.94 1.14-2.38-4-.46-8.2-2-8.2-8.9 0-1.96.7-3.58 1.84-4.84-.2-.46-.8-2.3.18-4.8 0 0 1.5-.48 4.9 1.82 1.42-.4 2.94-.6 4.46-.6 1.52 0 3.04.2 4.46.6 3.4-2.3 4.9-1.82 4.9-1.82.98 2.5.38 4.34.18 4.8 1.14 1.26 1.84 2.88 1.84 4.84 0 6.92-4.2 8.44-8.22 8.88.64.54 1.22 1.64 1.22 3.32v4.92c0 .48.32 1.04 1.24.86C36.86 38.6 42 31.9 42 24 42 14.06 33.94 6 24 6z"
-                  fill={project.highlight ? '#e87b35' : 'currentColor'}
-                  class={project.highlight ? '' : 'text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]'}
-                />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-3 mb-2 flex-wrap">
-                <h2 class="text-xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] group-hover:text-[var(--color-accent)] dark:group-hover:text-[var(--color-accent-dark)] transition-colors">
-                  {project.name}
-                </h2>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--color-code-bg)] dark:bg-[var(--color-code-bg-dark)] text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
-                  {project.license}
-                </span>
-                {project.highlight && (
-                  <span class="text-xs px-2 py-0.5 rounded-full bg-[#fff5ee] dark:bg-[#2a1f15] text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] font-medium">
-                    主要项目
-                  </span>
-                )}
-              </div>
-              <p class="text-sm font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)] mb-3">
-                {project.tagline}
-              </p>
-              <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed mb-4">
-                {project.description}
-              </p>
-              <div class="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <span class="text-xs px-2 py-1 rounded-md bg-[var(--color-code-bg)] dark:bg-[var(--color-code-bg-dark)] text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div class="flex-shrink-0 hidden sm:block text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] group-hover:text-[var(--color-accent)] dark:group-hover:text-[var(--color-accent-dark)] transition-colors self-center">
-              →
-            </div>
-          </div>
-        </a>
-      ))}
-    </section>
-
-    <!-- 引言区 -->
-    <section class="mb-14">
-      <div class="p-6 rounded-xl bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border-l-[3px] border-[var(--color-accent)] dark:border-[var(--color-accent-dark)]">
-        <h2 class="text-lg font-semibold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-3">
-          关于开源
-        </h2>
-        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
-          我做开源的原则很简单：<strong>做自己会用的东西</strong>。如果一个项目我自己都不想用，那说明它还没到可以开源的时候。
-        </p>
-        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed mt-2">
-          所以这里的项目不多，但每一个都是我真的在用来解决自己问题的。有 bug 你提 issue，有想法你发 PR，能帮上忙我就回。
-        </p>
-      </div>
-    </section>
-
-    <!-- 关注引导 -->
-    <section class="text-center py-8">
-      <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-4">
-        更多项目和更新在 GitHub
-      </p>
-      <a href="https://github.com/g-dxw"
-         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-accent)] text-white text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors no-underline">
-        GitHub @g-dxw
-        <span>→</span>
-      </a>
-    </section>
-
+    <p class="results-description" id="project-count" role="status" aria-live="polite">共 {projects.length} 个作品</p>
+    <div class="project-grid" id="project-list">{projects.map((project) => <div class="project-item" data-project-category={project.data.category} data-project-topics={project.data.topics.join(' ')}><ProjectCard project={project} headingLevel="h2" /></div>)}</div>
+    <p id="project-empty" class="empty-state" hidden>这个组合暂时没有作品。换一个类型或主题看看。</p>
+    <aside class="work-footnote"><span class="eyebrow">A NOTE ON THESE PROJECTS</span><p>作品包含个人工具、开源二次开发与产品原型。每个案例都注明上游与当前范围，项目状态也会随着实践继续调整。</p><a class="text-link" href="https://github.com/g-dxw" target="_blank" rel="noopener noreferrer">也可以去 GitHub 看看 <span aria-hidden="true">↗</span></a></aside>
   </div>
 </Base>
+<script>
+  const categoryButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category]'));
+  const topicSelect = document.querySelector<HTMLSelectElement>('#project-topic');
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-project-category]'));
+  let category = 'all';
+  function applyFilters(updateUrl = true) {
+    const topic = topicSelect?.value || 'all';
+    let count = 0;
+    for (const item of items) {
+      const visible = (category === 'all' || item.dataset.projectCategory === category) && (topic === 'all' || item.dataset.projectTopics?.split(' ').includes(topic));
+      item.hidden = !visible;
+      if (visible) count++;
+    }
+    for (const button of categoryButtons) button.setAttribute('aria-pressed', String(button.dataset.category === category));
+    const label = document.getElementById('project-count');
+    if (label) label.textContent = `共 ${count} 个作品`;
+    const empty = document.getElementById('project-empty');
+    if (empty) empty.hidden = count !== 0;
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      category === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', category);
+      topic === 'all' ? url.searchParams.delete('topic') : url.searchParams.set('topic', topic);
+      history.replaceState(null, '', url);
+    }
+  }
+  const params = new URLSearchParams(window.location.search);
+  if (categoryButtons.some((button) => button.dataset.category === params.get('category'))) category = params.get('category')!;
+  if (topicSelect && Array.from(topicSelect.options).some((option) => option.value === params.get('topic'))) topicSelect.value = params.get('topic')!;
+  applyFilters(false);
+  categoryButtons.forEach((button) => button.addEventListener('click', () => { category = button.dataset.category!; applyFilters(); }));
+  topicSelect?.addEventListener('change', () => applyFilters());
+</script>
+<style>
+  .project-filters { display: flex; justify-content: space-between; align-items: center; gap: 24px; border-bottom: 1px solid var(--line); padding-bottom: 24px; }
+  .filter-bar { margin: 0; }
+  .filter-button span { font-family: var(--font-mono); font-size: 10px; margin-left: 8px; opacity: .7; }
+  .topic-select { font-size: 12px; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+  select { min-height: 44px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); color: var(--ink); max-width: 200px; font-size: 13px; }
+  .results-description { padding: 23px 0; font-size: 12px; color: var(--muted); }
+  .project-item { display: flex; min-width: 0; }
+  .project-item > :global(.project-card) { width: 100%; }
+  .work-footnote { margin-top: 56px; padding-top: 25px; border-top: 1px solid var(--line); }
+  .work-footnote p { max-width: 680px; font-size: 14px; color: var(--muted); line-height: 1.9; margin: 12px 0; }
+  @media(max-width: 760px) { .project-filters { flex-direction: column; align-items: flex-start; gap: 16px; } .filter-bar { gap: 7px; } .filter-button { padding: 8px 12px; } .filter-button span { margin-left: 4px; } }
+</style>

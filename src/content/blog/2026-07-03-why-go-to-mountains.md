@@ -3,6 +3,9 @@ title: "写代码的人为什么需要进山"
 date: 2026-07-03
 tags: ["户外", "生活", "日记"]
 summary: "坐在电脑前，脑子里装的是bug和焦虑。进了山，脑子里只有下一步踩哪块石头。这是最好的关机方式。"
+topics: ["outdoor-life"]
+projects: []
+featured: false
 ---
 
 ## 一个程序员的"关机"方式

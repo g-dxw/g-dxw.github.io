@@ -1,75 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
-
-const outdoorPosts = [
-  { title: '徒步', desc: '中登协初级户外指导员，带过队伍走山路。在山上脑子里只有下一步踩哪，是最好的关机方式。', icon: '⛰️' },
-  { title: '摩旅', desc: '机车 + 公路 = 自由。没什么比风从耳边过去更解压。', icon: '🏍️' },
-  { title: '户外领队', desc: '考了中国登山协会初级户外指导员证，带队伍走山路，负责路线规划和安全保障。', icon: '🧭' }
-];
+import ProjectCard from '../components/ProjectCard.astro';
+import { getPortfolio, formatDate, postsForTopic, projectsForTopic } from '../utils/portfolio';
+import { topics } from '../data/topics';
+const topic = topics.find((item) => item.id === 'outdoor-life')!;
+const { posts, projects } = await getPortfolio();
+const outdoorPosts = postsForTopic(topic, posts);
+const outdoorProjects = projectsForTopic(topic, projects);
 ---
-
-<Base
-  title="生活 · 旺仔"
-  description="代码之外，我是户外领队、摩旅爱好者。徒步、机车、山路，记录生活的另一面。"
->
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-
-    <!-- Hero -->
-    <section class="mb-14">
-      <h1 class="text-3xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-3">
-        代码之外
-      </h1>
-      <p class="text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
-        徒步爱好者 · 摩托车骑行 · 户外领队 · 中登协山地户外指导员<br>
-        写代码是谋生，进山是生活。
-      </p>
-    </section>
-
-    <!-- 户外身份卡片 -->
-    <section class="mb-14">
-      <h2 class="text-xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-6">
-        我的户外身份
-      </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {outdoorPosts.map((post) => (
-          <div class="p-5 rounded-xl bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border border-[var(--color-border)] dark:border-[var(--color-border-dark)] hover:border-[var(--color-accent)]/20 dark:hover:border-[var(--color-accent-dark)]/20 transition-colors">
-            <div class="text-3xl mb-3">{post.icon}</div>
-            <h3 class="text-base font-semibold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-2">{post.title}</h3>
-            <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">{post.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- 引言区 -->
-    <section class="mb-14">
-      <div class="p-6 rounded-xl bg-[var(--color-surface)] dark:bg-[var(--color-surface-dark)] border-l-[3px] border-[var(--color-accent)] dark:border-[var(--color-accent-dark)]">
-        <h2 class="text-lg font-semibold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-3">
-          为什么写代码的人也需要进山
-        </h2>
-        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed">
-          坐在电脑前，脑子里装的是 bug、deadline、转型焦虑。进了山，脑子里只有下一步踩哪块石头、还有多远到顶、水还够不够喝。
-        </p>
-        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed mt-2">
-          山不会跟你谈绩效，路不会问你几岁。走就是了。这是最好的关机方式，比任何冥想App都管用。
-        </p>
-        <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] leading-relaxed mt-2">
-          骑摩托车也一样。风从耳边过去的时候，脑子里什么都没有，只有路和下一个弯。那种干净的感觉，在城市的格子间里找不到。
-        </p>
-      </div>
-    </section>
-
-    <!-- 关注引导 -->
-    <section class="text-center py-8">
-      <p class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-4">
-        想看更多户外内容？来小红书找我
-      </p>
-      <a href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55"
-         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-accent)] text-white text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors no-underline">
-        小红书 @旺仔爱运动
-        <span>→</span>
-      </a>
-    </section>
-
+<Base title="户外与生活 · 旺仔" description="徒步、摩旅、轨迹与沿途的记录。看看旺仔在屏幕之外的兴趣，以及由这些兴趣长出的工具。">
+  <div class="site-wrap">
+    <header class="page-intro"><span class="eyebrow">OUTSIDE THE SCREEN</span><h1>去山里，<br />也去路上。</h1><p>喜欢徒步，也喜欢摩旅。走出去的时候，注意力回到脚下的路、沿途的风景，和下一个弯。</p></header>
+    <div class="outside-intro"><p>考过中国登山协会初级户外指导员，带过队伍走山路。户外带来的不只有放松，也有新的好奇：怎样保留走过的轨迹，怎样整理照片，又怎样把这些记忆画成一张图。</p><a class="text-link" href="https://www.xiaohongshu.com/user/profile/667dfe4e000000000d024d55" target="_blank" rel="noopener noreferrer">小红书 · 旺仔爱运动 ↗</a></div>
+    <section class="outside-section"><div class="section-heading"><div><span class="eyebrow">STORIES ALONG THE WAY</span><h2>路上的一些感受</h2></div></div><div class="writing-list">{outdoorPosts.map((post) => <a class="writing-row" href={`/blog/${post.id}/`}><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time><div><h3>{post.data.title}</h3><p>{post.data.summary}</p></div><span class="row-arrow" aria-hidden="true">↗</span></a>)}</div></section>
+    <section class="outside-section"><div class="section-heading"><div><span class="eyebrow">TOOLS FROM AN INTEREST</span><h2>兴趣，也能长成工具</h2></div><a class="text-link" href="/explore/outdoor-life/">沿着主题看看 →</a></div><div class="project-grid">{outdoorProjects.map((project) => <ProjectCard project={project} />)}</div></section>
   </div>
 </Base>
+<style>
+  .outside-intro { display: grid; grid-template-columns: 1fr auto; gap: 45px; border-block: 1px solid var(--line); padding: 28px 0; align-items: center; }
+  .outside-intro p { max-width: 750px; color: var(--muted); font-size: 15px; line-height: 1.95; }
+  .outside-section { margin-top: 58px; }
+  @media(max-width: 700px) { .outside-intro { grid-template-columns: 1fr; gap: 12px; } }
+</style>

@@ -3,7 +3,8 @@ import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import TagBadge from '../components/TagBadge.astro';
 import ImageViewer from '../components/ImageViewer.astro';
-import { SITE_TITLE } from '../consts';
+import { getPortfolio } from '../utils/portfolio';
+import { getTopic } from '../data/topics';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -11,6 +12,9 @@ export interface Props {
 
 const { post } = Astro.props;
 const { title, date, cover, tags = [] } = post.data;
+const { projects } = await getPortfolio();
+const relatedProjects = projects.filter((project) => post.data.projects.includes(project.id));
+const relatedTopics = post.data.topics.map(getTopic).filter((topic) => !!topic);
 
 const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -26,14 +30,11 @@ const jsonLd = {
   '@type': 'BlogPosting',
   headline: title,
   datePublished: date.toISOString(),
-  dateModified: date.toISOString(),
-  author: {
-    '@type': 'Person',
-    name: SITE_TITLE,
-  },
+  dateModified: (post.data.updatedAt || date).toISOString(),
+  ...(post.data.attribution ? { isBasedOn: post.data.attribution.url } : { author: { '@type': 'Person', name: '旺仔' } }),
   publisher: {
     '@type': 'Person',
-    name: SITE_TITLE,
+    name: '旺仔',
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
@@ -51,16 +52,17 @@ const jsonLd = {
   image={cover}
   type="article"
   publishedTime={date}
-  author={SITE_TITLE}
+  author={post.data.attribution ? undefined : '旺仔'}
   tags={tags}
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-  <article class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+  <article class="site-wrap post-shell" data-pagefind-filter="type:文章">
+    <a class="text-link post-back" href="/blog/">← 文章与随记</a>
     <header class="mb-10">
       <time class="text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)]" datetime={date.toISOString()}>
         {formattedDate}
       </time>
-      <h1 class="mt-4 text-3xl sm:text-4xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] leading-tight">
+      <h1 class="post-title" data-pagefind-meta="title">
         {title}
       </h1>
       {tags.length > 0 && (
@@ -68,6 +70,8 @@ const jsonLd = {
           {tags.map((tag) => <TagBadge tag={tag} />)}
         </div>
       )}
+      {relatedTopics.length > 0 && <div class="post-topics">{relatedTopics.map((topic) => <a class="pill" href={`/explore/${topic.id}/`}>{topic.title} →</a>)}</div>}
+      {post.data.attribution && <p class="post-attribution"><a href={post.data.attribution.url} target="_blank" rel="noopener noreferrer">{post.data.attribution.label} ↗</a> · 本文为学习收藏，内容归原作者。</p>}
     </header>
 
     {cover && (
@@ -82,16 +86,33 @@ const jsonLd = {
       <slot />
     </div>
 
+    {relatedProjects.length > 0 && <aside class="post-projects" aria-label="文章相关作品"><span class="eyebrow">FROM THE WORKBENCH</span><h2>文字背后的作品</h2>{relatedProjects.map((project) => <a href={`/projects/${project.id}/`}><strong>{project.data.title} ↗</strong><span>{project.data.summary}</span></a>)}</aside>}
+
     <div class="mt-12 pt-6 border-t border-[var(--color-border)] dark:border-[var(--color-border-dark)]">
-      <a href="/"
+      <a href="/blog/"
          class="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] transition-colors no-underline">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        返回首页
+        返回文章与随记
       </a>
     </div>
 
     <ImageViewer />
   </article>
 </Base>
+
+<style>
+  .post-shell { max-width: 860px; padding-top: 34px; }
+  .post-back { font-size: 13px; margin-bottom: 32px; color: var(--muted); }
+  .post-title { font-size: clamp(30px, 4vw, 46px); font-weight: 600; letter-spacing: -.04em; line-height: 1.45; margin-top: 16px; text-wrap: balance; }
+  .post-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .post-attribution { color: var(--muted); font-size: 12px; line-height: 1.8; margin-top: 18px; }
+  .post-attribution a { color: var(--accent); }
+  .post-projects { border: 1px solid var(--line); border-radius: 6px; padding: 28px; margin-top: 45px; }
+  .post-projects h2 { font-size: 22px; font-weight: 500; margin-top: 12px; margin-bottom: 20px; }
+  .post-projects > a { display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--ink); }
+  .post-projects strong { font-size: 17px; font-weight: 500; }
+  .post-projects > a > span { color: var(--muted); font-size: 14px; line-height: 1.8; }
+  .post-projects > a:hover strong { color: var(--accent); }
+</style>

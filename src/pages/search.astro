@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import SearchBox from '../components/SearchBox.astro';
+---
+
+<Base title="搜索 · 旺仔" description="在作品、文章与随记中寻找你感兴趣的问题、工具和实践。" noindex>
+  <div class="site-wrap search-page" data-pagefind-ignore>
+    <header class="page-intro">
+      <p class="eyebrow">FIND SOMETHING</p>
+      <h1>从一个关键词开始。</h1>
+      <p>搜索作品、文章与随记，也许能找到一条新的阅读路径。</p>
+    </header>
+    <SearchBox mode="page" />
+  </div>
+</Base>
+
+<style>
+  .search-page { padding-bottom: 100px; }
+</style>

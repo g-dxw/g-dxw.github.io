@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { topics, type Topic } from '../../data/topics';
+import { getPortfolio, formatDate, postsForTopic, projectsForTopic } from '../../utils/portfolio';
+
+export function getStaticPaths() {
+  return topics.map((topic) => ({ params: { slug: topic.id }, props: { topic } }));
+}
+interface Props { topic: Topic }
+const { topic } = Astro.props;
+const { projects, posts, notes } = await getPortfolio();
+const selectedPosts = postsForTopic(topic, posts);
+const selectedProjects = projectsForTopic(topic, projects);
+const selectedNotes = notes.filter((note) => note.data.topics.includes(topic.id));
+const otherTopics = topics.filter((item) => item.id !== topic.id);
+---
+
+<Base title={`${topic.title} · 探索 · 旺仔`} description={topic.description}>
+  <div class="site-wrap topic-page">
+    <a class="text-link back-link" href="/explore/"><span aria-hidden="true">←</span> 全部主题</a>
+    <header class="page-intro topic-intro"><p class="eyebrow">{topic.kicker}</p><h1>{topic.title}</h1><p>{topic.description}</p></header>
+    <div class="topic-guide"><p class="eyebrow">从这里开始</p><p>{topic.intro}</p></div>
+
+    <section class="topic-section" aria-labelledby="topic-reading">
+      <div class="section-heading"><div><p class="eyebrow">READING PATH</p><h2 id="topic-reading">一条阅读路径</h2></div><span class="meta-line">{selectedPosts.length} 篇文章</span></div>
+      {selectedPosts.length > 0 ? <ol class="reading-path">{selectedPosts.map((post, index) => <li><span class="reading-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div><h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.summary}</p><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></div><a class="reading-arrow" href={`/blog/${post.id}/`} aria-label={`阅读：${post.data.title}`}><span aria-hidden="true">↗</span></a></li>)}</ol> : <div class="empty-state"><p>这个主题的长文还在积累，可以先从下面的作品开始。</p></div>}
+    </section>
+
+    {selectedProjects.length > 0 && <section class="topic-section" aria-labelledby="topic-projects"><div class="section-heading"><div><p class="eyebrow">IN PRACTICE</p><h2 id="topic-projects">把问题放进实践</h2></div><span class="meta-line">{selectedProjects.length} 个作品</span></div><div class="topic-projects">{selectedProjects.map((project) => <ProjectCard project={project} />)}</div></section>}
+
+    {selectedNotes.length > 0 && <section class="topic-section" aria-labelledby="topic-notes"><div class="section-heading"><div><p class="eyebrow">ALONG THE WAY</p><h2 id="topic-notes">沿途的记录</h2></div></div><div class="topic-notes">{selectedNotes.map((note) => <a href={`/notes/${note.id}/`}><time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time><h3>{note.data.title}</h3><p>{note.data.summary}</p><span class="text-link">阅读随记 <span aria-hidden="true">↗</span></span></a>)}</div></section>}
+
+    <section class="next-topics" aria-labelledby="other-topics"><p class="eyebrow" id="other-topics">也可以换个方向</p><div>{otherTopics.map((item) => <a href={`/explore/${item.id}/`}>{item.title}<span aria-hidden="true">→</span></a>)}</div></section>
+  </div>
+</Base>
+
+<style>
+  .topic-page { padding-top: 40px; padding-bottom: 96px; }
+  .back-link { font-size: 13px; }
+  .topic-intro { padding-top: 60px; padding-bottom: 36px; }
+  .topic-guide { display: grid; grid-template-columns: 160px 1fr; gap: 35px; padding: 30px 0; border-block: 1px solid var(--line); }
+  .topic-guide > p:last-child { max-width: 780px; line-height: 1.95; color: var(--muted); font-size: 15px; }
+  .topic-section { margin-top: 64px; }
+  .reading-path { padding: 0; margin: 0; list-style: none; }
+  .reading-path li { display: grid; grid-template-columns: 42px 1fr 44px; gap: 24px; padding: 27px 0; border-bottom: 1px solid var(--line); }
+  .reading-index { color: var(--accent); font-size: 15px; padding-top: 3px; font-family: var(--font-mono); }
+  .reading-path h3 { font-size: 19px; font-weight: 600; line-height: 1.6; }
+  .reading-path h3 a { text-decoration: none; transition: color .18s; }
+  .reading-path h3 a:hover { color: var(--accent); }
+  .reading-path p { color: var(--muted); font-size: 14px; line-height: 1.85; margin: 8px 0 13px; max-width: 800px; }
+  .reading-path time { color: var(--muted); font-size: 12px; }
+  .reading-arrow { width: 44px; height: 44px; display: grid; place-items: center; text-decoration: none; font-size: 23px; }
+  .topic-projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px; }
+  .topic-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .topic-notes > a { display: block; padding: 28px; border: 1px solid var(--line); text-decoration: none; border-radius: 8px; }
+  .topic-notes time { font-size: 12px; color: var(--muted); }
+  .topic-notes h3 { font-size: 21px; font-weight: 600; margin: 16px 0 12px; }
+  .topic-notes p { color: var(--muted); font-size: 14px; line-height: 1.85; margin-bottom: 20px; }
+  .next-topics { border-top: 1px solid var(--line); padding-top: 30px; margin-top: 64px; }
+  .next-topics > div { display: flex; flex-wrap: wrap; gap: 18px 40px; margin-top: 22px; }
+  .next-topics a { display: flex; gap: 28px; align-items: center; font-size: 19px; text-decoration: none; min-height: 44px; }
+  .next-topics a:hover { color: var(--accent); }
+  @media (max-width: 680px) { .topic-guide { grid-template-columns: 1fr; gap: 14px; } .topic-projects, .topic-notes { grid-template-columns: 1fr; } .reading-path li { grid-template-columns: 26px 1fr 24px; gap: 12px; } .reading-path h3 { font-size: 17px; } .reading-arrow { width: 24px; } .topic-section { margin-top: 44px; } }
+</style>

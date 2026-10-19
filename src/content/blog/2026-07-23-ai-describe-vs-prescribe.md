@@ -4,6 +4,9 @@ date: 2026-07-23
 cover: "/images/ai-describe-vs-prescribe-cover.svg"
 tags: ["AI 协作", "Prompt", "学习笔记"]
 summary: "把'我观察到什么'丢给 AI 让它分析，往往比直接告诉它'你去改成 XXX'更靠谱——聊聊这个反直觉现象背后的四个机制。"
+topics: ["ai-practice"]
+projects: []
+featured: true
 ---
 
 ## 一个反直觉的发现

@@ -4,6 +4,10 @@ date: 2026-07-23
 cover: "/images/ai-thinking-framework-cover.jpeg"
 tags: ["AI", "Prompt", "学习笔记"]
 summary: "从玻尔兹曼分布到小球地形模型，用统计力学的视角拆解大模型推理的六大性质，以及实战中的隐式语义、掺杂剂、催化剂等技巧。"
+topics: ["ai-practice"]
+projects: []
+featured: false
+attribution: { label: "转载 · linux.do 原帖", url: "https://linux.do/t/topic/2538870" }
 ---
 
 > 本文转载自 linux.do 用户原创帖，原帖地址：[https://linux.do/t/topic/2538870](https://linux.do/t/topic/2538870)

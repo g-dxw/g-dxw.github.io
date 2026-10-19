@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">两步路轨迹导出：保留轨迹点和标注点的多格式导出流程示意</title>
+  <desc id="desc">在有权访问的两步路页面读取轨迹点和标注点，再导出为 GPX、KML、TCX、CSV 或 JSON。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#e87b35" stroke-width="1.5"/></marker></defs>
+  <rect width="1200" height="750" fill="#fafaf8"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#2d2d2a">
+    <text x="70" y="100" font-size="17" letter-spacing="3" fill="#877f73">OUTDOORS / SMALL TOOLS</text>
+    <text x="70" y="164" font-size="45" font-weight="650">让路线，走出一个平台。</text>
+    <rect x="990" y="65" width="140" height="40" rx="20" fill="#eeeae2"/><text x="1060" y="91" font-size="17" text-anchor="middle" fill="#6e675e">流程示意</text>
+    <rect x="70" y="255" width="415" height="337" rx="26" fill="#fff" stroke="#ddd8cf" stroke-width="1.5"/>
+    <path d="M135 480 L174 439 L201 449 L226 380 L267 391 L299 330 L335 350 L374 308 L421 319" fill="none" stroke="#e87b35" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#fafaf8" stroke="#e87b35" stroke-width="3"><circle cx="135" cy="480" r="8"/><circle cx="226" cy="380" r="8"/><circle cx="335" cy="350" r="8"/><circle cx="421" cy="319" r="8"/></g>
+    <text x="107" y="549" font-size="24" font-weight="600">轨迹点 + 标注点</text>
+    <path d="M513 420 H615" stroke="#e87b35" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="566" y="391" font-size="18" text-anchor="middle" fill="#8d8578">读取与整理</text>
+    <rect x="655" y="255" width="475" height="337" rx="26" fill="#f3eee5"/>
+    <text x="690" y="309" font-size="25" font-weight="600">带着完整资料继续使用</text>
+    <g font-size="24" font-family="monospace"><text x="690" y="379">GPX</text><text x="837" y="379">KML</text><text x="983" y="379">TCX</text><text x="690" y="447">CSV</text><text x="837" y="447">JSON</text></g>
+    <path d="M690 475 H1090" stroke="#d9d0c2"/>
+    <text x="690" y="525" font-size="20" fill="#817264">保留分段、时间、海拔与标注资料</text>
+    <text x="70" y="707" font-size="15" fill="#8d8578">浏览器用户脚本 · 仅导出当前浏览器有权访问的轨迹</text>
+  </g>
+</svg>

@@ -1,41 +1,110 @@
 ---
 import Base from '../layouts/Base.astro';
-import PostGrid from '../components/PostGrid.astro';
-import SearchBox from '../components/SearchBox.astro';
-import { getCollection } from 'astro:content';
-
-const posts = (await getCollection('blog'))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+import ProjectCard from '../components/ProjectCard.astro';
+import { getPortfolio, formatDate, postsForTopic, projectsForTopic } from '../utils/portfolio';
+import { topics } from '../data/topics';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+const { projects, posts, notes } = await getPortfolio();
+const selected = projects.filter((project) => project.data.featured);
+const featuredPosts = posts.filter((post) => post.data.featured).slice(0, 3);
+const latestNote = notes[0];
 ---
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION} image="/images/projects/ebao-home.jpg">
+  <div class="site-wrap">
+    <section class="home-hero" aria-labelledby="home-title">
+      <div class="hero-introduction">
+        <p class="eyebrow"><span class="intro-rule" aria-hidden="true"></span>WANGZAI / A PERSONAL SPACE</p>
+        <h1 id="home-title">循着兴趣学习，<br />把热爱做成<span>作品。</span></h1>
+        <p class="hero-description">让学习跟着兴趣走，让尝试发生在生活里。<br class="desktop-break" />这里记录我的项目、学到的东西，还有一路上的发现。</p>
+        <div class="hero-actions"><a class="button button-primary" href="/projects/">看看我的作品 <span aria-hidden="true">↗</span></a><a class="text-link" href="/about/">认识一下 <span aria-hidden="true">→</span></a></div>
+        <div class="hero-footnote"><span>产品 / 工具 / 文字 / 山野</span><span>重庆，中国 · 保持好奇</span></div>
+      </div>
+      <aside class="currently" aria-label="最近在做的事情">
+        <div class="currently-top"><span class="eyebrow">ON MY DESK</span><a href="/now/">最近在做 <span aria-hidden="true">↗</span></a></div>
+        <div class="desk-note"><span class="desk-note-star" aria-hidden="true">＋</span><p>一些想法，<br />正在变成作品。</p><span class="desk-note-date">OCTOBER · 2026</span></div>
+        <ol class="desk-list">
+          <li><span>01</span><a href="/projects/ebao-studio/"><strong>e宝工坊</strong><span>把分散的工具组织成工作流</span></a><span aria-hidden="true">↗</span></li>
+          <li><span>02</span><a href="/projects/sam-group-buy/"><strong>山姆代购与团购</strong><span>把生活里的具体规则做进产品</span></a><span aria-hidden="true">↗</span></li>
+          <li><span>03</span><a href="/projects/dsh-plugin-track/"><strong>Track · 轨迹助手</strong><span>从路线与照片，走向图片和视频</span></a><span aria-hidden="true">↗</span></li>
+        </ol>
+      </aside>
+    </section>
 
-<Base
-  title="旺仔的博客"
-  description="10年前端工程师转型AI Agent开发，记录技术探索、学习笔记和生活感悟"
->
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-    <!-- Hero -->
-    <section class="relative text-center mb-12 sm:mb-16">
-      <div class="hero-bg"></div>
-      <div class="relative z-10 animate-fade-in-up px-6 py-8 sm:px-12 sm:py-10">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-code-bg)] dark:bg-[var(--color-code-bg-dark)] mb-5">
-          <span class="w-2 h-2 rounded-full bg-[var(--color-accent)] dark:bg-[var(--color-accent-dark)] animate-pulse"></span>
-          <span class="text-xs font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">正在转型AI Agent开发</span>
-        </div>
-        <p class="text-lg font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
-          AI应用工程师 · 全栈开发 · 手写Agent
-        </p>
-        <p class="mt-4 text-base text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] max-w-lg mx-auto leading-relaxed">
-          10年前端 + AI Agent实战 + 户外领队<br>
-          记录技术探索、学习笔记和生活的胡思乱想
-        </p>
+    <section class="home-section selected-work" aria-labelledby="work-title">
+      <div class="section-heading"><div><span class="eyebrow">01 / SELECTED WORK</span><h2 id="work-title">最近做的东西</h2></div><a class="text-link" href="/projects/">全部 {projects.length} 个作品 <span aria-hidden="true">→</span></a></div>
+      {selected[0] && <ProjectCard project={selected[0]} featured />}
+      <div class="project-grid">{selected.slice(1).map((project) => <ProjectCard project={project} />)}</div>
+    </section>
+
+    <section class="home-section writing-section" aria-labelledby="writing-title">
+      <div class="section-heading"><div><span class="eyebrow">02 / WORDS & THOUGHTS</span><h2 id="writing-title">做的过程，也值得写下来</h2></div><a class="text-link" href="/blog/">所有文章 <span aria-hidden="true">→</span></a></div>
+      <div class="writing-layout">
+        <div class="writing-list">{featuredPosts.map((post) => <a class="writing-row" href={`/blog/${post.id}/`}><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time><div><h3>{post.data.title}</h3><p>{post.data.summary}</p></div><span class="row-arrow" aria-hidden="true">↗</span></a>)}</div>
+        {latestNote && <aside class="latest-note"><div class="meta-line"><span class="note-dot" aria-hidden="true"></span>一则新随记</div><h3><a href={`/notes/${latestNote.id}/`}>{latestNote.data.title}</a></h3><p>{latestNote.data.summary}</p><time datetime={latestNote.data.date.toISOString()}>{formatDate(latestNote.data.date)}</time><a class="text-link" href="/notes/">翻翻随记 <span aria-hidden="true">→</span></a></aside>}
       </div>
     </section>
 
-    <!-- 搜索 -->
-    <SearchBox />
+    <section class="home-section" aria-labelledby="explore-title">
+      <div class="section-heading"><div><span class="eyebrow">03 / FOLLOW A THREAD</span><h2 id="explore-title">顺着一个兴趣，继续看看</h2></div><a class="text-link" href="/explore/">探索专题 <span aria-hidden="true">→</span></a></div>
+      <div class="topic-grid">{topics.map((topic, index) => <a class="topic-card" href={`/explore/${topic.id}/`}><span class="eyebrow">0{index + 1} / {topic.kicker}</span><h3>{topic.title}</h3><p>{topic.description}</p><span class="topic-count">{projectsForTopic(topic, projects).length} 个作品 · {postsForTopic(topic, posts).length} 篇文章 <span aria-hidden="true">↗</span></span></a>)}</div>
+    </section>
 
-    <!-- 文章网格 -->
-    <PostGrid posts={posts} />
+    <section class="home-about" aria-labelledby="person-title"><div><span class="eyebrow">MORE THAN A SCREEN</span><h2 id="person-title">你好，我是旺仔。</h2><p>也叫代兴旺。喜欢做东西，也喜欢出去走走。过去做过前端、产品和项目交付，现在继续围绕实际问题探索。徒步、摩旅和生活里的小麻烦，常常也是新项目的起点。</p><a class="text-link" href="/about/">更多关于我 <span aria-hidden="true">→</span></a></div><div class="about-quote"><span aria-hidden="true">“</span><p>把好奇心带到生活里，<br />再把遇到的问题带回来。</p><a href="/life/">一些屏幕之外的记录 ↗</a></div></section>
   </div>
 </Base>
+
+<style>
+  .home-hero { display: grid; grid-template-columns: 1.55fr 1fr; gap: 70px; padding: 80px 0 68px; align-items: start; }
+  .hero-introduction > .eyebrow { display: flex; align-items: center; gap: 12px; }
+  .intro-rule { width: 25px; height: 1px; background: var(--accent); }
+  h1 { margin: 27px 0 26px; font-size: clamp(48px, 5.9vw, 79px); font-weight: 600; line-height: 1.25; letter-spacing: -.07em; }
+  h1 > span { position: relative; white-space: nowrap; }
+  h1 > span::after { content: ''; position: absolute; left: 0; right: 0; height: 9px; bottom: 3px; background: var(--accent-bright); opacity: .24; transform: rotate(-1deg); z-index: -1; }
+  .hero-description { font-size: 15px; color: var(--muted); line-height: 2; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; margin: 30px 0 43px; }
+  .hero-footnote { display: flex; flex-wrap: wrap; gap: 10px 24px; font-size: 11px; color: var(--muted); }
+  .currently { padding-top: 8px; }
+  .currently-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .currently-top > a { color: var(--muted); font-size: 12px; text-decoration: none; min-height: 28px; }
+  .desk-note { background: var(--warm); border-radius: 3px; padding: 28px 30px 22px; transform: rotate(1.5deg); position: relative; margin: 0 4px 18px; }
+  .desk-note::before { content: ''; height: 19px; width: 66px; background: var(--soft); opacity: .8; position: absolute; left: calc(50% - 33px); top: -8px; transform: rotate(-5deg); }
+  .desk-note-star { color: var(--accent); font-size: 35px; position: absolute; right: 25px; top: 17px; line-height: 1; }
+  .desk-note p { font-family: 'Songti SC', 'Noto Serif CJK SC', 'STSong', serif; font-size: 27px; line-height: 1.65; letter-spacing: .02em; }
+  .desk-note-date { display: block; color: var(--muted); font-size: 9px; font-family: var(--font-mono); letter-spacing: .15em; margin-top: 20px; }
+  .desk-list { padding: 0; margin: 0; list-style: none; }
+  .desk-list li { display: flex; gap: 15px; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--line); }
+  .desk-list li > span { color: var(--muted); font-size: 11px; font-family: var(--font-mono); }
+  .desk-list li > span:last-child { margin-left: auto; font-size: 17px; }
+  .desk-list a { color: var(--ink); text-decoration: none; display: flex; flex-direction: column; gap: 5px; }
+  .desk-list a strong { font-size: 13px; font-weight: 500; }
+  .desk-list a > span { color: var(--muted); font-size: 11px; }
+  .desk-list a:hover strong { color: var(--accent); }
+  .home-section { padding: 56px 0; border-top: 1px solid var(--line); }
+  .writing-layout { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 54px; }
+  .writing-list { border-top: 0; }
+  .writing-row { grid-template-columns: 95px minmax(0, 1fr) 16px; gap: 16px; padding: 22px 0; }
+  .writing-row:first-child { padding-top: 0; }
+  .writing-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .writing-row h3 { font-size: 17px; }
+  .writing-row p { font-size: 13px; }
+  .latest-note { padding: 25px; background: var(--warm); border-radius: 5px; display: flex; flex-direction: column; align-items: flex-start; }
+  .note-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+  .latest-note h3 { font-size: 22px; font-family: 'Songti SC', 'STSong', serif; line-height: 1.6; margin: 17px 0 13px; }
+  .latest-note h3 a { color: var(--ink); text-decoration: none; }
+  .latest-note > p { color: var(--muted); font-size: 13px; line-height: 1.9; }
+  .latest-note > time { color: var(--muted); font-size: 11px; margin: 18px 0 10px; }
+  .latest-note > .text-link { margin-top: auto; font-size: 12px; }
+  .topic-card { background: transparent; }
+  .topic-count { width: 100%; display: flex; gap: 6px; align-items: center; }
+  .topic-count > span { margin-left: auto; font-size: 20px; }
+  .home-about { display: grid; grid-template-columns: 1.1fr 1fr; gap: 100px; border-top: 1px solid var(--line); padding-top: 60px; margin-top: 5px; }
+  .home-about h2 { font-size: 32px; font-weight: 500; margin: 15px 0; letter-spacing: -.04em; }
+  .home-about p { font-size: 14px; line-height: 1.95; color: var(--muted); }
+  .home-about .text-link { margin-top: 15px; }
+  .about-quote { align-self: center; padding-left: 38px; border-left: 1px solid var(--line); }
+  .about-quote > span { display: block; font-family: Georgia, serif; font-size: 50px; color: var(--accent-bright); height: 36px; }
+  .about-quote > p { color: var(--ink); font-size: 24px; font-family: 'Songti SC', 'STSong', serif; line-height: 1.8; }
+  .about-quote a { color: var(--muted); text-decoration: none; font-size: 12px; display: inline-flex; min-height: 44px; align-items: center; margin-top: 10px; }
+  @media(max-width: 1000px) { .home-hero { gap: 40px; padding-top: 60px; } .writing-layout { gap: 30px; grid-template-columns: minmax(0, 1fr) 240px; } .home-about { gap: 50px; } }
+  @media(max-width: 760px) { .home-hero { grid-template-columns: 1fr; gap: 42px; padding: 48px 0; } h1 { font-size: clamp(36px, 8.5vw, 60px); margin-top: 24px; } .hero-description { font-size: 14px; } .hero-actions { margin-bottom: 25px; } .currently { display: none; } .home-section { padding: 38px 0; } .writing-layout { grid-template-columns: 1fr; gap: 26px; } .writing-row { grid-template-columns: minmax(0, 1fr) auto; } .writing-row time { grid-column: 1; grid-row: 1; } .writing-row > div { grid-column: 1; } .writing-row .row-arrow { grid-column: 2; grid-row: 1 / span 2; } .latest-note { padding: 25px; } .latest-note h3 { margin-top: 10px; } .home-about { grid-template-columns: 1fr; gap: 30px; padding-top: 40px; } .about-quote { padding-left: 24px; } .desktop-break { display: none; } }
+</style>

@@ -4,6 +4,9 @@ date: 2026-07-22
 cover: "/images/agent-cover-2-how-agent-thinks.svg"
 tags: ["AI Agent", "学习笔记", "系列"]
 summary: "Plan 是旅行攻略，Spec 是旅行守则——用大白话拆解 Agent 的规划能力和推理方式，顺便搞清楚 Plan 和 Spec 到底有啥区别。"
+topics: ["ai-practice"]
+projects: []
+featured: false
 ---
 
 ## 接到任务之后，先别急着干

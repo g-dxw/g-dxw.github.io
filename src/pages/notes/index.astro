@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPortfolio, formatDate } from '../../utils/portfolio';
+import { topics } from '../../data/topics';
+const { notes, posts } = await getPortfolio();
+const entries = [
+  ...notes.map((note) => ({ ...note, href: `/notes/${note.id}/` })),
+  ...posts.filter((post) => post.data.kind === 'note').map((post) => ({ ...post, href: `/blog/${post.id}/` })),
+].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Base title="随记 · 旺仔" description="边做边留下的短记录：一个发现、一次取舍、一个尚在生长的想法。">
+  <div class="site-wrap notes-page">
+    <header class="page-intro"><p class="eyebrow">FIELD NOTES</p><h1>边做，边记。</h1><p>一个发现、一次取舍、一个尚未展开的想法。给过程留一点位置。</p></header>
+    <div class="notes-topline"><p class="meta-line">{entries.length} 则随记</p><a class="text-link" href="/blog/">文章与全部记录 <span aria-hidden="true">→</span></a></div>
+    <div class="notes-list">{entries.map((note) => <article><time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time><div><h2><a href={note.href}>{note.data.title}</a></h2><p>{note.data.summary}</p><div class="note-topics">{topics.filter((topic) => note.data.topics.includes(topic.id)).map((topic) => <a class="pill" href={`/explore/${topic.id}/`}>{topic.title}</a>)}</div></div><a class="note-arrow" href={note.href} aria-label={`阅读随记：${note.data.title}`}><span aria-hidden="true">↗</span></a></article>)}</div>
+    {entries.length === 0 && <div class="empty-state"><p>新的记录会从这里开始。</p></div>}
+  </div>
+</Base>
+
+<style>
+  .notes-page { padding-bottom: 100px; }
+  .notes-topline { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+  .notes-list article { display: grid; grid-template-columns: 130px 1fr 44px; gap: 24px; padding: 35px 0; border-bottom: 1px solid var(--line); }
+  .notes-list time { font-size: 12px; color: var(--muted); padding-top: 7px; }
+  .notes-list h2 { font-size: 25px; font-weight: 600; margin-bottom: 12px; }
+  .notes-list h2 a { text-decoration: none; }
+  .notes-list h2 a:hover { color: var(--accent); }
+  .notes-list p { font-size: 15px; color: var(--muted); line-height: 1.85; max-width: 760px; }
+  .note-topics { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 9px; }
+  .note-arrow { display: grid; place-items: center; width: 44px; height: 44px; font-size: 24px; text-decoration: none; }
+  @media (max-width: 600px) { .notes-list article { grid-template-columns: 1fr 32px; gap: 14px; } .notes-list time { grid-column: 1 / -1; } .notes-list h2 { font-size: 22px; } .note-arrow { width: 32px; } }
+</style>

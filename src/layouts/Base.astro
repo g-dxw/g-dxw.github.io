@@ -34,8 +34,9 @@ const { title, description, image, type, publishedTime, author, tags, noindex } 
     </script>
   </head>
   <body class="bg-[var(--color-bg)] dark:bg-[var(--color-bg-dark)] text-[var(--color-text)] dark:text-[var(--color-text-dark)] min-h-screen flex flex-col">
+    <a class="skip-link" href="#main-content">跳到正文</a>
     <Header />
-    <main class="flex-1">
+    <main class="flex-1" id="main-content" data-pagefind-body>
       <slot />
     </main>
     <Footer />

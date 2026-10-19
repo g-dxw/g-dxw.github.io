@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { projectCategories, projectStatuses } from '../utils/portfolio';
+interface Props { project: CollectionEntry<'projects'>; featured?: boolean; compact?: boolean; headingLevel?: 'h2' | 'h3'; }
+const { project, featured = false, compact = false, headingLevel: Heading = 'h3' } = Astro.props;
+const { title, subtitle, summary, category, status, origin, cover, stack } = project.data;
+const href = `/projects/${project.id}/`;
+---
+<article class:list={['project-card', { 'project-card--feature': featured, 'project-card--compact': compact }]}>
+  <a class="project-visual" href={href} tabindex="-1" aria-hidden="true">
+    {cover ? <img src={cover} alt={`${title}：${subtitle}`} width="1200" height="750" loading="lazy" decoding="async" /> : <div class="project-fallback"><span class="fallback-cross" aria-hidden="true">＋</span><span>{subtitle}</span><span class="fallback-caption">{projectCategories[category]}</span></div>}
+    <span class="visual-open" aria-hidden="true">↗</span>
+  </a>
+  <div class="project-copy">
+    <div class="meta-line"><span>{projectCategories[category]}</span><span class="status-label"><span aria-hidden="true"></span>{projectStatuses[status]}</span></div>
+    <Heading class="project-name"><a href={href}>{title}<span aria-hidden="true"> ↗</span></a></Heading>
+    <p class="project-subtitle">{subtitle}</p>
+    <p class="project-summary">{summary}</p>
+    <div class="project-tech">{stack.slice(0, 3).join(' / ')}</div>
+    <div class="project-card-bottom"><span>{origin}</span><a href={href} aria-label={`阅读${title}项目案例`}>了解这个项目 <span aria-hidden="true">→</span></a></div>
+  </div>
+</article>

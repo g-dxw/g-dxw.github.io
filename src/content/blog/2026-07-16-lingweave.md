@@ -5,6 +5,9 @@ cover: "/images/lingweave-home.png"
 tags: ["开源项目", "AI", "无限画布"]
 summary: "我把提示词、参考素材、模型配置和生成结果连接到了一张无限画布上，并将它开源为 LingWeave（灵织）。"
 draft: false
+topics: ["ai-practice", "product-making"]
+projects: ["lingweave"]
+featured: true
 ---
 
 项目已经开源，也可以直接在线体验：

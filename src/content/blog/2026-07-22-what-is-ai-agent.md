@@ -4,6 +4,9 @@ date: 2026-07-22
 cover: "/images/agent-cover-1-what-is-agent.svg"
 tags: ["AI Agent", "学习笔记", "系列"]
 summary: "用'雇实习生'的类比，搞懂 AI Agent 和普通聊天 AI 的本质区别，以及 Goal 和 Prompt 这两个最基础的概念。"
+topics: ["ai-practice"]
+projects: []
+featured: false
 ---
 
 ## 一个场景，看懂区别

@@ -4,6 +4,9 @@ date: 2026-07-22
 cover: "/images/agent-cover-3-tools-memory.svg"
 tags: ["AI Agent", "学习笔记", "系列"]
 summary: "Agent 怎么使用工具？怎么记住你说过的话？Agent Loop 又是什么？用前端工程师最熟悉的方式，拆解 Agent 的工具、记忆和运行机制。"
+topics: ["ai-practice"]
+projects: []
+featured: true
 ---
 
 ## 实习生光会想，还不够

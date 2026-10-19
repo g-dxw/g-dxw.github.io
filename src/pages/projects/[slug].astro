@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ImageViewer from '../../components/ImageViewer.astro';
+import { getPortfolio, formatDate, projectCategories, projectStatuses } from '../../utils/portfolio';
+import { getTopic } from '../../data/topics';
+export async function getStaticPaths() {
+  const { projects } = await getPortfolio();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+interface Props { project: CollectionEntry<'projects'>; }
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, subtitle, summary, category, status, origin, stack, repository, demo, cover, focus, updatedAt } = project.data;
+const { posts, projects, notes } = await getPortfolio();
+const relatedPosts = posts.filter((post) => post.data.projects.includes(project.id));
+const relatedNotes = notes.filter((note) => note.data.projects.includes(project.id));
+const relatedProjects = projects.filter((candidate) => candidate.id !== project.id && candidate.data.topics.some((id) => project.data.topics.includes(id))).slice(0, 2);
+const caption = project.id === 'trail-image-generation-skill' ? 'AI 生成示例 · 南山十二峰路线图，展示制作方向与画面效果。' : project.id === 'sam-group-buy' ? '顾客选品页 · 已有产品界面截图，使用演示商品与虚拟订单。' : project.id === 'xianyu-auto-reply' || project.id === '2bulu-track-exporter' ? '流程示意 · 用于说明项目的工作方式。' : project.id === 'caredock' ? '匿名演示界面 · 用于验证产品流程与交互。' : '项目界面 · 截图来自项目公开说明，具体界面随版本演进。';
+const extraImage = project.id === 'ebao-studio' ? { src: '/images/projects/ebao-video-workbench.jpg', alt: 'e宝工坊 e剪宝插件中的口播视频工作台界面', caption: 'e剪宝工作台 · 桌面插件承接具体的创作任务。' } : project.id === 'dsh-plugin-track' ? { src: '/images/projects/track-svg.jpg', alt: 'Track 的 SVG 路线标注与导出界面', caption: 'SVG 标注工作台 · 调整线路、点位与画面表达。' } : undefined;
+---
+<Base title={`${title} · 作品 · 旺仔`} description={summary} image={cover}>
+  <div class="site-wrap project-detail">
+    <nav class="breadcrumbs" aria-label="面包屑导航" data-pagefind-ignore><a href="/">首页</a><span aria-hidden="true">/</span><a href="/projects/">作品</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav>
+    <header class="project-heading"><span class="eyebrow">{projectCategories[category]} / {origin}</span><h1 data-pagefind-meta="title">{title}</h1><p class="project-lead">{subtitle}</p><p class="detail-summary">{summary}</p><div class="detail-meta"><span class="pill">{projectStatuses[status]}</span><span>最近代码更新 <time datetime={updatedAt.toISOString()}>{formatDate(updatedAt)}</time></span></div></header>
+    {cover && <figure class:list={['detail-cover', { 'detail-cover--portrait': ['dsh-plugin-track', 'trail-image-generation-skill', 'caredock'].includes(project.id) }]}><img src={cover} alt={`${title}：${caption}`} width="1200" height="750" decoding="async" fetchpriority="high" /><figcaption>{caption}</figcaption></figure>}
+    <div class="project-body-grid">
+      <article class="prose project-story"><Content />{extraImage && <figure><img src={extraImage.src} alt={extraImage.alt} loading="lazy" decoding="async" /><figcaption>{extraImage.caption}</figcaption></figure>}</article>
+      <aside class="project-facts" aria-label="项目资料"><div><span class="eyebrow">THE QUESTION</span><h2>关注的问题</h2><p>{focus}</p></div><div><h2>实现涉及</h2><div class="stack-list">{stack.map((item) => <span class="pill">{item}</span>)}</div></div><div><h2>继续看看</h2><div class="project-externals">{repository && <a class="text-link" href={repository} target="_blank" rel="noopener noreferrer">代码与项目说明 <span aria-hidden="true">↗</span></a>}{demo && <a class="text-link" href={demo} target="_blank" rel="noopener noreferrer">查看项目演示 <span aria-hidden="true">↗</span></a>}{project.data.topics.map((id) => { const topic = getTopic(id); return topic && <a class="text-link" href={`/explore/${topic.id}/`}>{topic.title} <span aria-hidden="true">→</span></a>; })}</div></div></aside>
+    </div>
+    {(relatedPosts.length > 0 || relatedNotes.length > 0) && <section class="detail-section" aria-labelledby="related-writing"><div class="section-heading"><div><span class="eyebrow">BEHIND THE WORK</span><h2 id="related-writing">项目之外的记录</h2></div></div><div class="writing-list">{relatedPosts.map((post) => <a class="writing-row" href={`/blog/${post.id}/`}><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time><div><h3>{post.data.title}</h3><p>{post.data.summary}</p></div><span class="row-arrow" aria-hidden="true">↗</span></a>)}{relatedNotes.map((note) => <a class="writing-row" href={`/notes/${note.id}/`}><time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time><div><h3>{note.data.title}</h3><p>{note.data.summary}</p></div><span class="row-arrow" aria-hidden="true">↗</span></a>)}</div></section>}
+    {relatedProjects.length > 0 && <section class="detail-section" aria-labelledby="more-work"><div class="section-heading"><div><span class="eyebrow">KEEP EXPLORING</span><h2 id="more-work">还有这些尝试</h2></div><a class="text-link" href="/projects/">全部作品 →</a></div><div class="project-grid">{relatedProjects.map((candidate) => <ProjectCard project={candidate} compact />)}</div></section>}
+    <ImageViewer />
+  </div>
+</Base>
+<style>
+  .breadcrumbs { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); padding-top: 32px; line-height: 1.8; }
+  .breadcrumbs a { color: var(--muted); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--accent); }
+  .project-heading { max-width: 850px; padding: 48px 0 38px; }
+  h1 { font-size: clamp(40px, 6vw, 70px); font-weight: 600; line-height: 1.2; letter-spacing: -.055em; margin: 18px 0; }
+  .project-lead { font-size: clamp(19px, 2.5vw, 25px); line-height: 1.7; letter-spacing: -.02em; }
+  .detail-summary { color: var(--muted); font-size: 15px; line-height: 1.95; max-width: 720px; margin-top: 12px; }
+  .detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; color: var(--muted); font-size: 12px; margin-top: 25px; }
+  .detail-cover { margin-bottom: 55px; }
+  .detail-cover > img { width: 100%; max-height: 690px; object-fit: contain; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; height: auto; }
+  .detail-cover--portrait > img { max-height: 700px; }
+  figcaption { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 12px; }
+  .project-body-grid { display: grid; grid-template-columns: minmax(0, 1fr) 265px; gap: 85px; align-items: start; }
+  .project-story { min-width: 0; font-size: 16px; }
+  .project-story :global(h2) { font-size: 23px; border: 0; padding: 0; margin: 36px 0 16px; font-weight: 500; letter-spacing: -.03em; }
+  .project-story :global(h2:first-child) { margin-top: 0; }
+  .project-story :global(figure) { margin: 36px 0; }
+  .project-story :global(figure img) { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 5px; }
+  .project-story :global(figcaption) { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 12px; }
+  .project-facts { border-top: 1px solid var(--line); }
+  .project-facts > div { padding: 25px 0; border-bottom: 1px solid var(--line); }
+  .project-facts h2 { font-size: 14px; font-weight: 500; line-height: 1.6; margin: 5px 0 13px; }
+  .project-facts p { color: var(--muted); font-size: 14px; line-height: 1.9; }
+  .stack-list { display: flex; flex-wrap: wrap; gap: 7px; }
+  .project-externals { display: flex; flex-direction: column; align-items: flex-start; }
+  .project-externals .text-link { font-size: 12px; }
+  .detail-section { margin-top: 70px; padding-top: 38px; border-top: 1px solid var(--line); }
+  @media(max-width: 850px) { .project-body-grid { gap: 35px; grid-template-columns: minmax(0, 1fr) 220px; } }
+  @media(max-width: 640px) { .project-heading { padding: 34px 0 28px; } .project-body-grid { grid-template-columns: 1fr; gap: 30px; } .detail-cover { margin-bottom: 32px; } .project-facts { display: grid; grid-template-columns: 1fr; } .detail-section { margin-top: 45px; } }
+</style>

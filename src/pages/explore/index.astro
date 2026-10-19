@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import { topics } from '../../data/topics';
+import { getPortfolio, postsForTopic, projectsForTopic } from '../../utils/portfolio';
+
+const { projects, posts, notes } = await getPortfolio();
+---
+
+<Base title="探索 · 旺仔" description="沿着一个问题，连接作品、文章和随记。从 AI 协作到产品实践，再到屏幕之外的生活。">
+  <div class="site-wrap explore-page">
+    <header class="page-intro">
+      <p class="eyebrow">THREADS TO FOLLOW</p>
+      <h1>顺着兴趣，<br />再往里走一点。</h1>
+      <p>一些问题会反复出现在不同项目里。把相关的作品和文字放在一起，也就有了这些持续生长的主题。</p>
+    </header>
+
+    <div class="explore-topline"><span class="eyebrow">三个入口</span><span class="muted">不必从最新的一篇开始</span></div>
+    <div class="explore-collection">
+      {topics.map((topic, index) => {
+        const topicPosts = postsForTopic(topic, posts);
+        const topicProjects = projectsForTopic(topic, projects);
+        const topicNotes = notes.filter((note) => note.data.topics.includes(topic.id));
+        return (
+          <a class="explore-topic" href={`/explore/${topic.id}/`}>
+            <span class="topic-number" aria-hidden="true">0{index + 1}</span>
+            <div class="topic-copy"><span class="eyebrow">{topic.kicker}</span><h2>{topic.title}</h2><p>{topic.description}</p><div class="topic-counts"><span>{topicProjects.length} 个作品</span><span>{topicPosts.length} 篇文章</span>{topicNotes.length > 0 && <span>{topicNotes.length} 则随记</span>}</div></div>
+            <span class="topic-direction" aria-hidden="true">↗</span>
+          </a>
+        );
+      })}
+    </div>
+
+    <aside class="explore-footnote"><span class="small-mark" aria-hidden="true">✳</span><p>专题会随新的实践慢慢生长。<br />想看最近发生了什么，也可以去 <a href="/blog/">文章与随记</a>，或看看 <a href="/now/">我的近况</a>。</p></aside>
+  </div>
+</Base>
+
+<style>
+  .explore-page { padding-bottom: 96px; }
+  .explore-topline { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 20px; font-size: 13px; }
+  .explore-collection { border-top: 1px solid var(--line); }
+  .explore-topic { display: grid; grid-template-columns: 90px 1fr 60px; gap: 28px; align-items: center; padding: 43px 28px 43px 6px; border-bottom: 1px solid var(--line); text-decoration: none; transition: background .2s; }
+  .explore-topic:hover { background: var(--soft); }
+  .topic-number { font-size: clamp(38px, 5vw, 60px); font-family: Georgia, serif; font-style: italic; color: var(--accent); align-self: start; line-height: 1.3; }
+  .topic-copy h2 { margin: 12px 0 14px; font-size: clamp(26px, 3vw, 36px); letter-spacing: -.03em; font-weight: 600; }
+  .topic-copy p { color: var(--muted); line-height: 1.85; font-size: 15px; max-width: 630px; }
+  .topic-counts { display: flex; gap: 20px; margin-top: 24px; font-size: 12px; color: var(--muted); }
+  .topic-direction { justify-self: end; font-size: 32px; transition: transform .2s; }
+  .explore-topic:hover .topic-direction { transform: translate(3px, -3px); }
+  .explore-footnote { display: flex; gap: 20px; margin-top: 42px; align-items: center; color: var(--muted); font-size: 14px; line-height: 1.9; }
+  .small-mark { color: var(--accent); font-size: 35px; }
+  .explore-footnote a { color: var(--ink); text-underline-offset: 4px; }
+  @media (max-width: 600px) { .explore-topic { grid-template-columns: 36px 1fr 24px; gap: 14px; padding: 30px 0; } .topic-number { font-size: 30px; line-height: 1.2; } .topic-direction { font-size: 24px; } .topic-copy h2 { font-size: 25px; } .topic-counts { flex-wrap: wrap; gap: 8px 15px; } .explore-topline { align-items: start; flex-direction: column; gap: 7px; } }
+  @media (prefers-reduced-motion: reduce) { .explore-topic, .topic-direction { transition: none; } .explore-topic:hover .topic-direction { transform: none; } }
+</style>

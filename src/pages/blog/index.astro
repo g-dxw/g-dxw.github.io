@@ -1,29 +1,131 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PostGrid from '../../components/PostGrid.astro';
 import SearchBox from '../../components/SearchBox.astro';
-import { getCollection } from 'astro:content';
+import { topics } from '../../data/topics';
+import { getPortfolio, formatDate } from '../../utils/portfolio';
 
-const posts = (await getCollection('blog'))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => {
-    const dateDiff = b.data.date.getTime() - a.data.date.getTime();
-    if (dateDiff !== 0) return dateDiff;
-    return b.id.localeCompare(a.id);
-  });
+const { posts, notes } = await getPortfolio();
+const entries = [
+  ...posts.map((post) => ({ ...post, kind: post.data.kind, href: `/blog/${post.id}/` })),
+  ...notes.map((note) => ({ ...note, kind: 'note' as const, href: `/notes/${note.id}/` })),
+].sort((a, b) => b.data.date.getTime() - a.data.date.getTime() || b.id.localeCompare(a.id));
+const essayCount = entries.filter((entry) => entry.kind === 'essay').length;
+const noteCount = entries.length - essayCount;
 ---
 
-<Base title="博客归档" description="所有博客文章">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
-    <h1 class="text-3xl font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] mb-4">
-      博客归档
-    </h1>
-    <p class="text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] mb-10">
-      共 {posts.length} 篇文章
-    </p>
+<Base title="文章与随记 · 旺仔" description="项目中的判断、AI 协作的实践，以及生活里的观察。按时间阅读，也可以沿着一个主题探索。">
+  <div class="site-wrap archive-page">
+    <header class="page-intro">
+      <p class="eyebrow">WRITING & NOTES</p>
+      <h1>想明白一些事，<br />也把过程留下来。</h1>
+      <p>有整理成篇的思考，也有边做边写的记录。关于产品、技术、AI，以及屏幕之外的生活。</p>
+    </header>
 
-    <SearchBox />
+    <div class="archive-topline">
+      <p class="meta-line">{essayCount} 篇文章 <span aria-hidden="true">/</span> {noteCount} 则随记</p>
+      <a class="text-link" href="/rss.xml">订阅 RSS <span aria-hidden="true">↗</span></a>
+    </div>
 
-    <PostGrid posts={posts} />
+    <section aria-label="筛选与搜索文章" class="archive-controls">
+      <div class="archive-filters">
+        <div class="type-filter" role="group" aria-label="内容类型">
+          <button type="button" data-kind="all" aria-pressed="true">全部</button>
+          <button type="button" data-kind="essay" aria-pressed="false">文章</button>
+          <button type="button" data-kind="note" aria-pressed="false">随记</button>
+        </div>
+        <label class="topic-select">
+          <span class="sr-only">按主题筛选</span>
+          <select id="writing-topic">
+            <option value="all">所有主题</option>
+            {topics.map((topic) => <option value={topic.id}>{topic.title}</option>)}
+          </select>
+        </label>
+      </div>
+      <div class="archive-search"><SearchBox /></div>
+    </section>
+
+    <p class="archive-count muted" id="writing-count" aria-live="polite">共 {entries.length} 条记录</p>
+    <div class="writing-list" id="writing-entries">
+      {entries.map((entry) => (
+        <article class="archive-row" data-writing-entry data-kind={entry.kind} data-topics={entry.data.topics.join(' ')}>
+          <div class="archive-meta"><time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time><span>{entry.kind === 'note' ? '随记' : 'attribution' in entry.data && entry.data.attribution ? '转载' : '文章'}</span></div>
+          <div class="archive-content">
+            <h2><a href={entry.href}>{entry.data.title}</a></h2>
+            {entry.data.summary && <p>{entry.data.summary}</p>}
+            <div class="archive-topics">
+              {topics.filter((topic) => entry.data.topics.includes(topic.id)).map((topic) => <a href={`/explore/${topic.id}/`}>{topic.title}</a>)}
+            </div>
+          </div>
+          <a href={entry.href} class="archive-arrow" aria-label={`阅读：${entry.data.title}`}><span aria-hidden="true">↗</span></a>
+        </article>
+      ))}
+    </div>
+    <div class="empty-state" id="writing-empty" hidden><p>这个组合下还没有记录。</p><button type="button" class="text-link" id="writing-reset">查看全部内容</button></div>
+    <aside class="archive-footer"><p class="muted">想顺着一个问题读下去？</p><a class="text-link" href="/explore/">去专题里逛逛 <span aria-hidden="true">→</span></a></aside>
   </div>
 </Base>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-kind][aria-pressed]')];
+  const select = document.querySelector<HTMLSelectElement>('#writing-topic');
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-writing-entry]')];
+  const count = document.querySelector('#writing-count');
+  const empty = document.querySelector<HTMLElement>('#writing-empty');
+  const params = new URLSearchParams(window.location.search);
+  let kind = ['essay', 'note'].includes(params.get('kind') || '') ? params.get('kind')! : 'all';
+  if (select && [...select.options].some((option) => option.value === params.get('topic'))) select.value = params.get('topic')!;
+  function filter(updateUrl = true) {
+    let visible = 0;
+    buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.kind === kind)));
+    rows.forEach((row) => {
+      const matchesKind = kind === 'all' || row.dataset.kind === kind;
+      const matchesTopic = !select || select.value === 'all' || (row.dataset.topics || '').split(' ').includes(select.value);
+      row.hidden = !matchesKind || !matchesTopic;
+      if (!row.hidden) visible++;
+    });
+    if (count) count.textContent = `共 ${visible} 条记录`;
+    if (empty) empty.hidden = visible !== 0;
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      if (kind === 'all') url.searchParams.delete('kind'); else url.searchParams.set('kind', kind);
+      if (!select || select.value === 'all') url.searchParams.delete('topic'); else url.searchParams.set('topic', select.value);
+      window.history.replaceState({}, '', url);
+    }
+  }
+  buttons.forEach((button) => button.addEventListener('click', () => { kind = button.dataset.kind || 'all'; filter(); }));
+  select?.addEventListener('change', () => filter());
+  document.querySelector('#writing-reset')?.addEventListener('click', () => { kind = 'all'; if (select) select.value = 'all'; filter(); });
+  filter(false);
+</script>
+
+<style>
+  .archive-page { padding-bottom: 96px; }
+  .archive-topline, .archive-controls, .archive-filters, .type-filter, .archive-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .archive-topline { padding-bottom: 22px; }
+  .archive-topline .meta-line { display: flex; gap: 12px; }
+  .archive-controls { padding: 24px 0; border-block: 1px solid var(--line); }
+  .archive-filters { justify-content: flex-start; flex-wrap: wrap; gap: 14px; }
+  .type-filter { gap: 4px; }
+  .type-filter button { cursor: pointer; min-height: 44px; padding: 8px 17px; border-radius: 6px; color: var(--muted); font-size: 14px; transition: background .18s, color .18s; }
+  .type-filter button[aria-pressed='true'] { background: var(--ink); color: var(--page); }
+  .type-filter button:hover:not([aria-pressed='true']) { background: var(--soft); color: var(--ink); }
+  .topic-select select { font: inherit; font-size: 14px; cursor: pointer; min-height: 44px; max-width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 8px 30px 8px 12px; background: var(--panel); }
+  .archive-search { width: 300px; flex-shrink: 0; }
+  .archive-search :global(.relative.w-full.max-w-md) { margin-bottom: 0; }
+  .archive-count { padding: 25px 0 8px; font-size: 13px; }
+  .archive-row { display: grid; grid-template-columns: 120px 1fr 44px; gap: 30px; padding: 29px 0; border-bottom: 1px solid var(--line); }
+  .archive-row[hidden], #writing-empty[hidden] { display: none; }
+  .archive-meta { display: flex; flex-direction: column; gap: 7px; font-size: 12px; color: var(--muted); padding-top: 5px; }
+  .archive-meta time { font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+  .archive-content h2 { font-size: clamp(18px, 2vw, 22px); font-weight: 600; line-height: 1.55; margin: 0 0 9px; }
+  .archive-content h2 a { text-decoration: none; transition: color .18s; }
+  .archive-content h2 a:hover { color: var(--accent); }
+  .archive-content p { color: var(--muted); font-size: 14px; line-height: 1.85; max-width: 720px; }
+  .archive-topics { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 13px; }
+  .archive-topics a { color: var(--accent); font-size: 12px; text-decoration: none; }
+  .archive-topics a:hover { text-decoration: underline; }
+  .archive-arrow { width: 44px; height: 44px; display: grid; place-items: center; text-decoration: none; font-size: 23px; border-radius: 50%; transition: background .18s, color .18s; }
+  .archive-arrow:hover { color: var(--accent); background: var(--soft); }
+  .archive-footer { margin-top: 45px; font-size: 14px; }
+  @media (max-width: 760px) { .archive-controls { align-items: stretch; flex-direction: column; gap: 20px; } .archive-search { width: 100%; } .archive-search :global(.relative.w-full.max-w-md) { max-width: none; } .archive-row { grid-template-columns: 1fr 36px; gap: 8px 12px; } .archive-meta { grid-column: 1 / -1; flex-direction: row; gap: 14px; } .archive-content { min-width: 0; } .archive-arrow { width: 36px; } .archive-footer { align-items: flex-start; } }
+</style>

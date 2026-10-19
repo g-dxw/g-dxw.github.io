@@ -1,20 +1,19 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+const path = Astro.url.pathname;
+const links = [
+  { href: '/projects/', label: '作品' },
+  { href: '/blog/', label: '文章' },
+  { href: '/explore/', label: '探索' },
+  { href: '/about/', label: '关于' },
+];
 ---
-
-<header class="nav-blur sticky top-0 z-50 bg-[var(--color-bg)]/80 dark:bg-[var(--color-bg-dark)]/80 border-b border-[var(--color-border)]">
-  <nav class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-    <a href="/" class="flex-shrink-0 whitespace-nowrap text-lg font-bold text-[var(--color-text)] dark:text-[var(--color-text-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline">
-      旺仔
-    </a>
-    <div class="flex items-center gap-1">
-      <a href="/" class="hidden sm:inline-flex px-2 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">首页</a>
-      <a href="/blog" class="px-2 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">文章</a>
-      <a href="/projects" class="px-2 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">项目</a>
-      <a href="/about" class="px-2 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">关于</a>
-      <a href="/life" class="px-2 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">生活</a>
-      <a href="/resume/" class="px-2 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] dark:text-[var(--color-text-muted-dark)] hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent-dark)] transition-colors no-underline rounded-lg hover:bg-[var(--color-code-bg)] dark:hover:bg-[var(--color-code-bg-dark)]">简历</a>
-      <ThemeToggle />
+<header class="site-header" data-pagefind-ignore>
+  <nav class="site-wrap header-inner" aria-label="主导航">
+    <a class="brand" href="/" aria-label="旺仔，返回首页"><svg class="brand-mark" viewBox="0 0 28 28" width="28" height="28" fill="none" aria-hidden="true"><path d="M14 2v24M2 14h24M5.5 5.5l17 17M5.5 22.5l17-17" stroke="currentColor" stroke-width="3" /></svg>旺仔<span class="brand-caption">的个人站</span></a>
+    <div class="header-links">
+      {links.map((link) => <a href={link.href} aria-current={path.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>)}
+      <span class="theme-control"><ThemeToggle /></span>
     </div>
   </nav>
 </header>
