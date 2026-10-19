@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import RepositoryLink from '../components/RepositoryLink.astro';
 import '../styles/global.css';
 import { getPortfolio } from '../utils/portfolio';
 
@@ -98,6 +99,7 @@ const { projects: portfolioProjects } = await getPortfolio();
 const projectDetails = portfolioProjects.filter((project) => project.data.featured).map((project, index) => ({
   label: `${String(index + 1).padStart(2, '0')} · ${project.data.origin}`,
   title: project.data.title,
+  repository: project.data.repository,
   text: project.data.summary,
   tech: project.data.stack.join(' · '),
   href: `/projects/${project.id}/`,
@@ -289,6 +291,7 @@ const credentials = [
                 <div>
                   <h3>{project.title}</h3>
                   <p>{project.text}</p>
+                  <RepositoryLink repository={project.repository} title={project.title} />
                 </div>
                 <div class="project-entry__meta">
                   <span>{project.tech}</span>
@@ -658,6 +661,7 @@ const credentials = [
   .project-entry > p { margin: 2px 0 0; color: var(--gold); font: 700 10px/1.5 ui-monospace, monospace; letter-spacing: .08em; }
   .project-entry h3 { margin: 0 0 10px; color: var(--paper-light); font: 800 24px/1.4 "Songti SC", STSong, serif; }
   .project-entry div > p { margin: 0; color: rgba(231,220,195,.73); font-size: 15px; line-height: 1.8; }
+  .project-entry :global(.repository-link) { color: var(--pale-gold); margin: 8px 0 0; }
   .project-entry__meta { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
   .project-entry__meta span { color: rgba(158,180,189,.7); font: 600 11px/1.8 ui-monospace, monospace; }
   .project-entry__meta a { color: var(--pale-gold); text-decoration: none; font-size: 13px; border-bottom: 1px solid rgba(210,176,106,.34); padding-bottom: 4px; }

@@ -1,0 +1,10 @@
+---
+interface Props { repository?: string; title: string; }
+const { repository, title } = Astro.props;
+---
+{repository && <a class="repository-link" href={repository} target="_blank" rel="noopener noreferrer" aria-label={`在新标签页查看${title}的 GitHub 仓库`}>GitHub：{repository.replace('https://github.com/', '')} <span aria-hidden="true">↗</span></a>}
+
+<style>
+  .repository-link { display: block; width: fit-content; max-width: 100%; padding: 10px 0; margin-bottom: 16px; color: inherit; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 4px; }
+  .repository-link:hover { text-decoration-thickness: 2px; }
+</style>
