@@ -96,6 +96,11 @@ const experiences = [
 ];
 
 const { projects: portfolioProjects } = await getPortfolio();
+const experienceProjectLinks = new Map([
+  ['Niffler', 'https://github.com/g-dxw/Niffler'],
+  ['LingWeave', portfolioProjects.find((project) => project.id === 'lingweave')?.data.repository],
+  ['安养台', portfolioProjects.find((project) => project.id === 'caredock')?.data.repository],
+]);
 const projectDetails = portfolioProjects.filter((project) => project.data.featured).map((project, index) => ({
   label: `${String(index + 1).padStart(2, '0')} · ${project.data.origin}`,
   title: project.data.title,
@@ -267,7 +272,10 @@ const credentials = [
                   <p>{experience.summary}</p>
                   <ul>{experience.stats.map((stat) => <li>{stat}</li>)}</ul>
                   <div class="experience-details">
-                    {experience.bullets.map((bullet) => <p><span aria-hidden="true"></span>{bullet}</p>)}
+                    {experience.bullets.map((bullet) => <p><span class="experience-detail-marker" aria-hidden="true"></span><span class="experience-detail-copy">{bullet.split(/(Niffler|LingWeave|安养台)/g).map((part) => {
+                      const href = experienceProjectLinks.get(part);
+                      return href ? <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`在新标签页查看${part}的 GitHub 仓库`}>{part}</a> : part;
+                    })}</span></p>)}
                   </div>
                 </div>
               </article>
@@ -631,7 +639,10 @@ const credentials = [
   .experience-paper li { padding: 6px 9px; border: 1px solid rgba(23,32,39,.16); color: rgba(23,32,39,.72); font: 500 10px/1 ui-monospace, monospace; }
   .experience-details { display: grid; gap: 10px; margin-top: 24px; padding-top: 21px; border-top: 1px solid rgba(23,32,39,.14); }
   .experience-details p { display: grid; grid-template-columns: 8px 1fr; gap: 11px; margin: 0; color: rgba(23,32,39,.74); font-size: 14px; line-height: 1.75; }
-  .experience-details p span { width: 5px; height: 5px; margin-top: .72em; background: var(--vermillion); transform: rotate(45deg); }
+  .experience-details .experience-detail-marker { width: 5px; height: 5px; margin-top: .72em; background: var(--vermillion); transform: rotate(45deg); }
+  .experience-detail-copy { min-width: 0; }
+  .experience-details a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+  .experience-details a:hover { text-decoration-thickness: 2px; }
 
   .ecosystem-section { position: relative; padding: 150px 0 190px; background: radial-gradient(circle at 72% 50%, rgba(53,91,109,.3), transparent 35%); }
   .ecosystem-layout { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
